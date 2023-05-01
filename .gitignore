@@ -1,0 +1,7 @@
+__[Hh]istory/
+__[Rr]ecovery/
+[Bb]in/
+
+*.local
+*.identcache
+*.res
