@@ -1,0 +1,22 @@
+﻿{
+    "type": "PhUsers_u.PhUsers",
+    "id": 1,
+    "fields": {
+        "Users": [
+            {
+                "type": "PhUsers_u.PhUser",
+                "id": 2,
+                "fields": {
+                    "m_GUID": "0FF54C0B80D24CB6B443C1C9BE95EC29",
+                    "m_Appliances": [
+                        1,
+                        5,
+                        21,
+                        23,
+                        30
+                    ]
+                }
+            }
+        ]
+    }
+}

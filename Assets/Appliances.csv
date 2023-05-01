@@ -1,0 +1,6 @@
+ApplianceType,Wattage,HoursPerDay
+Refrigerator,120,24
+Television,50,6
+Desktop computer,200,4
+Laptop computer,60,4
+Air conditioner,1000,4
