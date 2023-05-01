@@ -1,2 +1,35 @@
-# Auto detect text files and perform LF normalization
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
 * text=auto
+
+###############################################################################
+# behavior for image files
+#
+# image files are treated as binary by default.
+###############################################################################
+#*.jpg   binary
+#*.png   binary
+#*.gif   binary
+
+###############################################################################
+# diff behavior for common document formats
+# 
+# Convert binary document formats to text before diffing them. This feature
+# is only available from the command line. Turn it on by uncommenting the 
+# entries below.
+###############################################################################
+#*.doc   diff=astextplain
+#*.DOC   diff=astextplain
+*.docx  diff=astextplain
+*.DOCX  diff=astextplain
+*.accdb diff=astextplain
+*.ACCDB diff=astextplain
+*.mdb   diff=astextplain
+*.MDB   diff=astextplain
+#*.dot   diff=astextplain
+#*.DOT   diff=astextplain
+*.pdf   diff=astextplain
+*.PDF   diff=astextplain
+#*.rtf   diff=astextplain
+#*.RTF   diff=astextplain
