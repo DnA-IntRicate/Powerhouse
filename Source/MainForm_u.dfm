@@ -14,8 +14,8 @@ object Form1: TForm1
   PixelsPerInch = 120
   TextHeight = 16
   object btnGUID: TButton
-    Left = 232
-    Top = 112
+    Left = 8
+    Top = 54
     Width = 75
     Height = 25
     Caption = 'GUID'
@@ -23,10 +23,33 @@ object Form1: TForm1
     OnClick = btnGUIDClick
   end
   object edtGUID: TEdit
-    Left = 184
-    Top = 184
+    Left = 8
+    Top = 24
     Width = 329
     Height = 24
     TabOrder = 1
+  end
+  object edtPassword: TEdit
+    Left = 352
+    Top = 176
+    Width = 249
+    Height = 24
+    TabOrder = 2
+  end
+  object edtHash: TEdit
+    Left = 352
+    Top = 206
+    Width = 249
+    Height = 24
+    TabOrder = 3
+  end
+  object btnHash: TButton
+    Left = 264
+    Top = 232
+    Width = 97
+    Height = 51
+    Caption = 'Hash'
+    TabOrder = 4
+    OnClick = btnHashClick
   end
 end
