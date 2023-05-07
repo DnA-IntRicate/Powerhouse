@@ -1,6 +1,8 @@
 # Powerhouse
 ---
 
+![alt text](Assets/Logo/Logo-720p.png)
+
 ## Scenario
 The load shedding epidemic in South Africa has flung the country into a full-scale energy crisis, and the average person is being greatly affected by it. The government has been encouraging people to conserve electricity, which is not an easy task since almost all of our appliances and devices require electricity to operate properly. This crisis has highlighted the need for individuals to be more mindful of their energy usage to reduce their impact on the environment and save money on their electricity bills. However, many people lack the tools and knowledge to accurately track their energy consumption and identify areas where they can make changes to reduce their energy usage.
 
