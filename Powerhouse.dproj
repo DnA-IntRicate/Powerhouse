@@ -109,6 +109,14 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Source\MainForm_u.pas">
             <Form>Form1</Form>
         </DCCReference>
+        <DCCReference Include="Source\LoginForm.pas">
+            <Form>Form2</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Source\HomeForm.pas">
+            <Form>Form3</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -135,7 +143,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="Win32\Debug\Powerhouse.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="bin\Win32\Debug\Powerhouse.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Powerhouse.exe</RemoteName>
                         <Overwrite>true</Overwrite>
