@@ -22,33 +22,51 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit LoginForm;
+unit Powerhouse.JsonSerializer;
 
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Powerhouse.Database,
-  Powerhouse.Appliance, Powerhouse.User, Powerhouse.JsonSerializer;
+  System.SysUtils, System.StrUtils, System.Math, System.Hash, System.JSON,
+  Data.DBXJSON,
+  Data.DBXJSONReflect;
 
 type
-  TForm2 = class(TForm)
-    edtUsername: TEdit;
-    pnlLogin: TPanel;
-    edtPassword: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    lnkForgotPassword: TLinkLabel;
-    btnLogin: TButton;
-  end;
+  PhJsonSerializer = class
+  public
+    constructor Create();
+    destructor Destroy();
 
-var
-  Form2: TForm2;
+    function SerializeJson(obj: TObject): string;
+    function DeserializeJson(jsonStr: string): TObject;
+
+  private
+    m_Marshal: TJSONMarshal;
+    m_Unmarshal: TJSONUnMarshal;
+  end;
 
 implementation
 
-{$R *.dfm}
+constructor PhJsonSerializer.Create();
+begin
+  // Create and register JSON Converters and reverters here.
+end;
+
+destructor PhJsonSerializer.Destroy();
+begin
+  m_Marshal.Free();
+  m_Unmarshal.Free();
+end;
+
+function PhJsonSerializer.SerializeJson(obj: TObject): string;
+begin
+  Result := m_Marshal.Marshal(obj).ToString();
+end;
+
+function PhJsonSerializer.DeserializeJson(jsonStr: string): TObject;
+begin
+  Result := m_Unmarshal.Unmarshal(TJSONObject.ParseJSONValue(jsonStr))
+    as TObject;
+end;
 
 end.

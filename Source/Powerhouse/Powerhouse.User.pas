@@ -1,0 +1,289 @@
+{ ----------------------------------------------------------------------------
+  MIT License
+
+  Copyright (c) 2023 Adam Foflonker
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+  ---------------------------------------------------------------------------- }
+
+unit Powerhouse.User;
+
+interface
+
+uses
+  System.SysUtils, System.StrUtils, System.Math, System.Hash,
+  Powerhouse.Appliance, Powerhouse.Database;
+
+type
+  PhUser = class
+  public
+    constructor Create(guid: string); overload;
+    constructor Create(usr, pswd, names, surname: string;
+      appliances: PhAppliances); overload;
+
+    function CheckPassword(pswd: string): boolean;
+
+    function GetGUID(): string;
+
+    function GetUsername(): string;
+    procedure SetUsername(newUsrName: string);
+
+    function GetEmailAddress(): string;
+    procedure SetEmailAddress(newAddress: string);
+
+    function GetForenames(): string;
+    procedure SetForenames(newNames: string);
+
+    function GetSurname(): string;
+    procedure SetSurname(newSurname: string);
+
+    function GetPasswordHash(): string;
+    procedure SetPassword(newPswd: string);
+    // TODO: Add an 'out' string called ErrorMessage for Password validation?
+
+    procedure GetAppliances(out Result: PhAppliances);
+
+    procedure GetApplianceByName(name: string; out Result: PhAppliance);
+    procedure GetApplianceByID(id: uint32; out Result: PhAppliance);
+
+  private
+    function HashPassword(pswd: string): string;
+    function NewGUID(): string;
+
+    procedure UpdateInDatabase();
+
+  private
+    m_GUID: string;
+    m_Username: string;
+    m_EmailAddress: string;
+    m_Forenames: string;
+    m_Surname: string;
+    m_PasswordHash: string;
+
+    m_Appliances: PhAppliances;
+  end;
+
+type
+  PhUsers = TArray<PhUser>;
+
+const
+  TBL_FIELD_NAME_USERS_PK: string = 'UserGUID';
+  TBL_FIELD_NAME_USERS_USERNAME: string = 'Username';
+  TBL_FIELD_NAME_USERS_EMAIL_ADDRESS: string = 'EmailAddress';
+  TBL_FIELD_NAME_USERS_FORENAMES: string = 'Forenames';
+  TBL_FIELD_NAME_USERS_SURNAME: string = 'Surname';
+  TBL_FIELD_NAME_USERS_PASSWORD_HASH: string = 'PasswordHash';
+
+implementation
+
+constructor PhUser.Create(guid: string);
+begin
+  m_GUID := guid;
+
+  with g_Database do
+  begin
+    TblUsers.First();
+
+    // Find the record in the table where UserGUID = m_GUID.
+    while not Eof do
+    begin
+      if m_GUID = TblUsers[TBL_FIELD_NAME_USERS_PK] then
+        break;
+
+      TblUsers.Next();
+    end;
+
+    m_Username := TblUsers[TBL_FIELD_NAME_USERS_USERNAME];
+    m_EmailAddress := TblUsers[TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
+    m_Forenames := TblUsers[TBL_FIELD_NAME_USERS_FORENAMES];
+    m_Surname := TblUsers[TBL_FIELD_NAME_USERS_SURNAME];
+    m_PasswordHash := TblUsers[m_PasswordHash];
+
+    // NOTE: m_Appliances is not being set yet. JSON file is needed to store active appliances.
+  end;
+end;
+
+constructor PhUser.Create(usr, pswd, names, surname: string;
+  appliances: PhAppliances);
+begin
+  // If this constructor is invoked it is assumed that the program is attempting to create a new
+  // user to be inserted into the database.
+
+  m_GUID := NewGUID();
+  m_Username := usr;
+  m_PasswordHash := HashPassword(pswd);
+  m_Forenames := names;
+  m_Surname := surname;
+  m_Appliances := appliances;
+end;
+
+function PhUser.CheckPassword(pswd: string): boolean;
+begin
+  Result := HashPassword(pswd) = m_PasswordHash;
+end;
+
+function PhUser.GetGUID(): string;
+begin
+  Result := m_GUID;
+end;
+
+function PhUser.GetUsername(): string;
+begin
+  Result := m_Username;
+end;
+
+procedure PhUser.SetUsername(newUsrName: string);
+begin
+  m_Username := newUsrName;
+
+  UpdateInDatabase();
+end;
+
+function PhUser.GetEmailAddress(): string;
+begin
+  Result := m_EmailAddress;
+end;
+
+procedure PhUser.SetEmailAddress(newAddress: string);
+begin
+  m_EmailAddress := newAddress;
+
+  UpdateInDatabase();
+end;
+
+function PhUser.GetForenames(): string;
+begin
+  Result := m_Forenames;
+end;
+
+procedure PhUser.SetForenames(newNames: string);
+begin
+  m_Forenames := newNames;
+
+  UpdateInDatabase();
+end;
+
+function PhUser.GetSurname(): string;
+begin
+  Result := m_Surname;
+end;
+
+procedure PhUser.SetSurname(newSurname: string);
+begin
+  m_Surname := newSurname;
+
+  UpdateInDatabase();
+end;
+
+function PhUser.GetPasswordHash(): string;
+begin
+  Result := m_PasswordHash;
+end;
+
+procedure PhUser.SetPassword(newPswd: string);
+begin
+  m_PasswordHash := HashPassword(newPswd);
+
+  UpdateInDatabase();
+end;
+
+procedure PhUser.GetAppliances(out Result: PhAppliances);
+begin
+  Result := m_Appliances;
+end;
+
+procedure PhUser.GetApplianceByName(name: string; out Result: PhAppliance);
+var
+  i: integer;
+begin
+  for i := Low(m_Appliances) to High(m_Appliances) do
+  begin
+    if m_Appliances[i].GetName() = name then
+    begin
+      Result := m_Appliances[i];
+      break;
+    end;
+  end;
+end;
+
+procedure PhUser.GetApplianceByID(id: uint32; out Result: PhAppliance);
+var
+  i: integer;
+begin
+  for i := Low(m_Appliances) to High(m_Appliances) do
+  begin
+    if m_Appliances[i].GetID() = id then
+    begin
+      Result := m_Appliances[i];
+      break;
+    end;
+  end;
+end;
+
+function PhUser.HashPassword(pswd: string): string;
+var
+  MD5: THashMD5;
+  sHash, sDynamicSalt: string;
+begin
+  MD5 := THashMD5.Create();
+
+  sHash := MD5.GetHashString(pswd);
+  sDynamicSalt := MD5.GetHashString(IntToStr(Length(pswd)));
+  sHash := sHash.Insert(Length(pswd), sDynamicSalt);
+  sHash := MD5.GetHashString(sHash) + '==';
+
+  Result := sHash;
+end;
+
+function PhUser.NewGUID(): string;
+var
+  guid: TGUID;
+  sHexGUID: string;
+begin
+  CreateGUID(guid);
+  sHexGUID := GUIDToString(guid);
+
+  sHexGUID := StringReplace(sHexGUID, '{', '', [rfReplaceAll]);
+  sHexGUID := StringReplace(sHexGUID, '}', '', [rfReplaceAll]);
+  sHexGUID := StringReplace(sHexGUID, '-', '', [rfReplaceAll]);
+
+  Result := sHexGUID;
+end;
+
+procedure PhUser.UpdateInDatabase();
+var
+  sQuery: string;
+  e: Exception;
+begin
+  sQuery := Format('UPDATE %s' + #13#10 +
+    'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s''' +
+    #13#10 + 'WHERE %s = %s', [TBL_NAME_USERS, TBL_FIELD_NAME_USERS_USERNAME,
+    m_Username, TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
+    TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames, TBL_FIELD_NAME_USERS_SURNAME,
+    m_Surname, TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
+    TBL_FIELD_NAME_USERS_PK, m_GUID]);
+
+  e := g_Database.RunQuery(sQuery);
+
+  // TODO: Handle exceptions better and display the message somewhere.
+  if e <> nil then
+    raise e;
+end;
+
+end.
