@@ -2,9 +2,9 @@ program Powerhouse;
 
 uses
   Vcl.Forms,
-  MainForm_u in 'Source\MainForm_u.pas' {Form1},
-  LoginForm in 'Source\LoginForm.pas' {Form2},
-  HomeForm in 'Source\HomeForm.pas' {Form3},
+  Powerhouse.Forms.Main in 'Source\Powerhouse\Forms\Powerhouse.Forms.Main.pas' {MainForm},
+  Powerhouse.Forms.Login in 'Source\Powerhouse\Forms\Powerhouse.Forms.Login.pas' {LoginForm},
+  Powerhouse.Forms.Home in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.pas' {HomeForm},
   Powerhouse.Database in 'Source\Powerhouse\Powerhouse.Database.pas',
   Powerhouse.Appliance in 'Source\Powerhouse\Powerhouse.Appliance.pas',
   Powerhouse.User in 'Source\Powerhouse\Powerhouse.User.pas',
@@ -13,10 +13,10 @@ uses
 {$R *.res}
 
 begin
-  Application.Initialize;
+  Application.Initialize();
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
-  Application.CreateForm(TForm2, Form2);
-  Application.CreateForm(TForm3, Form3);
-  Application.Run;
+  Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TLoginForm, LoginForm);
+  Application.CreateForm(THomeForm, HomeForm);
+  Application.Run();
 end.

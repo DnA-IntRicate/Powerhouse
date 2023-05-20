@@ -22,7 +22,7 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit HomeForm;
+unit Powerhouse.Forms.Home;
 
 interface
 
@@ -31,7 +31,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
-  TForm3 = class(TForm)
+  THomeForm = class(TForm)
     tbcHome: TTabControl;
     lstAppliances: TListBox;
     pnlApplianceInformation: TPanel;
@@ -39,14 +39,10 @@ type
     btnModifyAppliance: TButton;
     pnlHomeForm: TPanel;
     Label3: TLabel;
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
 
 var
-  Form3: TForm3;
+  HomeForm: THomeForm;
 
 implementation
 

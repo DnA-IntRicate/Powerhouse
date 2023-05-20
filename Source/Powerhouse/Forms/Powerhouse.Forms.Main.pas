@@ -22,7 +22,7 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit MainForm_u;
+unit Powerhouse.Forms.Main;
 
 interface
 
@@ -30,10 +30,10 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Hash, Vcl.ComCtrls,
-  IdHTTP, IdSSLOpenSSL, LoginForm;
+  IdHTTP, IdSSLOpenSSL, Powerhouse.Forms.Login;
 
 type
-  TForm1 = class(TForm)
+  TMainForm = class(TForm)
     btnGUID: TButton;
     edtGUID: TEdit;
     edtPassword: TEdit;
@@ -47,20 +47,16 @@ type
     function StringToSaltedMD5Hash(const text: string): string;
     procedure btnAskClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
 
 var
-  Form1: TForm1;
+  MainForm: TMainForm;
 
 implementation
 
 {$R *.dfm}
 
-procedure TForm1.btnAskClick(Sender: TObject);
+procedure TMainForm.btnAskClick(Sender: TObject);
 const
   APIUrl: string = 'https://api.openai.com/v1/chat/completions';
   APIKey: string = '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';
@@ -98,7 +94,7 @@ begin
   R.Free();
 end;
 
-procedure TForm1.btnGUIDClick(Sender: TObject);
+procedure TMainForm.btnGUIDClick(Sender: TObject);
 var
   newGUID: TGUID;
   sHexGUID: string;
@@ -113,17 +109,17 @@ begin
   edtGUID.text := sHexGUID;
 end;
 
-procedure TForm1.btnHashClick(Sender: TObject);
+procedure TMainForm.btnHashClick(Sender: TObject);
 begin
   edtHash.text := StringToSaltedMD5Hash(edtPassword.text);
 end;
 
-procedure TForm1.FormActivate(Sender: TObject);
+procedure TMainForm.FormActivate(Sender: TObject);
 begin
-   LoginForm.Form2.Show();
+  LoginForm.Show();
 end;
 
-function TForm1.StringToSaltedMD5Hash(const text: string): string;
+function TMainForm.StringToSaltedMD5Hash(const text: string): string;
 var
   MD5: THashMD5;
   sHash: string;

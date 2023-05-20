@@ -22,7 +22,7 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit LoginForm;
+unit Powerhouse.Forms.Login;
 
 interface
 
@@ -33,7 +33,7 @@ uses
   Powerhouse.Appliance, Powerhouse.User, Powerhouse.JsonSerializer;
 
 type
-  TForm2 = class(TForm)
+  TLoginForm = class(TForm)
     edtUsername: TEdit;
     pnlLogin: TPanel;
     edtPassword: TEdit;
@@ -45,7 +45,7 @@ type
   end;
 
 var
-  Form2: TForm2;
+  LoginForm: TLoginForm;
 
 implementation
 

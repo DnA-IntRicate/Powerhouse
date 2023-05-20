@@ -1,4 +1,4 @@
-object Form2: TForm2
+object LoginForm: TLoginForm
   Left = 0
   Top = 0
   Caption = 'Powerhouse'

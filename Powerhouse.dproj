@@ -106,15 +106,15 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Source\MainForm_u.pas">
-            <Form>Form1</Form>
+        <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Main.pas">
+            <Form>MainForm</Form>
         </DCCReference>
-        <DCCReference Include="Source\LoginForm.pas">
-            <Form>Form2</Form>
+        <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Login.pas">
+            <Form>LoginForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Source\HomeForm.pas">
-            <Form>Form3</Form>
+        <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Home.pas">
+            <Form>HomeForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Database.pas"/>
@@ -940,7 +940,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
+&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
@@ -948,7 +950,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
+&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
@@ -956,7 +960,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
+&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
@@ -964,7 +970,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
+&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>
