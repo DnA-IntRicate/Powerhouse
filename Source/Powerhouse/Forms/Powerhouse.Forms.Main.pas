@@ -33,7 +33,7 @@ uses
   IdHTTP, IdSSLOpenSSL, Powerhouse.Forms.Login;
 
 type
-  TMainForm = class(TForm)
+  TPhfMain = class(TForm)
     btnGUID: TButton;
     edtGUID: TEdit;
     edtPassword: TEdit;
@@ -50,13 +50,13 @@ type
   end;
 
 var
-  MainForm: TMainForm;
+  g_MainForm: TPhfMain;
 
 implementation
 
 {$R *.dfm}
 
-procedure TMainForm.btnAskClick(Sender: TObject);
+procedure TPhfMain.btnAskClick(Sender: TObject);
 const
   APIUrl: string = 'https://api.openai.com/v1/chat/completions';
   APIKey: string = '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';
@@ -94,7 +94,7 @@ begin
   R.Free();
 end;
 
-procedure TMainForm.btnGUIDClick(Sender: TObject);
+procedure TPhfMain.btnGUIDClick(Sender: TObject);
 var
   newGUID: TGUID;
   sHexGUID: string;
@@ -109,17 +109,17 @@ begin
   edtGUID.text := sHexGUID;
 end;
 
-procedure TMainForm.btnHashClick(Sender: TObject);
+procedure TPhfMain.btnHashClick(Sender: TObject);
 begin
   edtHash.text := StringToSaltedMD5Hash(edtPassword.text);
 end;
 
-procedure TMainForm.FormActivate(Sender: TObject);
+procedure TPhfMain.FormActivate(Sender: TObject);
 begin
-  LoginForm.Show();
+  g_LoginForm.Show();
 end;
 
-function TMainForm.StringToSaltedMD5Hash(const text: string): string;
+function TPhfMain.StringToSaltedMD5Hash(const text: string): string;
 var
   MD5: THashMD5;
   sHash: string;

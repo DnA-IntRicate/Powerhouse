@@ -1,4 +1,4 @@
-object MainForm: TMainForm
+object PhfMain: TPhfMain
   Left = 0
   Top = 0
   Caption = 'Form1'

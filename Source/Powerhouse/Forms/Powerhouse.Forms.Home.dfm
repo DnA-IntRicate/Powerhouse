@@ -1,4 +1,4 @@
-object HomeForm: THomeForm
+object g_HomeForm: TPhfHome
   Left = 0
   Top = 0
   Caption = 'Powerhouse'

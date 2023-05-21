@@ -31,7 +31,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
-  THomeForm = class(TForm)
+  TPhfHome = class(TForm)
     tbcHome: TTabControl;
     lstAppliances: TListBox;
     pnlApplianceInformation: TPanel;
@@ -42,7 +42,7 @@ type
   end;
 
 var
-  HomeForm: THomeForm;
+  g_HomeForm: TPhfHome;
 
 implementation
 

@@ -1,4 +1,4 @@
-object LoginForm: TLoginForm
+object PhfLogin: TPhfLogin
   Left = 0
   Top = 0
   Caption = 'Powerhouse'
@@ -11,6 +11,7 @@ object LoginForm: TLoginForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 120
   TextHeight = 16
   object pnlLogin: TPanel

@@ -33,7 +33,7 @@ uses
   Powerhouse.Appliance, Powerhouse.User, Powerhouse.JsonSerializer;
 
 type
-  TLoginForm = class(TForm)
+  TPhfLogin = class(TForm)
     edtUsername: TEdit;
     pnlLogin: TPanel;
     edtPassword: TEdit;
@@ -42,13 +42,19 @@ type
     Label3: TLabel;
     lnkForgotPassword: TLinkLabel;
     btnLogin: TButton;
+    procedure FormCreate(Sender: TObject);
   end;
 
 var
-  LoginForm: TLoginForm;
+  g_LoginForm: TPhfLogin;
 
 implementation
 
 {$R *.dfm}
+
+procedure TPhfLogin.FormCreate(Sender: TObject);
+begin
+//
+end;
 
 end.

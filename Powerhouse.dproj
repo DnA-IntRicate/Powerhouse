@@ -4,7 +4,7 @@
         <ProjectVersion>19.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -107,20 +107,21 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Main.pas">
-            <Form>MainForm</Form>
+            <Form>g_MainForm</Form>
         </DCCReference>
         <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Login.pas">
-            <Form>LoginForm</Form>
+            <Form>g_LoginForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Home.pas">
-            <Form>HomeForm</Form>
+            <Form>g_HomeForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Database.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Appliance.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.User.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.JsonSerializer.pas"/>
+        <DCCReference Include="Source\Powerhouse\Powerhouse.FormManager.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -940,9 +941,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
-&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
-</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
@@ -950,9 +949,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
-&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
-</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
@@ -960,9 +957,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
-&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
-</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
@@ -970,9 +965,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q
-&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
-</PostBuildEvent>
+        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>
