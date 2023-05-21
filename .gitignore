@@ -9,4 +9,5 @@ __[Rr]ecovery/
 
 # Microsoft Office temporary files
 *.laccdb
+*.ldb
 ~$T*.docx

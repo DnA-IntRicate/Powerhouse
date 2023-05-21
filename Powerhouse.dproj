@@ -4,7 +4,7 @@
         <ProjectVersion>19.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -59,8 +59,8 @@
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
         <SanitizedProjectName>Powerhouse</SanitizedProjectName>
         <VerInfo_Locale>7177</VerInfo_Locale>
-        <PostBuildEvent><![CDATA[if exist "$(OUTPUTDIR)Assets" rmdir "$(OUTPUTDIR)Assets" /s /q
-xcopy "$(PROJECTDIR)Assets" "$(OUTPUTDIR)Assets" /E /I /R
+        <PostBuildEvent><![CDATA[rmdir "$(OUTPUTDIR)Assets" /s /q 
+xcopy "$(PROJECTDIR)\Assets" "$(OUTPUTDIR)Assets" /E /I /R
 $(PostBuildEvent)]]></PostBuildEvent>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
@@ -941,7 +941,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
@@ -949,7 +949,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
@@ -957,7 +957,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
@@ -965,7 +965,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>if exist &quot;$(OUTPUTDIR)Assets&quot; rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q&amp;&amp;xcopy &quot;$(PROJECTDIR)Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>

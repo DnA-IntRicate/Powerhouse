@@ -66,10 +66,9 @@ begin
   Connection := TADOConnection.Create(nil);
   with Connection do
   begin
-    // 'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=Assets/Database.mdb;Mode=ReadWrite'
     ConnectionString := Format('User ID=Admin;Data Source=%s', [m_Path]);
-    Mode := cmReadWrite;
     Provider := 'Microsoft.Jet.OLEDB.4.0';
+    Mode := cmReadWrite;
     LoginPrompt := false;
     Open();
   end;
