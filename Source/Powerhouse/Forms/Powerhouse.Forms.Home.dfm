@@ -1,4 +1,4 @@
-object g_HomeForm: TPhfHome
+object PhfHome: TPhfHome
   Left = 0
   Top = 0
   Caption = 'Powerhouse'
@@ -11,6 +11,7 @@ object g_HomeForm: TPhfHome
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   PixelsPerInch = 120
   TextHeight = 16
   object pnlHomeForm: TPanel

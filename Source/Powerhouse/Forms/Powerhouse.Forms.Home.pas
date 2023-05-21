@@ -27,8 +27,13 @@ unit Powerhouse.Forms.Home;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
+  Vcl.ExtCtrls;
+
+type
+  PtrForm = ^TForm;
 
 type
   TPhfHome = class(TForm)
@@ -39,6 +44,14 @@ type
     btnModifyAppliance: TButton;
     pnlHomeForm: TPanel;
     Label3: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+
+  public
+    procedure Enable(parentForm: PtrForm);
+    procedure Disable();
+
+  private
+    m_ParentForm: PtrForm;
   end;
 
 var
@@ -47,5 +60,27 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TPhfHome.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  // m_ParentForm.Enabled := true;
+  // m_ParentForm.Show();
+end;
+
+procedure TPhfHome.Enable(parentForm: PtrForm);
+begin
+  // m_ParentForm := parentForm;
+  // m_ParentForm.Hide();
+  // m_ParentForm.Enabled := false;
+
+  Self.Enabled := true;
+  Self.Show();
+end;
+
+procedure TPhfHome.Disable();
+begin
+  Self.Hide();
+  Self.Enabled := false;
+end;
 
 end.

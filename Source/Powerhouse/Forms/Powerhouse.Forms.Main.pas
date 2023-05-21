@@ -116,7 +116,7 @@ end;
 
 procedure TPhfMain.FormActivate(Sender: TObject);
 begin
-  g_LoginForm.Show();
+ // g_LoginForm.Show();
 end;
 
 function TPhfMain.StringToSaltedMD5Hash(const text: string): string;

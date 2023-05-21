@@ -27,7 +27,7 @@ unit Powerhouse.Database;
 interface
 
 uses
-  System.SysUtils, Data.DB, Data.Win.ADODB;
+  System.SysUtils, Data.DB, Data.Win.ADODB, Powerhouse.Logger;
 
 type
   PhDatabase = class
@@ -63,30 +63,36 @@ constructor PhDatabase.Create(dbPath: string);
 begin
   m_Path := dbPath;
 
-  Connection := TADOConnection.Create(nil);
-  with Connection do
-  begin
-    ConnectionString := Format('User ID=Admin;Data Source=%s', [m_Path]);
-    Provider := 'Microsoft.Jet.OLEDB.4.0';
-    Mode := cmReadWrite;
-    LoginPrompt := false;
-    Open();
+  try
+    Connection := TADOConnection.Create(nil);
+    with Connection do
+    begin
+      ConnectionString := Format('User ID=Admin;Data Source=%s', [m_Path]);
+      Provider := 'Microsoft.Jet.OLEDB.4.0';
+      Mode := cmReadWrite;
+      LoginPrompt := false;
+      Open();
+    end;
+
+    TblAppliances := TADOTable.Create(nil);
+    TblAppliances.Connection := Connection;
+    TblAppliances.TableName := TBL_NAME_APPLIANCES;
+    TblAppliances.Open();
+
+    TblTips := TADOTable.Create(nil);
+    TblTips.Connection := Connection;
+    TblTips.TableName := TBL_NAME_TIPS;
+    TblTips.Open();
+
+    TblUsers := TADOTable.Create(nil);
+    TblUsers.Connection := Connection;
+    TblUsers.TableName := TBL_NAME_USERS;
+    TblUsers.Open();
+
+  except
+    on e: Exception do
+      PhLogger.Error('Error connecting to database: %s', [e.Message]);
   end;
-
-  TblAppliances := TADOTable.Create(nil);
-  TblAppliances.Connection := Connection;
-  TblAppliances.TableName := TBL_NAME_APPLIANCES;
-  TblAppliances.Open();
-
-  TblTips := TADOTable.Create(nil);
-  TblTips.Connection := Connection;
-  TblTips.TableName := TBL_NAME_TIPS;
-  TblTips.Open();
-
-  TblUsers := TADOTable.Create(nil);
-  TblUsers.Connection := Connection;
-  TblUsers.TableName := TBL_NAME_USERS;
-  TblUsers.Open();
 end;
 
 destructor PhDatabase.Destroy();

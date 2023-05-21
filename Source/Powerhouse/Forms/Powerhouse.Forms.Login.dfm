@@ -12,6 +12,7 @@ object PhfLogin: TPhfLogin
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 120
   TextHeight = 16
   object pnlLogin: TPanel
@@ -90,6 +91,7 @@ object PhfLogin: TPhfLogin
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 3
+      OnClick = btnLoginClick
     end
   end
 end

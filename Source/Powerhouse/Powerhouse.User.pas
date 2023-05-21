@@ -90,9 +90,14 @@ const
   TBL_FIELD_NAME_USERS_SURNAME: string = 'Surname';
   TBL_FIELD_NAME_USERS_PASSWORD_HASH: string = 'PasswordHash';
 
+var
+  g_CurrentUser: PhUser;
+
 implementation
 
 constructor PhUser.Create(guid: string);
+var
+  foundGUID: boolean;
 begin
   m_GUID := guid;
 
@@ -101,21 +106,34 @@ begin
     TblUsers.First();
 
     // Find the record in the table where UserGUID = m_GUID.
-    while not Eof do
+    while not TblUsers.Eof do
     begin
-      if m_GUID = TblUsers[TBL_FIELD_NAME_USERS_PK] then
+      foundGUID := m_GUID = TblUsers[TBL_FIELD_NAME_USERS_PK];
+      if foundGUID then
         break;
 
       TblUsers.Next();
     end;
 
-    m_Username := TblUsers[TBL_FIELD_NAME_USERS_USERNAME];
-    m_EmailAddress := TblUsers[TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
-    m_Forenames := TblUsers[TBL_FIELD_NAME_USERS_FORENAMES];
-    m_Surname := TblUsers[TBL_FIELD_NAME_USERS_SURNAME];
-    m_PasswordHash := TblUsers[m_PasswordHash];
+    if foundGUID then
+    begin
+      m_Username := TblUsers[TBL_FIELD_NAME_USERS_USERNAME];
+      m_EmailAddress := TblUsers[TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
+      m_Forenames := TblUsers[TBL_FIELD_NAME_USERS_FORENAMES];
+      m_Surname := TblUsers[TBL_FIELD_NAME_USERS_SURNAME];
+      m_PasswordHash := TblUsers[TBL_FIELD_NAME_USERS_PASSWORD_HASH];
+    end
+    else
+    begin
+      m_Username := '';
+      m_EmailAddress := '';
+      m_Forenames := '';
+      m_Surname := '';
+      m_PasswordHash := '';
+    end;
 
     // NOTE: m_Appliances is not being set yet. JSON file is needed to store active appliances.
+    TblUsers.First();
   end;
 end;
 
