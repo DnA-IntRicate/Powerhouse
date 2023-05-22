@@ -30,11 +30,11 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home;
 
 type
-  TPhfLogin = class(TForm)
+  TPhfLogin = class(PhForm)
     edtUsername: TEdit;
     pnlLogin: TPanel;
     edtPassword: TEdit;
@@ -46,6 +46,10 @@ type
     procedure FormCreate(Sender: TObject);
     procedure btnLoginClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+
+  public
+    procedure Enable(); override;
+    procedure Disable(); override;
   end;
 
 var
@@ -73,6 +77,7 @@ var
 begin
   userName := edtUsername.Text;
   pswd := edtPassword.Text;
+  userFound := false;
 
   with g_Database do
   begin
@@ -98,8 +103,8 @@ begin
         PhLogger.Info('Welcome %s %s!', [g_CurrentUser.GetForenames(),
           g_CurrentUser.GetSurname()]);
 
-        g_HomeForm.Enable(@Self);
-        // Self.Hide();
+        TransitionForms(@Self, @g_HomeForm);
+
         // TODO: Load appliances from JSON
         // TODO: Perform post-login stuff
       end
@@ -117,6 +122,22 @@ begin
 
     TblUsers.First();
   end;
+end;
+
+procedure TPhfLogin.Enable();
+begin
+  inherited;
+
+  Self.Enabled := true;
+  Self.Show();
+end;
+
+procedure TPhfLogin.Disable();
+begin
+  inherited;
+
+  Self.Hide();
+  Self.Enabled := false;
 end;
 
 end.

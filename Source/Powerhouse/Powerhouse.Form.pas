@@ -22,58 +22,43 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit Powerhouse.Forms.Home;
+unit Powerhouse.Form;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
-  Vcl.ExtCtrls, Powerhouse.Form;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
 
 type
-  TPhfHome = class(PhForm)
-    tbcHome: TTabControl;
-    lstAppliances: TListBox;
-    pnlApplianceInformation: TPanel;
-    Label1: TLabel;
-    btnModifyAppliance: TButton;
-    pnlHomeForm: TPanel;
-    Label3: TLabel;
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  PhFormPtr = ^TForm;
 
+type
+  PhForm = class(TForm)
   public
-    procedure Enable(); override;
-    procedure Disable(); override;
-  end;
+    procedure Enable(); virtual; abstract;
+    procedure Disable(); virtual; abstract;
 
-var
-  g_HomeForm: TPhfHome;
+    procedure Quit();
+
+    class procedure TransitionForms(const oldForm, newForm: PhFormPtr); static;
+  end;
 
 implementation
 
-{$R *.dfm}
-
-procedure TPhfHome.FormClose(Sender: TObject; var Action: TCloseAction);
+class procedure PhForm.TransitionForms(const oldForm, newForm: PhFormPtr);
 begin
-  Quit();
+  oldForm.Hide();
+  oldForm.Enabled := false;
+
+  newForm.Enabled := true;
+  newForm.Show();
 end;
 
-procedure TPhfHome.Enable();
+procedure PhForm.Quit();
 begin
-  inherited;
-
-  Self.Enabled := true;
-  Self.Show();
-end;
-
-procedure TPhfHome.Disable();
-begin
-  inherited;
-
-  Self.Hide();
-  Self.Enabled := false;
+  Application.MainForm.Close();
 end;
 
 end.

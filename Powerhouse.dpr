@@ -26,24 +26,32 @@ program Powerhouse;
 
 uses
   Vcl.Forms,
-  Powerhouse.Forms.Main in 'Source\Powerhouse\Forms\Powerhouse.Forms.Main.pas' {g_MainForm},
-  Powerhouse.Forms.Login in 'Source\Powerhouse\Forms\Powerhouse.Forms.Login.pas' {g_LoginForm},
-  Powerhouse.Forms.Home in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.pas' {g_HomeForm},
+  Powerhouse.Forms.Main
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Main.pas' {g_MainForm} ,
+  Powerhouse.Forms.Login
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Login.pas' {g_LoginForm} ,
+  Powerhouse.Forms.Home
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.pas' {g_HomeForm} ,
   Powerhouse.Database in 'Source\Powerhouse\Powerhouse.Database.pas',
   Powerhouse.Appliance in 'Source\Powerhouse\Powerhouse.Appliance.pas',
   Powerhouse.User in 'Source\Powerhouse\Powerhouse.User.pas',
-  Powerhouse.JsonSerializer in 'Source\Powerhouse\Powerhouse.JsonSerializer.pas',
+  Powerhouse.JsonSerializer
+    in 'Source\Powerhouse\Powerhouse.JsonSerializer.pas',
   Powerhouse.FormManager in 'Source\Powerhouse\Powerhouse.FormManager.pas',
-  Powerhouse.Logger in 'Source\Powerhouse\Powerhouse.Logger.pas';
+  Powerhouse.Logger in 'Source\Powerhouse\Powerhouse.Logger.pas',
+  Powerhouse.Form in 'Source\Powerhouse\Powerhouse.Form.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize();
-  Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TPhfLogin, g_LoginForm);
+  Application.MainFormOnTaskbar := true;
+
+  // Note: Only the main form is being created here because the main form acts
+  // as the parent form for all other forms associated with the application.
+  // Normally all other forms would be created here, but instead they are dynamically
+  // created by the main form so that it can directly handle them by itself.
   Application.CreateForm(TPhfMain, g_MainForm);
-  Application.CreateForm(TPhfHome, g_HomeForm);
   Application.Run();
 
 end.

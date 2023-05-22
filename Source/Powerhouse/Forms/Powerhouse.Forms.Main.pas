@@ -29,24 +29,12 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Hash, Vcl.ComCtrls,
-  IdHTTP, IdSSLOpenSSL, Powerhouse.Forms.Login;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
+  Powerhouse.Form, Powerhouse.Forms.Login, Powerhouse.Forms.Home;
 
 type
   TPhfMain = class(TForm)
-    btnGUID: TButton;
-    edtGUID: TEdit;
-    edtPassword: TEdit;
-    edtHash: TEdit;
-    btnHash: TButton;
-    redQuestion: TRichEdit;
-    btnAsk: TButton;
-    redAnswer: TRichEdit;
-    procedure btnGUIDClick(Sender: TObject);
-    procedure btnHashClick(Sender: TObject);
-    function StringToSaltedMD5Hash(const text: string): string;
-    procedure btnAskClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   end;
 
 var
@@ -56,84 +44,38 @@ implementation
 
 {$R *.dfm}
 
-procedure TPhfMain.btnAskClick(Sender: TObject);
-const
-  APIUrl: string = 'https://api.openai.com/v1/chat/completions';
-  APIKey: string = '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';
+procedure TPhfMain.FormCreate(Sender: TObject);
 var
-  sQuestion, sAnswer: string;
-  IdHTTP: TIdHttp;
-  IdSSL: TIdSSLIOHandlerSocketOpenSSL;
-  RequestJSON, ResponseJSON: string;
-  R: TStream;
+  oldStyle, newStyle: integer;
 begin
-  IdSSL := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
-  IdHTTP := TIdHttp.Create(nil);
-  IdHTTP.IOHandler := IdSSL;
-  IdHTTP.Request.CustomHeaders.Add('Authorization: Bearer ' + APIKey);
-  IdHTTP.Request.ContentType := 'application/json';
+  Self.Hide();
 
-  sQuestion := redQuestion.text;
-  // RequestJSON := Format('{"prompt": "%s"}', [sQuestion]);
+  Application.CreateForm(TPhfLogin, g_LoginForm);
+  Application.CreateForm(TPhfHome, g_HomeForm);
 
-  // RequestJSON := '{"prompt": "What is electricity?"}';
-  RequestJSON := 'req.txt';
+  with g_LoginForm do
+  begin
+    BorderStyle := bsSingle;
+    FormStyle := fsNormal;
 
-  // try
+    oldStyle := GetWindowLong(Handle, GWL_EXSTYLE);
+    newStyle := oldStyle or WS_EX_APPWINDOW;
 
-  ResponseJSON := IdHTTP.Post(APIUrl, RequestJSON);
-  sAnswer := ResponseJSON;
-  // except
-  // on e: Exception do
-  // begin
-  // ShowMessage(e.Message);
-  // end
-  // end;
+    SetWindowLong(Handle, GWL_EXSTYLE, newStyle);
+  end;
 
-  redAnswer.Lines.Add(sAnswer);
-  R.Free();
-end;
+  with g_HomeForm do
+  begin
+    BorderStyle := bsSingle;
+    FormStyle := fsNormal;
 
-procedure TPhfMain.btnGUIDClick(Sender: TObject);
-var
-  newGUID: TGUID;
-  sHexGUID: string;
-begin
-  CreateGUID(newGUID);
-  sHexGUID := GUIDToString(newGUID);
+    oldStyle := GetWindowLong(Handle, GWL_EXSTYLE);
+    newStyle := oldStyle or WS_EX_APPWINDOW;
 
-  sHexGUID := StringReplace(sHexGUID, '{', '', [rfReplaceAll]);
-  sHexGUID := StringReplace(sHexGUID, '}', '', [rfReplaceAll]);
-  sHexGUID := StringReplace(sHexGUID, '-', '', [rfReplaceAll]);
+    SetWindowLong(Handle, GWL_EXSTYLE, newStyle);
+  end;
 
-  edtGUID.text := sHexGUID;
-end;
-
-procedure TPhfMain.btnHashClick(Sender: TObject);
-begin
-  edtHash.text := StringToSaltedMD5Hash(edtPassword.text);
-end;
-
-procedure TPhfMain.FormActivate(Sender: TObject);
-begin
- // g_LoginForm.Show();
-end;
-
-function TPhfMain.StringToSaltedMD5Hash(const text: string): string;
-var
-  MD5: THashMD5;
-  sHash: string;
-begin
-  MD5 := THashMD5.Create();
-  // Hashing password and then salting it
-  sHash := MD5.GetHashString(text);
-
-  // Dynamic salt
-  sHash := sHash.Insert(Length(text),
-    MD5.GetHashString(IntToStr(Length(text))));
-  sHash := MD5.GetHashString(sHash) + '==';
-
-  Result := sHash;
+  g_LoginForm.Show();
 end;
 
 end.
