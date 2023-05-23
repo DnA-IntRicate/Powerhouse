@@ -28,7 +28,7 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash,
-  Powerhouse.Appliance, Powerhouse.Database;
+  Powerhouse.Appliance, Powerhouse.Database, Powerhouse.Logger;
 
 type
   PhUser = class
@@ -55,7 +55,6 @@ type
 
     function GetPasswordHash(): string;
     procedure SetPassword(newPswd: string);
-    // TODO: Add an 'out' string called ErrorMessage for Password validation?
 
     procedure GetAppliances(out Result: PhAppliances);
 
@@ -100,6 +99,7 @@ var
   foundGUID: boolean;
 begin
   m_GUID := guid;
+  foundGUID := false;
 
   with g_Database do
   begin
@@ -299,9 +299,8 @@ begin
 
   e := g_Database.RunQuery(sQuery);
 
-  // TODO: Handle exceptions better and display the message somewhere.
   if e <> nil then
-    raise e;
+    PhLogger.Error('Error updating database: %s', [e.Message]);
 end;
 
 end.

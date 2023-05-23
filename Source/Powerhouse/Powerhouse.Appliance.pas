@@ -37,7 +37,7 @@ type
 
     function CalculateCostPerHour(): real;
 
-    function GetID(): integer;
+    function GetID(): uint32;
     function GetName(): string;
 
     function GetWattage(): real;
@@ -121,9 +121,10 @@ end;
 function PhAppliance.CalculateCostPerHour(): real;
 begin
   // TODO: Implement this.
+  Result := 0;
 end;
 
-function PhAppliance.GetID(): integer;
+function PhAppliance.GetID(): uint32;
 begin
   Result := m_ID;
 end;
@@ -185,9 +186,8 @@ begin
 
   e := g_Database.RunQuery(sQuery);
 
-  // TODO: Handle exceptions better and display the message somewhere.
   if e <> nil then
-    raise e;
+    PhLogger.Error('Error updating database: %s', [e.Message]);
 end;
 
 end.

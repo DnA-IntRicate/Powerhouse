@@ -35,7 +35,7 @@ type
   PhJsonSerializer = class
   public
     constructor Create();
-    destructor Destroy();
+    destructor Destroy(); override;
 
     function SerializeJson(obj: TObject): string;
     function DeserializeJson(jsonStr: string): TObject;
@@ -54,6 +54,8 @@ end;
 
 destructor PhJsonSerializer.Destroy();
 begin
+  inherited;
+
   m_Marshal.Free();
   m_Unmarshal.Free();
 end;

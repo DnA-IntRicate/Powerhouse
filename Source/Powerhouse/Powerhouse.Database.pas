@@ -33,7 +33,7 @@ type
   PhDatabase = class
   public
     constructor Create(dbPath: string);
-    destructor Destroy();
+    destructor Destroy(); override;
 
     function RunQuery(sqlQuery: string): Exception;
 
@@ -97,6 +97,8 @@ end;
 
 destructor PhDatabase.Destroy();
 begin
+  inherited;
+
   TblAppliances.Close();
   TblAppliances.Free();
   TblAppliances := nil;
