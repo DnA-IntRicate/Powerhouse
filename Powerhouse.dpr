@@ -37,7 +37,6 @@ uses
   Powerhouse.User in 'Source\Powerhouse\Powerhouse.User.pas',
   Powerhouse.JsonSerializer
     in 'Source\Powerhouse\Powerhouse.JsonSerializer.pas',
-  Powerhouse.FormManager in 'Source\Powerhouse\Powerhouse.FormManager.pas',
   Powerhouse.Logger in 'Source\Powerhouse\Powerhouse.Logger.pas',
   Powerhouse.Form in 'Source\Powerhouse\Powerhouse.Form.pas';
 
