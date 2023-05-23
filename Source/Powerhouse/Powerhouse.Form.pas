@@ -32,33 +32,61 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
 
 type
-  PhFormPtr = ^TForm;
+  PhFormPtr = ^PhForm;
 
-type
   PhForm = class(TForm)
   public
     procedure Enable(); virtual; abstract;
     procedure Disable(); virtual; abstract;
 
+    class procedure TransitionForms(const oldForm, newForm: PhFormPtr);
+      overload;
+    procedure TransitionForms(const newForm: PhFormPtr); overload;
+
     procedure Quit();
 
-    class procedure TransitionForms(const oldForm, newForm: PhFormPtr); static;
+    function GetParentForm(): PhFormPtr;
+    procedure SetParentForm(parentPtr: PhFormPtr);
+
+  protected
+    m_Parent: PhFormPtr;
   end;
 
 implementation
 
 class procedure PhForm.TransitionForms(const oldForm, newForm: PhFormPtr);
 begin
-  oldForm.Hide();
-  oldForm.Enabled := false;
+  oldForm.Disable();
 
-  newForm.Enabled := true;
-  newForm.Show();
+  newForm.SetParentForm(oldForm);
+  newForm.Enable();
+end;
+
+procedure PhForm.TransitionForms(const newForm: PhFormPtr);
+begin
+  TransitionForms(@Self, newForm);
+end;
+
+function PhForm.GetParentForm(): PhFormPtr;
+begin
+  Result := m_Parent;
+end;
+
+procedure PhForm.SetParentForm(parentPtr: PhFormPtr);
+begin
+  m_Parent := parentPtr;
 end;
 
 procedure PhForm.Quit();
+var
+  myPID: DWORD;
+  myHandle: THandle;
 begin
-  Application.MainForm.Close();
+  myPID := GetCurrentProcessId();
+  myHandle := OpenProcess(PROCESS_TERMINATE, false, myPID);
+
+  TerminateProcess(myHandle, 0);
+  CloseHandle(myHandle);
 end;
 
 end.

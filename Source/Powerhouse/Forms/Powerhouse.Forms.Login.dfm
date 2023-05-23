@@ -11,8 +11,7 @@ object PhfLogin: TPhfLogin
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  OnCreate = FormCreate
-  OnShow = FormShow
+  OnClose = FormClose
   PixelsPerInch = 120
   TextHeight = 16
   object pnlLogin: TPanel

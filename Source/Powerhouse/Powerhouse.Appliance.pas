@@ -27,7 +27,8 @@ unit Powerhouse.Appliance;
 interface
 
 uses
-  System.SysUtils, System.StrUtils, System.Math, Powerhouse.Database;
+  System.SysUtils, System.StrUtils, System.Math, Powerhouse.Database,
+  Powerhouse.Logger;
 
 type
   PhAppliance = class

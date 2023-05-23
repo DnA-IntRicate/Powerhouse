@@ -30,11 +30,19 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
-  Powerhouse.Form, Powerhouse.Forms.Login, Powerhouse.Forms.Home;
+  Powerhouse.Form, Powerhouse.Forms.Login, Powerhouse.Forms.Home,
+  Powerhouse.Database;
 
 type
-  TPhfMain = class(TForm)
+  TPhfMain = class(PhForm)
     procedure FormCreate(Sender: TObject);
+
+  public
+    procedure Enable(); override;
+    procedure Disable(); override;
+
+  private
+    procedure SetFormStyle(const formPtr: PhFormPtr);
   end;
 
 var
@@ -45,37 +53,45 @@ implementation
 {$R *.dfm}
 
 procedure TPhfMain.FormCreate(Sender: TObject);
-var
-  oldStyle, newStyle: integer;
 begin
-  Self.Hide();
+  g_Database := PhDatabase.Create('Assets/PowerhouseDb.mdb');
 
   Application.CreateForm(TPhfLogin, g_LoginForm);
   Application.CreateForm(TPhfHome, g_HomeForm);
 
-  with g_LoginForm do
-  begin
-    BorderStyle := bsSingle;
-    FormStyle := fsNormal;
+  SetFormStyle(@g_LoginForm);
+  SetFormStyle(@g_HomeForm);
 
-    oldStyle := GetWindowLong(Handle, GWL_EXSTYLE);
-    newStyle := oldStyle or WS_EX_APPWINDOW;
+  g_HomeForm.Disable();
 
-    SetWindowLong(Handle, GWL_EXSTYLE, newStyle);
-  end;
+  TransitionForms(@g_LoginForm);
+end;
 
-  with g_HomeForm do
-  begin
-    BorderStyle := bsSingle;
-    FormStyle := fsNormal;
+procedure TPhfMain.Enable();
+begin
+  inherited;
 
-    oldStyle := GetWindowLong(Handle, GWL_EXSTYLE);
-    newStyle := oldStyle or WS_EX_APPWINDOW;
+  Self.Show();
+end;
 
-    SetWindowLong(Handle, GWL_EXSTYLE, newStyle);
-  end;
+procedure TPhfMain.Disable();
+begin
+  inherited;
 
-  g_LoginForm.Show();
+  Self.Hide();
+end;
+
+procedure TPhfMain.SetFormStyle(const formPtr: PhFormPtr);
+var
+  oldStyle, newStyle: integer;
+begin
+  formPtr.BorderStyle := bsSingle;
+  formPtr.FormStyle := fsNormal;
+
+  oldStyle := GetWindowLong(formPtr.Handle, GWL_EXSTYLE);
+  newStyle := oldStyle or WS_EX_APPWINDOW;
+
+  SetWindowLong(formPtr.Handle, GWL_EXSTYLE, newStyle);
 end;
 
 end.
