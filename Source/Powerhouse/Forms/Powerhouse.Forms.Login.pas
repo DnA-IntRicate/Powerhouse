@@ -67,7 +67,7 @@ begin
   userName := edtUsername.Text;
   pswd := edtPassword.Text;
   userFound := false;
-  ShowMessage(m_Parent.Caption);
+
   with g_Database do
   begin
     TblUsers.First();
