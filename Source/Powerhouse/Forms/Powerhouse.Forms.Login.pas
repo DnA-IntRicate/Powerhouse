@@ -75,8 +75,8 @@ begin
 
     while not TblUsers.Eof do
     begin
-      userFound := (userName = TblUsers[TBL_FIELD_NAME_USERS_USERNAME]) or
-        (userName = TblUsers[TBL_FIELD_NAME_USERS_EMAIL_ADDRESS]);
+      userFound := (userName = TblUsers[PH_TBL_FIELD_NAME_USERS_USERNAME]) or
+        (userName = TblUsers[PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS]);
       if userFound then
         break;
 
@@ -85,7 +85,7 @@ begin
 
     if userFound then
     begin
-      newUser := PhUser.Create(TblUsers[TBL_FIELD_NAME_USERS_PK]);
+      newUser := PhUser.Create(TblUsers[PH_TBL_FIELD_NAME_USERS_PK]);
 
       if newUser.CheckPassword(pswd) then
       begin

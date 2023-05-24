@@ -53,9 +53,9 @@ type
   end;
 
 const
-  TBL_NAME_APPLIANCES: string = 'tblAppliances';
-  TBL_NAME_TIPS: string = 'tblTips';
-  TBL_NAME_USERS: string = 'tblUsers';
+  PH_TBL_NAME_APPLIANCES: string = 'tblAppliances';
+  PH_TBL_NAME_TIPS: string = 'tblTips';
+  PH_TBL_NAME_USERS: string = 'tblUsers';
 
 var
   g_Database: PhDatabase;
@@ -77,9 +77,9 @@ begin
       Open();
     end;
 
-    OpenTable(TblAppliances, TBL_NAME_APPLIANCES);
-    OpenTable(TblTips, TBL_NAME_TIPS);
-    OpenTable(TblUsers, TBL_NAME_USERS);
+    OpenTable(TblAppliances, PH_TBL_NAME_APPLIANCES);
+    OpenTable(TblTips, PH_TBL_NAME_TIPS);
+    OpenTable(TblUsers, PH_TBL_NAME_USERS);
 
   except
     on e: Exception do

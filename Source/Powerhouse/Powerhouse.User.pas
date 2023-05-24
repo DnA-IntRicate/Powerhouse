@@ -91,12 +91,12 @@ type
   end;
 
 const
-  TBL_FIELD_NAME_USERS_PK: string = 'UserGUID';
-  TBL_FIELD_NAME_USERS_USERNAME: string = 'Username';
-  TBL_FIELD_NAME_USERS_EMAIL_ADDRESS: string = 'EmailAddress';
-  TBL_FIELD_NAME_USERS_FORENAMES: string = 'Forenames';
-  TBL_FIELD_NAME_USERS_SURNAME: string = 'Surname';
-  TBL_FIELD_NAME_USERS_PASSWORD_HASH: string = 'PasswordHash';
+  PH_TBL_FIELD_NAME_USERS_PK: string = 'UserGUID';
+  PH_TBL_FIELD_NAME_USERS_USERNAME: string = 'Username';
+  PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS: string = 'EmailAddress';
+  PH_TBL_FIELD_NAME_USERS_FORENAMES: string = 'Forenames';
+  PH_TBL_FIELD_NAME_USERS_SURNAME: string = 'Surname';
+  PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH: string = 'PasswordHash';
 
 var
   g_CurrentUser: PhUser;
@@ -117,7 +117,7 @@ begin
     // Find the record in the table where UserGUID = m_GUID.
     while not TblUsers.Eof do
     begin
-      foundGUID := m_GUID = TblUsers[TBL_FIELD_NAME_USERS_PK];
+      foundGUID := m_GUID = TblUsers[PH_TBL_FIELD_NAME_USERS_PK];
       if foundGUID then
         break;
 
@@ -126,11 +126,11 @@ begin
 
     if foundGUID then
     begin
-      m_Username := TblUsers[TBL_FIELD_NAME_USERS_USERNAME];
-      m_EmailAddress := TblUsers[TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
-      m_Forenames := TblUsers[TBL_FIELD_NAME_USERS_FORENAMES];
-      m_Surname := TblUsers[TBL_FIELD_NAME_USERS_SURNAME];
-      m_PasswordHash := TblUsers[TBL_FIELD_NAME_USERS_PASSWORD_HASH];
+      m_Username := TblUsers[PH_TBL_FIELD_NAME_USERS_USERNAME];
+      m_EmailAddress := TblUsers[PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
+      m_Forenames := TblUsers[PH_TBL_FIELD_NAME_USERS_FORENAMES];
+      m_Surname := TblUsers[PH_TBL_FIELD_NAME_USERS_SURNAME];
+      m_PasswordHash := TblUsers[PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH];
     end
     else
     begin
@@ -300,11 +300,13 @@ var
 begin
   sQuery := Format('UPDATE %s' + #13#10 +
     'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s''' +
-    #13#10 + 'WHERE %s = %s', [TBL_NAME_USERS, TBL_FIELD_NAME_USERS_USERNAME,
-    m_Username, TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
-    TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames, TBL_FIELD_NAME_USERS_SURNAME,
-    m_Surname, TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
-    TBL_FIELD_NAME_USERS_PK, m_GUID]);
+    #13#10 + 'WHERE %s = %s', [PH_TBL_NAME_USERS,
+    PH_TBL_FIELD_NAME_USERS_USERNAME, m_Username,
+    PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
+    PH_TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames,
+    PH_TBL_FIELD_NAME_USERS_SURNAME, m_Surname,
+    PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
+    PH_TBL_FIELD_NAME_USERS_PK, m_GUID]);
 
   e := g_Database.RunQuery(sQuery);
 

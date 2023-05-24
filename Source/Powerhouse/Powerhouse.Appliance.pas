@@ -76,12 +76,12 @@ type
   end;
 
 const
-  TBL_FIELD_NAME_APPLIANCES_PK: string = 'ApplianceID';
-  TBL_FIELD_NAME_APPLIANCES_NAME: string = 'ApplianceName';
-  TBL_FIELD_NAME_APPLIANCES_WATTAGE: string = 'Wattage';
-  TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT: string = 'InputCurrent';
-  TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE: string = 'InputVoltage';
-  TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR: string = 'CostPerHour';
+  PH_TBL_FIELD_NAME_APPLIANCES_PK: string = 'ApplianceID';
+  PH_TBL_FIELD_NAME_APPLIANCES_NAME: string = 'ApplianceName';
+  PH_TBL_FIELD_NAME_APPLIANCES_WATTAGE: string = 'Wattage';
+  PH_TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT: string = 'InputCurrent';
+  PH_TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE: string = 'InputVoltage';
+  PH_TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR: string = 'CostPerHour';
 
 implementation
 
@@ -96,17 +96,17 @@ begin
     // Find the record in the table where ApplianceID = m_ID.
     while not Eof do
     begin
-      if m_ID = TblAppliances[TBL_FIELD_NAME_APPLIANCES_PK] then
+      if m_ID = TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK] then
         break;
 
       TblAppliances.Next();
     end;
 
-    m_Name := TblAppliances[TBL_FIELD_NAME_APPLIANCES_NAME];
-    m_Wattage := TblAppliances[TBL_FIELD_NAME_APPLIANCES_WATTAGE];
-    m_InputCurrent := TblAppliances[TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT];
-    m_InputVoltage := TblAppliances[TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE];
-    m_CostPerHour := TblAppliances[TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR];
+    m_Name := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_NAME];
+    m_Wattage := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_WATTAGE];
+    m_InputCurrent := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT];
+    m_InputVoltage := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE];
+    m_CostPerHour := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR];
   end;
 end;
 
@@ -118,7 +118,7 @@ begin
   // cause any insert anomalies.
 
   g_Database.TblAppliances.Last();
-  m_ID := g_Database.TblAppliances[TBL_FIELD_NAME_APPLIANCES_PK] + 1;
+  m_ID := g_Database.TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK] + 1;
   g_Database.TblAppliances.First();
 
   m_Name := name;
@@ -187,12 +187,12 @@ var
 begin
   sQuery := Format('UPDATE %s' + #13#10 +
     'SET %s = ''%s'', %s = %f, %s = %f, %s = %f, %s = %f' + #13#10 +
-    'WHERE %s = %d', [TBL_NAME_APPLIANCES, TBL_FIELD_NAME_APPLIANCES_NAME,
-    m_Name, TBL_FIELD_NAME_APPLIANCES_WATTAGE, m_Wattage,
-    TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT, m_InputCurrent,
-    TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE, m_InputVoltage,
-    TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR, m_CostPerHour,
-    TBL_FIELD_NAME_APPLIANCES_PK, m_ID]);
+    'WHERE %s = %d', [PH_TBL_NAME_APPLIANCES, PH_TBL_FIELD_NAME_APPLIANCES_NAME,
+    m_Name, PH_TBL_FIELD_NAME_APPLIANCES_WATTAGE, m_Wattage,
+    PH_TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT, m_InputCurrent,
+    PH_TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE, m_InputVoltage,
+    PH_TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR, m_CostPerHour,
+    PH_TBL_FIELD_NAME_APPLIANCES_PK, m_ID]);
 
   e := g_Database.RunQuery(sQuery);
 
