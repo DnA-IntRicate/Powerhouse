@@ -66,6 +66,15 @@ type
 type
   PhAppliances = TArray<PhAppliance>;
 
+type
+  PhSerializableAppliances = class
+  public
+    constructor Create(var appliances: PhAppliances);
+
+  public
+    Appliances: PhAppliances;
+  end;
+
 const
   TBL_FIELD_NAME_APPLIANCES_PK: string = 'ApplianceID';
   TBL_FIELD_NAME_APPLIANCES_NAME: string = 'ApplianceName';
@@ -189,6 +198,11 @@ begin
 
   if e <> nil then
     PhLogger.Error('Error updating database: %s', [e.Message]);
+end;
+
+constructor PhSerializableAppliances.Create(var appliances: PhAppliances);
+begin
+  Self.Appliances := appliances;
 end;
 
 end.

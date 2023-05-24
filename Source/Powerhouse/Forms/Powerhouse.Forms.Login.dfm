@@ -47,6 +47,21 @@ object PhfLogin: TPhfLogin
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object lblForgotPassword: TLabel
+      Left = 184
+      Top = 124
+      Width = 102
+      Height = 16
+      Cursor = crHandPoint
+      Caption = 'Forgot password?'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsUnderline]
+      ParentFont = False
+      OnClick = lblForgotPasswordClick
+    end
     object edtUsername: TEdit
       Left = 130
       Top = 64
@@ -63,20 +78,6 @@ object PhfLogin: TPhfLogin
       TabOrder = 1
       TextHint = 'Enter password...'
     end
-    object lnkForgotPassword: TLinkLabel
-      Left = 176
-      Top = 124
-      Width = 106
-      Height = 20
-      Caption = 'Forgot Password?'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clMenuHighlight
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = [fsUnderline]
-      ParentFont = False
-      TabOrder = 2
-    end
     object btnLogin: TButton
       Left = 130
       Top = 150
@@ -89,7 +90,7 @@ object PhfLogin: TPhfLogin
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 2
       OnClick = btnLoginClick
     end
   end

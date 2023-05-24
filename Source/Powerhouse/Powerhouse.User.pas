@@ -81,6 +81,15 @@ type
 type
   PhUsers = TArray<PhUser>;
 
+type
+  PhSerializableUsers = class
+  public
+    constructor Create(var users: PhUsers);
+
+  public
+    Users: PhUsers;
+  end;
+
 const
   TBL_FIELD_NAME_USERS_PK: string = 'UserGUID';
   TBL_FIELD_NAME_USERS_USERNAME: string = 'Username';
@@ -301,6 +310,11 @@ begin
 
   if e <> nil then
     PhLogger.Error('Error updating database: %s', [e.Message]);
+end;
+
+constructor PhSerializableUsers.Create(var users: PhUsers);
+begin
+  Self.Users := users;
 end;
 
 end.

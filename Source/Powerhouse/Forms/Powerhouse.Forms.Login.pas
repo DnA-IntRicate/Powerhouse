@@ -41,10 +41,11 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
-    lnkForgotPassword: TLinkLabel;
     btnLogin: TButton;
+    lblForgotPassword: TLabel;
     procedure btnLoginClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure lblForgotPasswordClick(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -116,6 +117,11 @@ end;
 procedure TPhfLogin.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Quit();
+end;
+
+procedure TPhfLogin.lblForgotPasswordClick(Sender: TObject);
+begin
+  ShowMessage('Hello, World!');
 end;
 
 procedure TPhfLogin.Enable();
