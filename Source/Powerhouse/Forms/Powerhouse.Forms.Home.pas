@@ -34,13 +34,18 @@ uses
 
 type
   TPhfHome = class(PhForm)
-    tbcHome: TTabControl;
     lstAppliances: TListBox;
     pnlApplianceInformation: TPanel;
     Label1: TLabel;
     btnModifyAppliance: TButton;
     pnlHomeForm: TPanel;
     Label3: TLabel;
+    pgcHome: TPageControl;
+    tabAppliances: TTabSheet;
+    tabInsights: TTabSheet;
+    tabCalculator: TTabSheet;
+    tabAccount: TTabSheet;
+    tabHelp: TTabSheet;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   public

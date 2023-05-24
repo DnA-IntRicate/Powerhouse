@@ -46,6 +46,9 @@ type
     TblUsers: TADOTable;
 
   private
+    procedure OpenTable(var table: TADOTable; const tableName: string);
+
+  private
     m_Path: string;
   end;
 
@@ -74,20 +77,9 @@ begin
       Open();
     end;
 
-    TblAppliances := TADOTable.Create(nil);
-    TblAppliances.Connection := Connection;
-    TblAppliances.TableName := TBL_NAME_APPLIANCES;
-    TblAppliances.Open();
-
-    TblTips := TADOTable.Create(nil);
-    TblTips.Connection := Connection;
-    TblTips.TableName := TBL_NAME_TIPS;
-    TblTips.Open();
-
-    TblUsers := TADOTable.Create(nil);
-    TblUsers.Connection := Connection;
-    TblUsers.TableName := TBL_NAME_USERS;
-    TblUsers.Open();
+    OpenTable(TblAppliances, TBL_NAME_APPLIANCES);
+    OpenTable(TblTips, TBL_NAME_TIPS);
+    OpenTable(TblUsers, TBL_NAME_USERS);
 
   except
     on e: Exception do
@@ -142,6 +134,14 @@ end;
 function PhDatabase.GetPath(): string;
 begin
   Result := m_Path;
+end;
+
+procedure PhDatabase.OpenTable(var table: TADOTable; const tableName: string);
+begin
+  table := TADOTable.Create(nil);
+  table.Connection := Connection;
+  table.tableName := tableName;
+  table.Open();
 end;
 
 end.
