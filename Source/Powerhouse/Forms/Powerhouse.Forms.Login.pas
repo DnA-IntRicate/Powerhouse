@@ -31,7 +31,8 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
-  Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home;
+  Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home,
+  Powerhouse.FileStream;
 
 type
   TPhfLogin = class(PhForm)
@@ -92,6 +93,9 @@ begin
         g_CurrentUser := newUser;
         PhLogger.Info('Welcome %s %s!', [g_CurrentUser.GetForenames(),
           g_CurrentUser.GetSurname()]);
+
+        PhFileStream.WriteAllText('Hello.txt', 'Hello, World!',
+          PhWriteMode.Overwrite);
 
         TransitionForms(@g_HomeForm);
 

@@ -68,8 +68,15 @@ begin
 end;
 
 class procedure PhFileStream.CreateFile(const path: string);
+var
+  fileHandle: THandle;
 begin
-  FileCreate(path);
+  fileHandle := FileCreate(path);
+
+  if fileHandle = INVALID_HANDLE_VALUE then
+    PhLogger.Error('Failed to create file: ' + path);
+
+  FileClose(fileHandle);
 end;
 
 class function PhFileStream.IsFile(const path: string): boolean;
