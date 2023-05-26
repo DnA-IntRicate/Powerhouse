@@ -28,7 +28,8 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash, System.JSON,
-  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Appliance, Powerhouse.User;
+  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.SaveData, Powerhouse.FileStream;
 
 type
   PhJsonSerializer = class
@@ -53,74 +54,6 @@ constructor PhJsonSerializer.Create();
 begin
   m_Marshal := TJSONMarshal.Create(TJSONConverter.Create());
   m_Unmarshal := TJSONUnMarshal.Create();
-
-  // PhAppliances
-  m_Marshal.RegisterConverter(PhSerializableAppliances, 'Appliances',
-    function(data: TObject; field: string): TListOfObjects
-    var
-      appliance: PhAppliance;
-      i: integer;
-    begin
-      SetLength(Result, Length(PhSerializableAppliances(data).Appliances));
-      i := Low(Result);
-
-      for appliance in PhSerializableAppliances(data).Appliances do
-      begin
-        Result[i] := appliance;
-        Inc(i);
-      end;
-    end);
-
-  // TODO: This will only work if PhUser.m_Appliances is of type PhSerializableAppliances
-  // PhUsers
-  m_Marshal.RegisterConverter(PhSerializableUsers, 'Users',
-    function(data: TObject; field: string): TListOfObjects
-    var
-      user: PhUser;
-      i: integer;
-    begin
-      SetLength(Result, Length(PhSerializableUsers(data).Users));
-      i := Low(Result);
-
-      for user in PhSerializableUsers(data).Users do
-      begin
-        Result[i] := user;
-        Inc(i);
-      end;
-    end);
-
-  // PhAppliances
-  m_Unmarshal.RegisterReverter(PhSerializableAppliances, 'Appliances',
-    procedure(data: TObject; field: string; args: TListOfObjects)
-    var
-      obj: TObject;
-      i: integer;
-    begin
-      i := Low(PhSerializableAppliances(data).Appliances);
-
-      for obj in args do
-      begin
-        PhSerializableAppliances(data).Appliances[i] := PhAppliance(obj);
-        Inc(i);
-      end;
-    end);
-
-  // TODO: This will only work if PhUser.m_Appliances is of type PhSerializableAppliances
-  // PhUsers
-  m_Unmarshal.RegisterReverter(PhSerializableUsers, 'Users',
-    procedure(data: TObject; field: string; args: TListOfObjects)
-    var
-      obj: TObject;
-      i: integer;
-    begin
-      i := Low(PhSerializableUsers(data).Users);
-
-      for obj in args do
-      begin
-        PhSerializableUsers(data).Users[i] := PhUser(obj);
-        Inc(i);
-      end;
-    end);
 end;
 
 destructor PhJsonSerializer.Destroy();

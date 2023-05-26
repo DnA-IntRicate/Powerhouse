@@ -39,7 +39,8 @@ uses
     in 'Source\Powerhouse\Powerhouse.JsonSerializer.pas',
   Powerhouse.Logger in 'Source\Powerhouse\Powerhouse.Logger.pas',
   Powerhouse.Form in 'Source\Powerhouse\Powerhouse.Form.pas',
-  Powerhouse.FileStream in 'Source\Powerhouse\Powerhouse.FileStream.pas';
+  Powerhouse.FileStream in 'Source\Powerhouse\Powerhouse.FileStream.pas',
+  Powerhouse.SaveData in 'Source\Powerhouse\Powerhouse.SaveData.pas';
 
 {$R *.res}
 

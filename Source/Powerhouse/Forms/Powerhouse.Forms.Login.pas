@@ -32,7 +32,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home,
-  Powerhouse.FileStream;
+  Powerhouse.FileStream, Powerhouse.SaveData;
 
 type
   TPhfLogin = class(PhForm)
@@ -51,6 +51,10 @@ type
   public
     procedure Enable(); override;
     procedure Disable(); override;
+
+  private
+    procedure LoadUserAppliances(var inUser: PhUser; saveFilePath: string);
+    procedure CreateSaveFile(user: PhUser; saveFilePath: string);
   end;
 
 var
@@ -90,17 +94,17 @@ begin
 
       if newUser.CheckPassword(pswd) then
       begin
+        if PhFileStream.IsFile(PH_SAVEFILE_NAME) then
+          LoadUserAppliances(newUser, PH_SAVEFILE_NAME)
+        else
+          CreateSaveFile(newUser, PH_SAVEFILE_NAME);
+
         g_CurrentUser := newUser;
+
         PhLogger.Info('Welcome %s %s!', [g_CurrentUser.GetForenames(),
           g_CurrentUser.GetSurname()]);
 
-        PhFileStream.WriteAllText('Hello.txt', 'Hello, World!',
-          PhWriteMode.Overwrite);
-
         TransitionForms(@g_HomeForm);
-
-        // TODO: Load appliances from JSON
-        // TODO: Perform post-login stuff
       end
       else
       begin
@@ -110,7 +114,7 @@ begin
     end
     else
     begin
-      PhLogger.Error('Username or email address not found');
+      PhLogger.Error('Username or email address not found!');
       edtUsername.SetFocus();
     end;
 
@@ -142,6 +146,51 @@ begin
 
   Self.Hide();
   Self.Enabled := false;
+end;
+
+procedure TPhfLogin.LoadUserAppliances(var inUser: PhUser;
+  saveFilePath: string);
+var
+  jsonSrc: string;
+  json: PhJsonSerializer;
+  saveData: PhSaveData;
+  users: PhUsers;
+  user: PhUser;
+  appliances: PhAppliances;
+begin
+  jsonSrc := PhFileStream.ReadAllText(saveFilePath);
+  json := PhJsonSerializer.Create();
+  saveData := PhSaveData(json.DeserializeJson(jsonSrc));
+  saveData.ToPhUsers(users);
+
+  for user in users do
+  begin
+    if user.GetGUID() = inUser.GetGUID() then
+    begin
+      user.GetAppliances(appliances);
+      inUser.SetAppliances(appliances);
+
+      break;
+    end;
+  end;
+end;
+
+procedure TPhfLogin.CreateSaveFile(user: PhUser; saveFilePath: string);
+var
+  users: PhUsers;
+  saveData: PhSaveData;
+  json: PhJsonSerializer;
+  jsonSrc: string;
+begin
+  SetLength(users, 1);
+  users[0] := user;
+
+  saveData := PhSaveData.Create(users);
+
+  json := PhJsonSerializer.Create();
+  jsonSrc := json.SerializeJson(saveData);
+
+  PhFileStream.WriteAllText(PH_SAVEFILE_NAME, jsonSrc, PhWriteMode.Overwrite);
 end;
 
 end.

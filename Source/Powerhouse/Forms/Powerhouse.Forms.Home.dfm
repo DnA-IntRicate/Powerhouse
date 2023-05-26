@@ -61,8 +61,6 @@ object PhfHome: TPhfHome
           Top = 40
           Width = 239
           Height = 326
-          Items.Strings = (
-            'Samsung 303L Fridge')
           TabOrder = 1
         end
         object pnlApplianceInformation: TPanel
@@ -75,9 +73,9 @@ object PhfHome: TPhfHome
           object Label1: TLabel
             Left = 22
             Top = 0
-            Width = 188
+            Width = 193
             Height = 21
-            Caption = 'ApplianceInformation'
+            Caption = 'Appliance Information'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -17

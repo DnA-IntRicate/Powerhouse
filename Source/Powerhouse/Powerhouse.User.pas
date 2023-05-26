@@ -56,10 +56,11 @@ type
     function GetPasswordHash(): string;
     procedure SetPassword(newPswd: string);
 
-    procedure GetAppliances(out Result: PhAppliances);
+    procedure GetAppliances(out result: PhAppliances);
+    procedure SetAppliances(appliances: PhAppliances);
 
-    procedure GetApplianceByName(name: string; out Result: PhAppliance);
-    procedure GetApplianceByID(id: uint32; out Result: PhAppliance);
+    procedure GetApplianceByName(name: string; out result: PhAppliance);
+    procedure GetApplianceByID(id: uint32; out result: PhAppliance);
 
   private
     function HashPassword(pswd: string): string;
@@ -80,15 +81,6 @@ type
 
 type
   PhUsers = TArray<PhUser>;
-
-type
-  PhSerializableUsers = class
-  public
-    constructor Create(var users: PhUsers);
-
-  public
-    Users: PhUsers;
-  end;
 
 const
   PH_TBL_FIELD_NAME_USERS_PK: string = 'UserGUID';
@@ -114,7 +106,6 @@ begin
   begin
     TblUsers.First();
 
-    // Find the record in the table where UserGUID = m_GUID.
     while not TblUsers.Eof do
     begin
       foundGUID := m_GUID = TblUsers[PH_TBL_FIELD_NAME_USERS_PK];
@@ -141,7 +132,6 @@ begin
       m_PasswordHash := '';
     end;
 
-    // NOTE: m_Appliances is not being set yet. JSON file is needed to store active appliances.
     TblUsers.First();
   end;
 end;
@@ -235,7 +225,12 @@ begin
   Result := m_Appliances;
 end;
 
-procedure PhUser.GetApplianceByName(name: string; out Result: PhAppliance);
+procedure PhUser.SetAppliances(appliances: PhAppliances);
+begin
+  m_Appliances := appliances;
+end;
+
+procedure PhUser.GetApplianceByName(name: string; out result: PhAppliance);
 var
   i: integer;
 begin
@@ -243,13 +238,13 @@ begin
   begin
     if m_Appliances[i].GetName() = name then
     begin
-      Result := m_Appliances[i];
+      result := m_Appliances[i];
       break;
     end;
   end;
 end;
 
-procedure PhUser.GetApplianceByID(id: uint32; out Result: PhAppliance);
+procedure PhUser.GetApplianceByID(id: uint32; out result: PhAppliance);
 var
   i: integer;
 begin
@@ -257,7 +252,7 @@ begin
   begin
     if m_Appliances[i].GetID() = id then
     begin
-      Result := m_Appliances[i];
+      result := m_Appliances[i];
       break;
     end;
   end;
@@ -312,11 +307,6 @@ begin
 
   if e <> nil then
     PhLogger.Error('Error updating database: %s', [e.Message]);
-end;
-
-constructor PhSerializableUsers.Create(var users: PhUsers);
-begin
-  Self.Users := users;
 end;
 
 end.

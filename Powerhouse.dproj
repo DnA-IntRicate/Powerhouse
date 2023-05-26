@@ -131,6 +131,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Logger.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Form.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.FileStream.pas"/>
+        <DCCReference Include="Source\Powerhouse\Powerhouse.SaveData.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

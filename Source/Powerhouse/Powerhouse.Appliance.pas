@@ -66,15 +66,6 @@ type
 type
   PhAppliances = TArray<PhAppliance>;
 
-type
-  PhSerializableAppliances = class
-  public
-    constructor Create(var appliances: PhAppliances);
-
-  public
-    Appliances: PhAppliances;
-  end;
-
 const
   PH_TBL_FIELD_NAME_APPLIANCES_PK: string = 'ApplianceID';
   PH_TBL_FIELD_NAME_APPLIANCES_NAME: string = 'ApplianceName';
@@ -86,27 +77,44 @@ const
 implementation
 
 constructor PhAppliance.Create(id: uint32);
+var
+  foundID: boolean;
 begin
   m_ID := id;
+  foundID := false;
 
   with g_Database do
   begin
     TblAppliances.First();
 
-    // Find the record in the table where ApplianceID = m_ID.
-    while not Eof do
+    while not TblAppliances.Eof do
     begin
-      if m_ID = TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK] then
+      foundID := m_ID = TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK];
+      if foundID then
         break;
 
       TblAppliances.Next();
     end;
 
-    m_Name := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_NAME];
-    m_Wattage := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_WATTAGE];
-    m_InputCurrent := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT];
-    m_InputVoltage := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE];
-    m_CostPerHour := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR];
+    if foundID then
+    begin
+      m_Name := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_NAME];
+      m_Wattage := TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_WATTAGE];
+      m_InputCurrent := TblAppliances
+        [PH_TBL_FIELD_NAME_APPLIANCES_INPUT_CURRENT];
+      m_InputVoltage := TblAppliances
+        [PH_TBL_FIELD_NAME_APPLIANCES_INPUT_VOLTAGE];
+      m_CostPerHour := TblAppliances
+        [PH_TBL_FIELD_NAME_APPLIANCES_COST_PER_HOUR];
+    end
+    else
+    begin
+      m_Name := '';
+      m_Wattage := 0.0;
+      m_InputCurrent := 0.0;
+      m_InputVoltage := 0.0;
+      m_CostPerHour := 0.0;
+    end;
   end;
 end;
 
@@ -198,11 +206,6 @@ begin
 
   if e <> nil then
     PhLogger.Error('Error updating database: %s', [e.Message]);
-end;
-
-constructor PhSerializableAppliances.Create(var appliances: PhAppliances);
-begin
-  Self.Appliances := appliances;
 end;
 
 end.

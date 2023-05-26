@@ -30,7 +30,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
-  Vcl.ExtCtrls, Powerhouse.Form;
+  Vcl.ExtCtrls, Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance,
+  Powerhouse.User;
 
 type
   TPhfHome = class(PhForm)
@@ -51,6 +52,9 @@ type
   public
     procedure Enable(); override;
     procedure Disable(); override;
+
+  private
+    procedure DisplayUserAppliances(var inUser: PhUser);
   end;
 
 var
@@ -71,6 +75,8 @@ begin
 
   Self.Enabled := true;
   Self.Show();
+
+  DisplayUserAppliances(g_CurrentUser);
 end;
 
 procedure TPhfHome.Disable();
@@ -79,6 +85,20 @@ begin
 
   Self.Hide();
   Self.Enabled := false;
+end;
+
+procedure TPhfHome.DisplayUserAppliances(var inUser: PhUser);
+var
+  appliance: PhAppliance;
+  appliances: PhAppliances;
+begin
+  inUser.GetAppliances(appliances);
+
+  for appliance in appliances do
+  begin
+    lstAppliances.Items.Add(appliance.GetName());
+  end;
+
 end;
 
 end.
