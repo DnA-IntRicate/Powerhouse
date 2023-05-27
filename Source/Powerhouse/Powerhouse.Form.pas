@@ -28,24 +28,24 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
+  System.Classes, System.SyncObjs, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
 
 type
   PhFormPtr = ^PhForm;
+  PhOnGetParentProc = reference to procedure(parentPtr: PhFormPtr);
 
   PhForm = class(TForm)
   public
     procedure Enable(); virtual; abstract;
     procedure Disable(); virtual; abstract;
 
-    class procedure TransitionForms(const oldForm, newForm: PhFormPtr);
-      overload;
+    procedure TransitionForms(const oldForm, newForm: PhFormPtr); overload;
     procedure TransitionForms(const newForm: PhFormPtr); overload;
 
     procedure Quit();
 
-    function GetParentForm(): PhFormPtr;
+    procedure GetParentForm(onGetParentProc: PhOnGetParentProc);
     procedure SetParentForm(parentPtr: PhFormPtr);
 
   protected
@@ -54,7 +54,7 @@ type
 
 implementation
 
-class procedure PhForm.TransitionForms(const oldForm, newForm: PhFormPtr);
+procedure PhForm.TransitionForms(const oldForm, newForm: PhFormPtr);
 begin
   oldForm.Disable();
 
@@ -67,9 +67,16 @@ begin
   TransitionForms(@Self, newForm);
 end;
 
-function PhForm.GetParentForm(): PhFormPtr;
+procedure PhForm.GetParentForm(onGetParentProc: PhOnGetParentProc);
+var
+  mutex: TMutex;
 begin
-  Result := m_Parent;
+  mutex := TMutex.Create(nil, false, 'PhForm.GetParentForm_Mutex');
+
+  mutex.Acquire();
+  onGetParentProc(m_Parent);
+  mutex.Release();
+  mutex.Free();
 end;
 
 procedure PhForm.SetParentForm(parentPtr: PhFormPtr);
