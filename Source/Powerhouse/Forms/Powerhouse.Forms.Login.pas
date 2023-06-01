@@ -28,10 +28,10 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
-  Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ExtCtrls, Vcl.StdCtrls, Powerhouse.Form, Powerhouse.Database,
+  Powerhouse.Appliance, Powerhouse.User, Powerhouse.JsonSerializer,
+  Powerhouse.Logger, Powerhouse.Forms.Home, Powerhouse.Forms.Registration,
   Powerhouse.FileStream, Powerhouse.SaveData;
 
 type
@@ -43,10 +43,10 @@ type
     Label2: TLabel;
     Label3: TLabel;
     btnLogin: TButton;
-    lblForgotPassword: TLabel;
+    lblRegister: TLabel;
     procedure btnLoginClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure lblForgotPasswordClick(Sender: TObject);
+    procedure lblRegisterClick(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -54,6 +54,7 @@ type
 
   private
     procedure LoadUserAppliances(var inUser: PhUser; saveFilePath: string);
+    procedure LoginUser(var inUser: PhUser);
     procedure CreateSaveFile(user: PhUser; saveFilePath: string);
   end;
 
@@ -99,12 +100,7 @@ begin
         else
           CreateSaveFile(newUser, PH_SAVEFILE_NAME);
 
-        g_CurrentUser := newUser;
-
-        PhLogger.Info('Welcome %s %s!', [g_CurrentUser.GetForenames(),
-          g_CurrentUser.GetSurname()]);
-
-        TransitionForms(@g_HomeForm);
+        LoginUser(newUser);
       end
       else
       begin
@@ -127,9 +123,27 @@ begin
   Quit();
 end;
 
-procedure TPhfLogin.lblForgotPasswordClick(Sender: TObject);
+procedure TPhfLogin.lblRegisterClick(Sender: TObject);
+var
+  regForm: TPhfRegistration;
+  newUser: PhUser;
 begin
-  ShowMessage('Hello, World!');
+  regForm := TPhfRegistration.Create(Self);
+  regForm.Enable();
+
+  newUser := regForm.GetNewUser();
+
+  if newUser <> nil then
+  begin
+    edtUsername.Text := newUser.GetUsername();
+    edtPassword.Text := '••••••••';
+
+    Sleep(750);
+
+    LoginUser(newUser);
+  end;
+
+  regForm.Free();
 end;
 
 procedure TPhfLogin.Enable();
@@ -173,6 +187,16 @@ begin
       break;
     end;
   end;
+end;
+
+procedure TPhfLogin.LoginUser(var inUser: PhUser);
+begin
+  g_CurrentUser := inUser;
+
+  PhLogger.Info('Welcome %s %s!', [g_CurrentUser.GetForenames(),
+    g_CurrentUser.GetSurname()]);
+
+  TransitionForms(@g_HomeForm);
 end;
 
 procedure TPhfLogin.CreateSaveFile(user: PhUser; saveFilePath: string);

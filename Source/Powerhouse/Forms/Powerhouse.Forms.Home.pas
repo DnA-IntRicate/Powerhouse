@@ -28,10 +28,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
-  Vcl.ExtCtrls, Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance,
-  Powerhouse.User;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Form,
+  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
 
 type
   TPhfHome = class(PhForm)
@@ -70,6 +69,7 @@ begin
 end;
 
 procedure TPhfHome.Enable();
+
 begin
   inherited;
 
@@ -77,6 +77,12 @@ begin
   Self.Show();
 
   DisplayUserAppliances(g_CurrentUser);
+
+  GetParentForm(
+    procedure(parentPtr: PhFormPtr)
+    begin
+      ShowMessage(parentPtr.Caption);
+    end);
 end;
 
 procedure TPhfHome.Disable();
@@ -95,10 +101,7 @@ begin
   inUser.GetAppliances(appliances);
 
   for appliance in appliances do
-  begin
     lstAppliances.Items.Add(appliance.GetName());
-  end;
-
 end;
 
 end.

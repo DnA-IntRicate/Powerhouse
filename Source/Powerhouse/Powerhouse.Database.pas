@@ -35,7 +35,7 @@ type
     constructor Create(dbPath: string);
     destructor Destroy(); override;
 
-    function RunQuery(sqlQuery: string): Exception;
+    function RunQuery(sqlQuery: string): EADOError;
 
     function GetPath(): string;
 
@@ -47,6 +47,7 @@ type
 
   private
     procedure OpenTable(var table: TADOTable; const tableName: string);
+    procedure Reload();
 
   private
     m_Path: string;
@@ -108,7 +109,7 @@ begin
   Connection := nil;
 end;
 
-function PhDatabase.RunQuery(sqlQuery: string): Exception;
+function PhDatabase.RunQuery(sqlQuery: string): EADOError;
 var
   query: TADOQuery;
 begin
@@ -122,13 +123,15 @@ begin
     try
       query.ExecSQL();
     except
-      on e: Exception do
+      on e: EADOError do
         Result := e;
     end;
 
   finally
     query.Free();
   end;
+
+  Reload();
 end;
 
 function PhDatabase.GetPath(): string;
@@ -142,6 +145,20 @@ begin
   table.Connection := Connection;
   table.tableName := tableName;
   table.Open();
+end;
+
+procedure PhDatabase.Reload();
+begin
+  TblAppliances.Close();
+  TblTips.Close();
+  TblUsers.Close();
+
+  Connection.Close();
+  Connection.Open();
+
+  TblAppliances.Open();
+  TblTips.Open();
+  TblUsers.Open();
 end;
 
 end.

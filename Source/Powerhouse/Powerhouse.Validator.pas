@@ -54,8 +54,6 @@ type
       options: PhValidationOptions = []; min: integer = -1; max: integer = -1)
       : PhValidation;
 
-    class function ValidateUsername(const usr: string): PhValidation;
-    class function ValidatePassword(const pswd: string): PhValidation;
     class function ValidateEmailAddress(const email: string): PhValidation;
 
   private
@@ -67,12 +65,6 @@ type
   end;
 
 const
-  PH_MIN_LENGTH_USERNAME: integer = 6;
-  PH_MIN_LENGTH_PASSWORD: integer = 8;
-
-  PH_MAX_LENGTH_USERNAME: integer = 18;
-  PH_MAX_LENGTH_PASSWORD: integer = 26;
-
   PH_REGEX_WHITELIST = '^[a-zA-Z0-9_+\-=.@ ]+$';
   PH_REGEX_EMAIL_ADDRESS = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 
@@ -171,18 +163,6 @@ begin
   end;
 
   Result := validation;
-end;
-
-class function PhValidator.ValidateUsername(const usr: string): PhValidation;
-begin
-  Result := ValidateString(usr, [All], PH_MIN_LENGTH_USERNAME,
-    PH_MAX_LENGTH_USERNAME);
-end;
-
-class function PhValidator.ValidatePassword(const pswd: string): PhValidation;
-begin
-  Result := ValidateString(pswd, [All], PH_MIN_LENGTH_PASSWORD,
-    PH_MAX_LENGTH_PASSWORD);
 end;
 
 class function PhValidator.ValidateEmailAddress(const email: string)

@@ -124,6 +124,10 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>g_HomeForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Registration.pas">
+            <Form>g_RegistrationForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Database.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Appliance.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.User.pas"/>

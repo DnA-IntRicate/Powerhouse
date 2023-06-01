@@ -47,20 +47,20 @@ object PhfLogin: TPhfLogin
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblForgotPassword: TLabel
+    object lblRegister: TLabel
       Left = 184
       Top = 124
-      Width = 102
+      Width = 89
       Height = 16
       Cursor = crHandPoint
-      Caption = 'Forgot password?'
+      Caption = 'Register here...'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = [fsUnderline]
       ParentFont = False
-      OnClick = lblForgotPasswordClick
+      OnClick = lblRegisterClick
     end
     object edtUsername: TEdit
       Left = 130

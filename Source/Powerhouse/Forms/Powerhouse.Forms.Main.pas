@@ -28,10 +28,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
-  Powerhouse.Form, Powerhouse.Forms.Login, Powerhouse.Forms.Home,
-  Powerhouse.Database;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Form, Powerhouse.Forms.Home,
+  Powerhouse.Forms.Login, Powerhouse.Forms.Registration, Powerhouse.Database;
 
 type
   TPhfMain = class(PhForm)

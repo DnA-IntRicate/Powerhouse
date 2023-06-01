@@ -33,9 +33,10 @@ uses
 type
   PhUser = class
   public
-    constructor Create(guid: string); overload;
-    constructor Create(usr, pswd, names, surname: string;
-      appliances: PhAppliances); overload;
+    constructor Create(guid: string);
+
+    class function CreateUserAccount(const usr, pswd, email, names,
+      surname: string): PhUser;
 
     function CheckPassword(pswd: string): boolean;
 
@@ -63,8 +64,8 @@ type
     procedure GetApplianceByID(id: uint32; out result: PhAppliance);
 
   private
-    function HashPassword(pswd: string): string;
-    function NewGUID(): string;
+    class function HashPassword(pswd: string): string;
+    class function NewGUID(): string;
 
     procedure UpdateInDatabase();
 
@@ -136,18 +137,30 @@ begin
   end;
 end;
 
-constructor PhUser.Create(usr, pswd, names, surname: string;
-  appliances: PhAppliances);
+class function PhUser.CreateUserAccount(const usr, pswd, email, names,
+  surname: string): PhUser;
+var
+  query, guid, passwordHash, myEmail: string;
+  e: Exception;
 begin
-  // If this constructor is invoked it is assumed that the program is attempting to create a new
-  // user to be inserted into the database.
+  guid := NewGUID();
+  passwordHash := HashPassword(pswd);
+  myEmail := LowerCase(email);
 
-  m_GUID := NewGUID();
-  m_Username := usr;
-  m_PasswordHash := HashPassword(pswd);
-  m_Forenames := names;
-  m_Surname := surname;
-  m_Appliances := appliances;
+  query := Format('INSERT INTO %s (%s, %s, %s, %s, %s, %s)' +
+    'VALUES (''%s'', ''%s'', ''%s'', ''%s'', ''%s'', ''%s'');',
+    [PH_TBL_NAME_USERS, PH_TBL_FIELD_NAME_USERS_PK,
+    PH_TBL_FIELD_NAME_USERS_USERNAME, PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS,
+    PH_TBL_FIELD_NAME_USERS_FORENAMES, PH_TBL_FIELD_NAME_USERS_SURNAME,
+    PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, guid, usr, myEmail, names, surname,
+    passwordHash]);
+
+  e := g_Database.RunQuery(query);
+
+  if e <> nil then
+    PhLogger.Error('Error creating new user in database: %s', [e.Message]);
+
+  Result := PhUser.Create(guid);
 end;
 
 function PhUser.CheckPassword(pswd: string): boolean;
@@ -258,7 +271,7 @@ begin
   end;
 end;
 
-function PhUser.HashPassword(pswd: string): string;
+class function PhUser.HashPassword(pswd: string): string;
 var
   MD5: THashMD5;
   sHash, sDynamicSalt: string;
@@ -273,7 +286,7 @@ begin
   Result := sHash;
 end;
 
-function PhUser.NewGUID(): string;
+class function PhUser.NewGUID(): string;
 var
   guid: TGUID;
   sHexGUID: string;
@@ -290,10 +303,10 @@ end;
 
 procedure PhUser.UpdateInDatabase();
 var
-  sQuery: string;
+  query: string;
   e: Exception;
 begin
-  sQuery := Format('UPDATE %s' + #13#10 +
+  query := Format('UPDATE %s' + #13#10 +
     'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s''' +
     #13#10 + 'WHERE %s = %s', [PH_TBL_NAME_USERS,
     PH_TBL_FIELD_NAME_USERS_USERNAME, m_Username,
@@ -303,7 +316,7 @@ begin
     PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
     PH_TBL_FIELD_NAME_USERS_PK, m_GUID]);
 
-  e := g_Database.RunQuery(sQuery);
+  e := g_Database.RunQuery(query);
 
   if e <> nil then
     PhLogger.Error('Error updating database: %s', [e.Message]);
