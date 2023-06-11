@@ -29,10 +29,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ExtCtrls, Vcl.StdCtrls, Powerhouse.Form, Powerhouse.Database,
-  Powerhouse.Appliance, Powerhouse.User, Powerhouse.JsonSerializer,
-  Powerhouse.Logger, Powerhouse.Forms.Home, Powerhouse.Forms.Registration,
-  Powerhouse.FileStream, Powerhouse.SaveData;
+  Vcl.ExtCtrls, Vcl.StdCtrls, Powerhouse.Types, Powerhouse.Form,
+  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home,
+  Powerhouse.Forms.Registration, Powerhouse.FileStream, Powerhouse.SaveData;
 
 type
   TPhfLogin = class(PhForm)
@@ -53,6 +53,7 @@ type
     procedure Disable(); override;
 
   private
+    // TODO: If the logged in user has no save data, add them to the save.
     procedure LoadUserAppliances(var inUser: PhUser; saveFilePath: string);
     procedure LoginUser(var inUser: PhUser);
     procedure CreateSaveFile(user: PhUser; saveFilePath: string);
@@ -179,7 +180,7 @@ begin
 
   for user in users do
   begin
-    if user.GetGUID() = inUser.GetGUID() then
+    if user.GetGUID().Equals(inUser.GetGUID()) then
     begin
       user.GetAppliances(appliances);
       inUser.SetAppliances(appliances);

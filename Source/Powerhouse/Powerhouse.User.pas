@@ -27,20 +27,20 @@ unit Powerhouse.User;
 interface
 
 uses
-  System.SysUtils, System.StrUtils, System.Math, System.Hash,
+  System.SysUtils, System.StrUtils, System.Math, System.Hash, Powerhouse.Types,
   Powerhouse.Appliance, Powerhouse.Database, Powerhouse.Logger;
 
 type
   PhUser = class
   public
-    constructor Create(guid: string);
+    constructor Create(const guid: PhGUID);
 
     class function CreateUserAccount(const usr, pswd, email, names,
       surname: string): PhUser;
 
     function CheckPassword(pswd: string): boolean;
 
-    function GetGUID(): string;
+    function GetGUID(): PhGUID;
 
     function GetUsername(): string;
     procedure SetUsername(newUsrName: string);
@@ -65,12 +65,11 @@ type
 
   private
     class function HashPassword(pswd: string): string;
-    class function NewGUID(): string;
 
     procedure UpdateInDatabase();
 
   private
-    m_GUID: string;
+    m_GUID: PhGUID;
     m_Username: string;
     m_EmailAddress: string;
     m_Forenames: string;
@@ -96,7 +95,7 @@ var
 
 implementation
 
-constructor PhUser.Create(guid: string);
+constructor PhUser.Create(const guid: PhGUID);
 var
   foundGUID: boolean;
 begin
@@ -109,7 +108,7 @@ begin
 
     while not TblUsers.Eof do
     begin
-      foundGUID := m_GUID = TblUsers[PH_TBL_FIELD_NAME_USERS_PK];
+      foundGUID := m_GUID.Equals(TblUsers[PH_TBL_FIELD_NAME_USERS_PK]);
       if foundGUID then
         break;
 
@@ -140,10 +139,11 @@ end;
 class function PhUser.CreateUserAccount(const usr, pswd, email, names,
   surname: string): PhUser;
 var
-  query, guid, passwordHash, myEmail: string;
+  query, passwordHash, myEmail: string;
+  guid: PhGUID;
   e: Exception;
 begin
-  guid := NewGUID();
+  guid := PhGUID.Create();
   passwordHash := HashPassword(pswd);
   myEmail := LowerCase(email);
 
@@ -152,8 +152,8 @@ begin
     [PH_TBL_NAME_USERS, PH_TBL_FIELD_NAME_USERS_PK,
     PH_TBL_FIELD_NAME_USERS_USERNAME, PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS,
     PH_TBL_FIELD_NAME_USERS_FORENAMES, PH_TBL_FIELD_NAME_USERS_SURNAME,
-    PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, guid, usr, myEmail, names, surname,
-    passwordHash]);
+    PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, guid.ToString(), usr, myEmail, names,
+    surname, passwordHash]);
 
   e := g_Database.RunQuery(query);
 
@@ -168,7 +168,7 @@ begin
   Result := HashPassword(pswd) = m_PasswordHash;
 end;
 
-function PhUser.GetGUID(): string;
+function PhUser.GetGUID(): PhGUID;
 begin
   Result := m_GUID;
 end;
@@ -286,21 +286,6 @@ begin
   Result := sHash;
 end;
 
-class function PhUser.NewGUID(): string;
-var
-  guid: TGUID;
-  sHexGUID: string;
-begin
-  CreateGUID(guid);
-  sHexGUID := GUIDToString(guid);
-
-  sHexGUID := StringReplace(sHexGUID, '{', '', [rfReplaceAll]);
-  sHexGUID := StringReplace(sHexGUID, '}', '', [rfReplaceAll]);
-  sHexGUID := StringReplace(sHexGUID, '-', '', [rfReplaceAll]);
-
-  Result := sHexGUID;
-end;
-
 procedure PhUser.UpdateInDatabase();
 var
   query: string;
@@ -314,7 +299,7 @@ begin
     PH_TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames,
     PH_TBL_FIELD_NAME_USERS_SURNAME, m_Surname,
     PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
-    PH_TBL_FIELD_NAME_USERS_PK, m_GUID]);
+    PH_TBL_FIELD_NAME_USERS_PK, m_GUID.ToString()]);
 
   e := g_Database.RunQuery(query);
 

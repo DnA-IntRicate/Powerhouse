@@ -29,6 +29,7 @@ interface
 uses
   System.SysUtils, System.StrUtils, System.Math;
 
+// TODO: Implement these types everywhere.
 type
   bool = System.Boolean;
 
@@ -56,6 +57,97 @@ type
 
   PhIDType = uint32;
 
+  // NOTE: We may want to use this for appliances as well instead of uint32s.
+type
+  PhGUID = record
+  public
+    class function Create(const hexGuidStr: string = ''): PhGUID; static;
+
+    function Equals(const other: PhGUID): bool;
+
+    function ToString(): string;
+    function ToInt(): uint64;
+
+    class operator explicit(const value: PhGUID): string;
+    class operator implicit(const value: PhGUID): string;
+
+    class operator explicit(const value: PhGUID): uint64;
+    class operator implicit(const value: PhGUID): uint64;
+
+    class operator explicit(const hexGuidStr: string): PhGUID;
+    class operator implicit(const hexGuidStr: string): PhGUID;
+
+  private
+    m_GUID: string;
+  end;
+
 implementation
+
+class function PhGUID.Create(const hexGuidStr: string = ''): PhGUID;
+var
+  guid: TGUID;
+  hexGUID: string;
+begin
+  if hexGuidStr = '' then
+  begin
+    CreateGUID(guid);
+    hexGUID := GUIDToString(guid);
+
+    hexGUID := StringReplace(hexGUID, '{', '', [rfReplaceAll]);
+    hexGUID := StringReplace(hexGUID, '}', '', [rfReplaceAll]);
+    hexGUID := StringReplace(hexGUID, '-', '', [rfReplaceAll]);
+  end
+  else
+  begin
+    hexGUID := hexGuidStr;
+  end;
+
+  Result.m_GUID := hexGUID;
+end;
+
+function PhGUID.Equals(const other: PhGUID): bool;
+begin
+  Result := m_GUID = other.m_GUID;
+end;
+
+function PhGUID.ToString(): string;
+begin
+  Result := m_GUID;
+end;
+
+function PhGUID.ToInt(): uint64;
+begin
+  Result := StrToInt('$' + m_GUID);
+end;
+
+class operator PhGUID.explicit(const value: PhGUID): string;
+begin
+  Result := value.ToString();
+end;
+
+class operator PhGUID.implicit(const value: PhGUID): string;
+begin
+  Result := string(value);
+end;
+
+class operator PhGUID.explicit(const value: PhGUID): uint64;
+begin
+  Result := value.ToInt();
+end;
+
+class operator PhGUID.implicit(const value: PhGUID): uint64;
+begin
+  Result := uint64(value);
+end;
+
+class operator PhGUID.explicit(const hexGuidStr: string): PhGUID;
+begin
+  Result := PhGUID.Create(hexGuidStr);
+end;
+
+class operator PhGUID.implicit(const hexGuidStr: string): PhGUID;
+begin
+  Result := PhGUID(hexGuidStr);
+end;
 
 end.
