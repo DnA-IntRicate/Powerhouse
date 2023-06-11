@@ -160,7 +160,7 @@ begin
   if e <> nil then
     PhLogger.Error('Error creating new user in database: %s', [e.Message]);
 
-  Result := PhUser.Create(guid);
+  Result := Create(guid);
 end;
 
 function PhUser.CheckPassword(pswd: string): boolean;
