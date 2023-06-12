@@ -180,7 +180,7 @@ begin
 
   for user in users do
   begin
-    if user.GetGUID().Equals(refUser.GetGUID()) then
+    if user.GetGUID() = refUser.GetGUID() then
     begin
       user.GetAppliances(appliances);
       refUser.SetAppliances(appliances);

@@ -109,7 +109,7 @@ begin
 
     while not TblUsers.Eof do
     begin
-      foundGUID := m_GUID.Equals(TblUsers[PH_TBL_FIELD_NAME_USERS_PK]);
+      foundGUID := m_GUID = TblUsers[PH_TBL_FIELD_NAME_USERS_PK];
       if foundGUID then
         break;
 
@@ -266,7 +266,7 @@ var
 begin
   for i := Low(m_Appliances) to High(m_Appliances) do
   begin
-    if m_Appliances[i].GetGUID().Equals(guid) then
+    if m_Appliances[i].GetGUID() = guid then
     begin
       outResult := m_Appliances[i];
       break;

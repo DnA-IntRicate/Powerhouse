@@ -59,19 +59,22 @@ type
   public
     class function Create(const hexGuidStr: string = ''): PhGUID; static;
 
-    function Equals(const other: PhGUID): bool;
+    function Equals(const other: PhGUID): bool; inline;
 
     function ToString(): string;
     function ToInt(): uint64;
 
-    class operator explicit(const value: PhGUID): string;
-    class operator implicit(const value: PhGUID): string;
+    class operator explicit(const value: PhGUID): string; inline;
+    class operator implicit(const value: PhGUID): string; inline;
 
-    class operator explicit(const value: PhGUID): uint64;
-    class operator implicit(const value: PhGUID): uint64;
+    class operator explicit(const value: PhGUID): uint64; inline;
+    class operator implicit(const value: PhGUID): uint64; inline;
 
-    class operator explicit(const hexGuidStr: string): PhGUID;
-    class operator implicit(const hexGuidStr: string): PhGUID;
+    class operator explicit(const hexGuidStr: string): PhGUID; inline;
+    class operator implicit(const hexGuidStr: string): PhGUID; inline;
+
+    class operator Equal(const left, right: PhGUID): bool; inline;
+    class operator NotEqual(const right, left: PhGUID): bool; inline;
 
   private
     m_GUID: string;
@@ -144,6 +147,16 @@ end;
 class operator PhGUID.implicit(const hexGuidStr: string): PhGUID;
 begin
   Result := PhGUID(hexGuidStr);
+end;
+
+class operator PhGUID.Equal(const left, right: PhGUID): bool;
+begin
+  Result := left.Equals(right);
+end;
+
+class operator PhGUID.NotEqual(const right, left: PhGUID): bool;
+begin
+  Result := not(right = left);
 end;
 
 end.

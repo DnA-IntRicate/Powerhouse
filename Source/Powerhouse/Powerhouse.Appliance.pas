@@ -420,7 +420,7 @@ begin
 
     while not TblAppliances.Eof do
     begin
-      Result := guid.Equals(FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_PK));
+      Result := guid = FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_PK);
       if Result then
         break;
 
