@@ -35,11 +35,13 @@ type
   PhFormPtr = ^PhForm;
   PhOnGetParentProc = reference to procedure(parentPtr: PhFormPtr);
 
-  // TODO: Make this virtual and give derived classes the choice to override.
   PhForm = class(TForm)
   public
-    procedure Enable(); virtual; abstract;
-    procedure Disable(); virtual; abstract;
+    procedure Enable(); virtual;
+    procedure Disable(); virtual;
+
+    procedure EnableModal(); virtual;
+    procedure DisableModal(); virtual;
 
     procedure TransitionForms(const oldForm, newForm: PhFormPtr); overload;
     procedure TransitionForms(const newForm: PhFormPtr); overload;
@@ -54,6 +56,30 @@ type
   end;
 
 implementation
+
+procedure PhForm.Enable();
+begin
+  Self.Enabled := true;
+  Self.Show();
+end;
+
+procedure PhForm.Disable();
+begin
+  Self.Hide();
+  Self.Enabled := false;
+end;
+
+procedure PhForm.EnableModal();
+begin
+  Self.Enabled := true;
+  Self.ShowModal();
+end;
+
+procedure PhForm.DisableModal();
+begin
+  Close();
+  Self.Enabled := false;
+end;
 
 procedure PhForm.TransitionForms(const oldForm, newForm: PhFormPtr);
 begin

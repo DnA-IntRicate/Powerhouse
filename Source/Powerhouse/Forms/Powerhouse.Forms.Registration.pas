@@ -60,9 +60,6 @@ type
     procedure edtSurnameExit(Sender: TObject);
 
   public
-    procedure Enable(); override;
-    procedure Disable(); override;
-
     function GetNewUser(): PhUser;
 
   private
@@ -170,22 +167,6 @@ begin
   m_ValidSurname := ValidateName(edtSurname.Text);
 
   TryEnableBtnRegister();
-end;
-
-procedure TPhfRegistration.Enable();
-begin
-  inherited;
-
-  Self.Enabled := true;
-  Self.ShowModal();
-end;
-
-procedure TPhfRegistration.Disable();
-begin
-  inherited;
-
-  Close();
-  Self.Enabled := false;
 end;
 
 function TPhfRegistration.GetNewUser(): PhUser;

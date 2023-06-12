@@ -48,10 +48,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure lblRegisterClick(Sender: TObject);
 
-  public
-    procedure Enable(); override;
-    procedure Disable(); override;
-
   private
     // TODO: If the logged in user has no save data, add them to the save.
     procedure LoadUserAppliances(var refUser: PhUser; const savePath: string);
@@ -130,7 +126,7 @@ var
   newUser: PhUser;
 begin
   regForm := TPhfRegistration.Create(Self);
-  regForm.Enable();
+  regForm.EnableModal();
 
   newUser := regForm.GetNewUser();
 
@@ -145,22 +141,6 @@ begin
   end;
 
   regForm.Free();
-end;
-
-procedure TPhfLogin.Enable();
-begin
-  inherited;
-
-  Self.Enabled := true;
-  Self.Show();
-end;
-
-procedure TPhfLogin.Disable();
-begin
-  inherited;
-
-  Self.Hide();
-  Self.Enabled := false;
 end;
 
 procedure TPhfLogin.LoadUserAppliances(var refUser: PhUser;

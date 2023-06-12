@@ -50,7 +50,6 @@ type
 
   public
     procedure Enable(); override;
-    procedure Disable(); override;
 
   private
     procedure DisplayUserAppliances(var refUser: PhUser);
@@ -82,14 +81,6 @@ begin
     begin
       ShowMessage(parentPtr.Caption);
     end);
-end;
-
-procedure TPhfHome.Disable();
-begin
-  inherited;
-
-  Self.Hide();
-  Self.Enabled := false;
 end;
 
 procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);
