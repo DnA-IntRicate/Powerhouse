@@ -30,8 +30,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.StrUtils,
   System.Variants, System.Classes, System.RegularExpressions, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Powerhouse.Form, Powerhouse.Appliance, Powerhouse.User, Powerhouse.Logger,
-  Powerhouse.Database, Powerhouse.Validator;
+  Powerhouse.Types, Powerhouse.Form, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Validator;
 
 type
   TPhfRegistration = class(PhForm)
@@ -66,13 +66,13 @@ type
     function GetNewUser(): PhUser;
 
   private
-    function UsernameExists(const username: string): boolean;
-    function EmailAddressExists(const email: string): boolean;
+    function UsernameExists(const username: string): bool;
+    function EmailAddressExists(const email: string): bool;
 
-    function ValidateUsername(const username: string): boolean;
-    function ValidatePassword(const password: string): boolean;
-    function ValidateEmailAddress(const email: string): boolean;
-    function ValidateName(const name: string): boolean;
+    function ValidateUsername(const username: string): bool;
+    function ValidatePassword(const password: string): bool;
+    function ValidateEmailAddress(const email: string): bool;
+    function ValidateName(const name: string): bool;
 
     procedure TryEnableBtnRegister();
 
@@ -82,20 +82,20 @@ type
   private
     m_NewUser: PhUser;
 
-    m_ValidUsername: boolean;
-    m_ValidPassword: boolean;
-    m_PasswordConfirmed: boolean;
-    m_ValidEmailAddress: boolean;
-    m_ValidName: boolean;
-    m_ValidSurname: boolean;
+    m_ValidUsername: bool;
+    m_ValidPassword: bool;
+    m_PasswordConfirmed: bool;
+    m_ValidEmailAddress: bool;
+    m_ValidName: bool;
+    m_ValidSurname: bool;
   end;
 
 const
-  PH_MIN_LENGTH_USERNAME: integer = 6;
-  PH_MIN_LENGTH_PASSWORD: integer = 8;
+  PH_MIN_LENGTH_USERNAME = 6;
+  PH_MIN_LENGTH_PASSWORD = 8;
 
-  PH_MAX_LENGTH_USERNAME: integer = 18;
-  PH_MAX_LENGTH_PASSWORD: integer = 26;
+  PH_MAX_LENGTH_USERNAME = 18;
+  PH_MAX_LENGTH_PASSWORD = 26;
 
 implementation
 
@@ -193,9 +193,9 @@ begin
   Result := m_NewUser;
 end;
 
-function TPhfRegistration.UsernameExists(const username: string): boolean;
+function TPhfRegistration.UsernameExists(const username: string): bool;
 var
-  exists: boolean;
+  exists: bool;
 begin
   exists := false;
 
@@ -218,9 +218,9 @@ begin
   Result := exists;
 end;
 
-function TPhfRegistration.EmailAddressExists(const email: string): boolean;
+function TPhfRegistration.EmailAddressExists(const email: string): bool;
 var
-  exists: boolean;
+  exists: bool;
 begin
   exists := false;
 
@@ -243,7 +243,7 @@ begin
   Result := exists;
 end;
 
-function TPhfRegistration.ValidateUsername(const username: string): boolean;
+function TPhfRegistration.ValidateUsername(const username: string): bool;
 var
   validation: PhValidation;
 begin
@@ -288,7 +288,7 @@ begin
   end;
 end;
 
-function TPhfRegistration.ValidatePassword(const password: string): boolean;
+function TPhfRegistration.ValidatePassword(const password: string): bool;
 var
   validation: PhValidation;
 begin
@@ -325,7 +325,7 @@ begin
   end;
 end;
 
-function TPhfRegistration.ValidateEmailAddress(const email: string): boolean;
+function TPhfRegistration.ValidateEmailAddress(const email: string): bool;
 var
   validation: PhValidation;
   myEmail: string;
@@ -361,7 +361,7 @@ begin
   end;
 end;
 
-function TPhfRegistration.ValidateName(const name: string): boolean;
+function TPhfRegistration.ValidateName(const name: string): bool;
 var
   validation: PhValidation;
 begin

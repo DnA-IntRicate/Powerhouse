@@ -27,8 +27,8 @@ unit Powerhouse.FileStream;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows,
-  Powerhouse.Appliance, Powerhouse.Database, Powerhouse.Logger;
+  System.SysUtils, Winapi.Windows, Powerhouse.Types, Powerhouse.Appliance,
+  Powerhouse.Database, Powerhouse.Logger;
 
 type
   PhWriteMode = (Append = 0, Overwrite);
@@ -36,14 +36,15 @@ type
 type
   PhFileStream = class
   public
-    class function ReadAllText(const path: string): string; static;
+    class function ReadAllText(const path: string): string;
+
     class procedure WriteAllText(const path, text: string;
-      writeMode: PhWriteMode); static;
+      const writeMode: PhWriteMode);
 
     class procedure CreateFile(const path: string); static;
 
-    class function IsFile(const path: string): boolean; static;
-    class function IsDir(const dir: string): boolean; static;
+    class function IsFile(const path: string): bool; static;
+    class function IsDir(const dir: string): bool; static;
 
   private
     class procedure OpenFile(const path: string);
@@ -73,7 +74,7 @@ begin
 end;
 
 class procedure PhFileStream.WriteAllText(const path, text: string;
-  writeMode: PhWriteMode);
+  const writeMode: PhWriteMode);
 begin
   if not IsFile(path) then
     CreateFile(path);
@@ -103,12 +104,12 @@ begin
   FileClose(fileHandle);
 end;
 
-class function PhFileStream.IsFile(const path: string): boolean;
+class function PhFileStream.IsFile(const path: string): bool;
 begin
   Result := FileExists(path);
 end;
 
-class function PhFileStream.IsDir(const dir: string): boolean;
+class function PhFileStream.IsDir(const dir: string): bool;
 begin
   Result := DirectoryExists(dir);
 end;

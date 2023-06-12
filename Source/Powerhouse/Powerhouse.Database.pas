@@ -27,15 +27,15 @@ unit Powerhouse.Database;
 interface
 
 uses
-  System.SysUtils, Data.DB, Data.Win.ADODB, Powerhouse.Logger;
+  System.SysUtils, Data.DB, Data.Win.ADODB, Powerhouse.Types, Powerhouse.Logger;
 
 type
   PhDatabase = class
   public
-    constructor Create(dbPath: string);
+    constructor Create(const dbPath: string);
     destructor Destroy(); override;
 
-    function RunQuery(sqlQuery: string): EADOError;
+    function RunQuery(const sqlQuery: string): EADOError;
 
     function GetPath(): string;
 
@@ -46,7 +46,7 @@ type
     TblUsers: TADOTable;
 
   private
-    procedure OpenTable(var table: TADOTable; const tableName: string);
+    procedure OpenTable(var refTable: TADOTable; const tableName: string);
     procedure Reload();
 
   private
@@ -54,16 +54,16 @@ type
   end;
 
 const
-  PH_TBL_NAME_APPLIANCES: string = 'tblAppliances';
-  PH_TBL_NAME_TIPS: string = 'tblTips';
-  PH_TBL_NAME_USERS: string = 'tblUsers';
+  PH_TBL_NAME_APPLIANCES = 'tblAppliances';
+  PH_TBL_NAME_TIPS = 'tblTips';
+  PH_TBL_NAME_USERS = 'tblUsers';
 
 var
   g_Database: PhDatabase;
 
 implementation
 
-constructor PhDatabase.Create(dbPath: string);
+constructor PhDatabase.Create(const dbPath: string);
 begin
   m_Path := dbPath;
 
@@ -109,7 +109,7 @@ begin
   Connection := nil;
 end;
 
-function PhDatabase.RunQuery(sqlQuery: string): EADOError;
+function PhDatabase.RunQuery(const sqlQuery: string): EADOError;
 var
   query: TADOQuery;
 begin
@@ -139,12 +139,13 @@ begin
   Result := m_Path;
 end;
 
-procedure PhDatabase.OpenTable(var table: TADOTable; const tableName: string);
+procedure PhDatabase.OpenTable(var refTable: TADOTable;
+  const tableName: string);
 begin
-  table := TADOTable.Create(nil);
-  table.Connection := Connection;
-  table.tableName := tableName;
-  table.Open();
+  refTable := TADOTable.Create(nil);
+  refTable.Connection := Connection;
+  refTable.tableName := tableName;
+  refTable.Open();
 end;
 
 procedure PhDatabase.Reload();

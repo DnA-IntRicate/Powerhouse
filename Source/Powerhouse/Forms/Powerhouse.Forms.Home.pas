@@ -29,7 +29,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Form,
+  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Form,
   Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
 
 type
@@ -53,7 +53,7 @@ type
     procedure Disable(); override;
 
   private
-    procedure DisplayUserAppliances(var inUser: PhUser);
+    procedure DisplayUserAppliances(var refUser: PhUser);
   end;
 
 var
@@ -69,7 +69,6 @@ begin
 end;
 
 procedure TPhfHome.Enable();
-
 begin
   inherited;
 
@@ -93,12 +92,12 @@ begin
   Self.Enabled := false;
 end;
 
-procedure TPhfHome.DisplayUserAppliances(var inUser: PhUser);
+procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);
 var
   appliance: PhAppliance;
   appliances: PhAppliances;
 begin
-  inUser.GetAppliances(appliances);
+  refUser.GetAppliances(appliances);
 
   for appliance in appliances do
     lstAppliances.Items.Add(appliance.GetName());

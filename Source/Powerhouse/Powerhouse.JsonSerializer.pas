@@ -28,8 +28,8 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash, System.JSON,
-  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Appliance, Powerhouse.User,
-  Powerhouse.SaveData, Powerhouse.FileStream;
+  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Types, Powerhouse.Appliance,
+  Powerhouse.User, Powerhouse.SaveData, Powerhouse.FileStream;
 
 type
   PhJsonSerializer = class
@@ -38,7 +38,7 @@ type
     destructor Destroy(); override;
 
     function SerializeJson(obj: TObject): string;
-    function DeserializeJson(jsonStr: string): TObject;
+    function DeserializeJson(const jsonStr: string): TObject;
 
   private
     m_Marshal: TJSONMarshal;
@@ -46,7 +46,7 @@ type
   end;
 
 const
-  PH_SAVEFILE_NAME: string = 'PowerhouseSave.json';
+  PH_SAVEFILE_NAME = 'PowerhouseSave.json';
 
 implementation
 
@@ -69,7 +69,7 @@ begin
   Result := m_Marshal.Marshal(obj).ToString();
 end;
 
-function PhJsonSerializer.DeserializeJson(jsonStr: string): TObject;
+function PhJsonSerializer.DeserializeJson(const jsonStr: string): TObject;
 begin
   Result := m_Unmarshal.Unmarshal(TJSONObject.ParseJSONValue(jsonStr))
     as TObject;

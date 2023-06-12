@@ -29,7 +29,6 @@ interface
 uses
   System.SysUtils, System.StrUtils, System.Math;
 
-// TODO: Implement these types everywhere.
 type
   bool = System.Boolean;
 

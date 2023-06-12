@@ -28,7 +28,7 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Variants, System.Classes,
-  System.RegularExpressions;
+  System.RegularExpressions, Powerhouse.Types;
 
 type
   PhValidationFlag = (TooShort = 1, TooLong = 2, InvalidFormat = 4,
@@ -41,27 +41,27 @@ type
 type
   PhValidation = record
     Flags: PhValidationFlags;
-    Valid: boolean;
+    Valid: bool;
   end;
 
 type
   PhValidator = class
   public
-    class function ValidateStringLength(const str: string; min, max: integer)
+    class function ValidateStringLength(const str: string; const min, max: int)
       : PhValidation;
 
     class function ValidateString(const str: string;
-      options: PhValidationOptions = []; min: integer = -1; max: integer = -1)
-      : PhValidation;
+      options: PhValidationOptions = []; const min: int = -1;
+      const max: int = -1): PhValidation;
 
     class function ValidateEmailAddress(const email: string): PhValidation;
 
   private
-    class procedure AddFlag(var validation: PhValidation;
-      flag: PhValidationFlag);
+    class procedure AddFlag(var refValidation: PhValidation;
+      const flag: PhValidationFlag);
 
     class function HasOption(const options: PhValidationOptions;
-      const option: PhValidationOption): boolean;
+      const option: PhValidationOption): bool;
   end;
 
 const
@@ -81,7 +81,7 @@ const
 implementation
 
 class function PhValidator.ValidateStringLength(const str: string;
-  min, max: integer): PhValidation;
+  const min, max: int): PhValidation;
 var
   validation: PhValidation;
 begin
@@ -97,11 +97,11 @@ begin
 end;
 
 class function PhValidator.ValidateString(const str: string;
-  options: PhValidationOptions = []; min: integer = -1; max: integer = -1)
+  options: PhValidationOptions = []; const min: int = -1; const max: int = -1)
   : PhValidation;
 var
   validation, lengthValidation: PhValidation;
-  mustValidateLength: boolean;
+  mustValidateLength: bool;
 begin
   validation.Valid := true;
   validation.Flags := [];
@@ -178,11 +178,11 @@ begin
   Result := validation;
 end;
 
-class procedure PhValidator.AddFlag(var validation: PhValidation;
-  flag: PhValidationFlag);
+class procedure PhValidator.AddFlag(var refValidation: PhValidation;
+  const flag: PhValidationFlag);
 begin
-  Include(validation.Flags, flag);
-  validation.Valid := false;
+  Include(refValidation.Flags, flag);
+  refValidation.Valid := false;
 end;
 
 class function PhValidator.HasOption(const options: PhValidationOptions;

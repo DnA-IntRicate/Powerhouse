@@ -45,50 +45,50 @@ type
     function GetGUID(): PhGUID;
 
     function GetName(): string;
-    procedure SetName(name: string);
+    procedure SetName(const name: string);
 
     function GetManufacturer(): string;
-    procedure SetManufacturer(manufacturer: string);
+    procedure SetManufacturer(const manufacturer: string);
 
     function GetVoltage(): float;
-    procedure SetVoltage(voltage: float);
+    procedure SetVoltage(const voltage: float);
 
     function GetAmperage(): float;
-    procedure SetAmperage(amperage: float);
+    procedure SetAmperage(const amperage: float);
 
     function GetActivePower(): float;
-    procedure SetActivePower(activePower: float);
+    procedure SetActivePower(const activePower: float);
 
     function GetStandbyPower(): float;
-    procedure SetStandbyPower(standbyPower: float);
+    procedure SetStandbyPower(const standbyPower: float);
 
     function GetInputPower(): float;
-    procedure SetInputPower(inputPower: float);
+    procedure SetInputPower(const inputPower: float);
 
     function GetOutputPower(): float;
-    procedure SetOutputPower(outputPower: float);
+    procedure SetOutputPower(const outputPower: float);
 
     function GetFrequency(): float;
-    procedure SetFrequency(frequency: float);
+    procedure SetFrequency(const frequency: float);
 
     function GetEnergyRating(): int;
-    procedure SetEnegeryRating(rating: int);
+    procedure SetEnegeryRating(const rating: int);
 
     function GetPowerFactor(): float;
-    procedure SetPowerfactor(factor: float);
+    procedure SetPowerfactor(const factor: float);
 
     function GetBatterySize(): float;
-    procedure SetBatterySize(size: float);
+    procedure SetBatterySize(const size: float);
 
     function GetBatteryKind(): string;
-    procedure SetBatteryKind(kind: string);
+    procedure SetBatteryKind(const kind: string);
 
     function GetSurgeProtection(): bool;
-    procedure SetSurgeProtection(surgeProtection: bool);
+    procedure SetSurgeProtection(const surgeProtection: bool);
 
   private
     class function FindAppliance(const guid: PhGUID): bool;
-    class function FromDatabase(field: string): Variant;
+    class function FromDatabase(const field: string): Variant;
 
     procedure UpdateInDatabase();
 
@@ -247,7 +247,7 @@ begin
   Result := m_Name;
 end;
 
-procedure PhAppliance.SetName(name: string);
+procedure PhAppliance.SetName(const name: string);
 begin
   m_Name := name;
 
@@ -259,7 +259,7 @@ begin
   Result := m_Manufacturer;
 end;
 
-procedure PhAppliance.SetManufacturer(manufacturer: string);
+procedure PhAppliance.SetManufacturer(const manufacturer: string);
 begin
   m_Manufacturer := manufacturer;
 
@@ -271,7 +271,7 @@ begin
   Result := m_Voltage;
 end;
 
-procedure PhAppliance.SetVoltage(voltage: float);
+procedure PhAppliance.SetVoltage(const voltage: float);
 begin
   m_Voltage := voltage;
 
@@ -283,7 +283,7 @@ begin
   Result := m_Amperage;
 end;
 
-procedure PhAppliance.SetAmperage(amperage: float);
+procedure PhAppliance.SetAmperage(const amperage: float);
 begin
   m_Amperage := amperage;
 
@@ -295,7 +295,7 @@ begin
   Result := m_ActivePower;
 end;
 
-procedure PhAppliance.SetActivePower(activePower: float);
+procedure PhAppliance.SetActivePower(const activePower: float);
 begin
   m_ActivePower := activePower;
 
@@ -307,7 +307,7 @@ begin
   Result := m_StandbyPower;
 end;
 
-procedure PhAppliance.SetStandbyPower(standbyPower: float);
+procedure PhAppliance.SetStandbyPower(const standbyPower: float);
 begin
   m_StandbyPower := standbyPower;
 
@@ -319,7 +319,7 @@ begin
   Result := m_InputPower;
 end;
 
-procedure PhAppliance.SetInputPower(inputPower: float);
+procedure PhAppliance.SetInputPower(const inputPower: float);
 begin
   m_InputPower := inputPower;
 
@@ -331,7 +331,7 @@ begin
   Result := m_OutputPower;
 end;
 
-procedure PhAppliance.SetOutputPower(outputPower: float);
+procedure PhAppliance.SetOutputPower(const outputPower: float);
 begin
   m_OutputPower := outputPower;
 
@@ -343,7 +343,7 @@ begin
   Result := m_Frequency;
 end;
 
-procedure PhAppliance.SetFrequency(frequency: float);
+procedure PhAppliance.SetFrequency(const frequency: float);
 begin
   m_Frequency := frequency;
 
@@ -355,7 +355,7 @@ begin
   Result := m_EnergyRating;
 end;
 
-procedure PhAppliance.SetEnegeryRating(rating: int);
+procedure PhAppliance.SetEnegeryRating(const rating: int);
 begin
   m_EnergyRating := rating;
 
@@ -367,7 +367,7 @@ begin
   Result := m_PowerFactor;
 end;
 
-procedure PhAppliance.SetPowerfactor(factor: float);
+procedure PhAppliance.SetPowerfactor(const factor: float);
 begin
   m_PowerFactor := factor;
 
@@ -379,7 +379,7 @@ begin
   Result := m_BatterySize;
 end;
 
-procedure PhAppliance.SetBatterySize(size: float);
+procedure PhAppliance.SetBatterySize(const size: float);
 begin
   m_BatterySize := size;
 
@@ -391,7 +391,7 @@ begin
   Result := m_BatteryKind;
 end;
 
-procedure PhAppliance.SetBatteryKind(kind: string);
+procedure PhAppliance.SetBatteryKind(const kind: string);
 begin
   m_BatteryKind := kind;
 
@@ -403,7 +403,7 @@ begin
   Result := m_SurgeProtection;
 end;
 
-procedure PhAppliance.SetSurgeProtection(surgeProtection: bool);
+procedure PhAppliance.SetSurgeProtection(const surgeProtection: bool);
 begin
   m_SurgeProtection := surgeProtection;
 
@@ -429,7 +429,7 @@ begin
   end;
 end;
 
-class function PhAppliance.FromDatabase(field: string): Variant;
+class function PhAppliance.FromDatabase(const field: string): Variant;
 begin
   Result := g_Database.TblAppliances[field];
 end;

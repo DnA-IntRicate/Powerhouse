@@ -27,7 +27,8 @@ unit Powerhouse.Logger;
 interface
 
 uses
-  System.SysUtils, System.StrUtils, System.UITypes, Vcl.Dialogs;
+  System.SysUtils, System.StrUtils, System.UITypes, Vcl.Dialogs,
+  Powerhouse.Types;
 
 type
   PhMessageType = (Trace = 0, Information, Warning, Error);
@@ -35,33 +36,32 @@ type
 type
   PhLogger = class
   public
-    class function LogMessage(const msg: string;
-      msgType: PhMessageType): integer;
+    class function LogMessage(const msg: string; msgType: PhMessageType): int;
 
-    class procedure Trace(const msg: string; out Result: integer); overload;
+    class procedure Trace(const msg: string; out outResult: int); overload;
     class procedure Trace(const msg: string); overload;
-    class procedure Trace(const fmt: string; out Result: integer;
+    class procedure Trace(const fmt: string; out outResult: int;
       const args: array of const); overload;
     class procedure Trace(const fmt: string;
       const args: array of const); overload;
 
-    class procedure Info(const msg: string; out Result: integer); overload;
+    class procedure Info(const msg: string; out outResult: int); overload;
     class procedure Info(const msg: string); overload;
-    class procedure Info(const fmt: string; out Result: integer;
+    class procedure Info(const fmt: string; out outResult: int;
       const args: array of const); overload;
     class procedure Info(const fmt: string;
       const args: array of const); overload;
 
-    class procedure Warn(const msg: string; out Result: integer); overload;
+    class procedure Warn(const msg: string; out outResult: int); overload;
     class procedure Warn(const msg: string); overload;
-    class procedure Warn(const fmt: string; out Result: integer;
+    class procedure Warn(const fmt: string; out outResult: int;
       const args: array of const); overload;
     class procedure Warn(const fmt: string;
       const args: array of const); overload;
 
-    class procedure Error(const msg: string; out Result: integer); overload;
+    class procedure Error(const msg: string; out outResult: int); overload;
     class procedure Error(const msg: string); overload;
-    class procedure Error(const fmt: string; out Result: integer;
+    class procedure Error(const fmt: string; out outResult: int;
       const args: array of const); overload;
     class procedure Error(const fmt: string;
       const args: array of const); overload;
@@ -70,7 +70,7 @@ type
 implementation
 
 class function PhLogger.LogMessage(const msg: string;
-  msgType: PhMessageType): integer;
+  msgType: PhMessageType): int;
 begin
   Result := -1;
 
@@ -95,9 +95,9 @@ begin
   end;
 end;
 
-class procedure PhLogger.Trace(const msg: string; out Result: integer);
+class procedure PhLogger.Trace(const msg: string; out outResult: int);
 begin
-  Result := LogMessage(msg, PhMessageType.Trace);
+  outResult := LogMessage(msg, PhMessageType.Trace);
 end;
 
 class procedure PhLogger.Trace(const msg: string);
@@ -105,10 +105,10 @@ begin
   LogMessage(msg, PhMessageType.Trace);
 end;
 
-class procedure PhLogger.Trace(const fmt: string; out Result: integer;
+class procedure PhLogger.Trace(const fmt: string; out outResult: int;
   const args: array of const);
 begin
-  Result := LogMessage(Format(fmt, args), PhMessageType.Trace);
+  outResult := LogMessage(Format(fmt, args), PhMessageType.Trace);
 end;
 
 class procedure PhLogger.Trace(const fmt: string; const args: array of const);
@@ -116,9 +116,9 @@ begin
   LogMessage(Format(fmt, args), PhMessageType.Trace);
 end;
 
-class procedure PhLogger.Info(const msg: string; out Result: integer);
+class procedure PhLogger.Info(const msg: string; out outResult: int);
 begin
-  Result := LogMessage(msg, PhMessageType.Information);
+  outResult := LogMessage(msg, PhMessageType.Information);
 end;
 
 class procedure PhLogger.Info(const msg: string);
@@ -126,10 +126,10 @@ begin
   LogMessage(msg, PhMessageType.Information);
 end;
 
-class procedure PhLogger.Info(const fmt: string; out Result: integer;
+class procedure PhLogger.Info(const fmt: string; out outResult: int;
   const args: array of const);
 begin
-  Result := LogMessage(Format(fmt, args), PhMessageType.Information);
+  outResult := LogMessage(Format(fmt, args), PhMessageType.Information);
 end;
 
 class procedure PhLogger.Info(const fmt: string; const args: array of const);
@@ -137,9 +137,9 @@ begin
   LogMessage(Format(fmt, args), PhMessageType.Information);
 end;
 
-class procedure PhLogger.Warn(const msg: string; out Result: integer);
+class procedure PhLogger.Warn(const msg: string; out outResult: int);
 begin
-  Result := LogMessage(msg, PhMessageType.Warning);
+  outResult := LogMessage(msg, PhMessageType.Warning);
 end;
 
 class procedure PhLogger.Warn(const msg: string);
@@ -147,10 +147,10 @@ begin
   LogMessage(msg, PhMessageType.Warning);
 end;
 
-class procedure PhLogger.Warn(const fmt: string; out Result: integer;
+class procedure PhLogger.Warn(const fmt: string; out outResult: int;
   const args: array of const);
 begin
-  Result := LogMessage(Format(fmt, args), PhMessageType.Warning);
+  outResult := LogMessage(Format(fmt, args), PhMessageType.Warning);
 end;
 
 class procedure PhLogger.Warn(const fmt: string; const args: array of const);
@@ -158,9 +158,9 @@ begin
   LogMessage(Format(fmt, args), PhMessageType.Warning);
 end;
 
-class procedure PhLogger.Error(const msg: string; out Result: integer);
+class procedure PhLogger.Error(const msg: string; out outResult: int);
 begin
-  Result := LogMessage(msg, PhMessageType.Error);
+  outResult := LogMessage(msg, PhMessageType.Error);
 end;
 
 class procedure PhLogger.Error(const msg: string);
@@ -168,10 +168,10 @@ begin
   LogMessage(msg, PhMessageType.Error);
 end;
 
-class procedure PhLogger.Error(const fmt: string; out Result: integer;
+class procedure PhLogger.Error(const fmt: string; out outResult: int;
   const args: array of const);
 begin
-  Result := LogMessage(Format(fmt, args), PhMessageType.Error);
+  outResult := LogMessage(Format(fmt, args), PhMessageType.Error);
 end;
 
 class procedure PhLogger.Error(const fmt: string; const args: array of const);

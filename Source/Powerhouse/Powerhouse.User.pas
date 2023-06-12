@@ -38,33 +38,35 @@ type
     class function CreateUserAccount(const usr, pswd, email, names,
       surname: string): PhUser;
 
-    function CheckPassword(pswd: string): boolean;
+    function CheckPassword(const pswd: string): bool;
 
     function GetGUID(): PhGUID;
 
     function GetUsername(): string;
-    procedure SetUsername(newUsrName: string);
+    procedure SetUsername(const newUsrName: string);
 
     function GetEmailAddress(): string;
-    procedure SetEmailAddress(newAddress: string);
+    procedure SetEmailAddress(const newAddress: string);
 
     function GetForenames(): string;
-    procedure SetForenames(newNames: string);
+    procedure SetForenames(const newNames: string);
 
     function GetSurname(): string;
-    procedure SetSurname(newSurname: string);
+    procedure SetSurname(const newSurname: string);
 
     function GetPasswordHash(): string;
-    procedure SetPassword(newPswd: string);
+    procedure SetPassword(const newPswd: string);
 
-    procedure GetAppliances(out result: PhAppliances);
-    procedure SetAppliances(appliances: PhAppliances);
+    procedure GetAppliances(out outResult: PhAppliances);
+    procedure SetAppliances(const appliances: PhAppliances);
 
-    procedure GetApplianceByName(name: string; out result: PhAppliance);
-    procedure GetApplianceByGUID(const guid: PhGUID; out result: PhAppliance);
+    procedure GetApplianceByName(const name: string;
+      out outResult: PhAppliance);
+    procedure GetApplianceByGUID(const guid: PhGUID;
+      out outResult: PhAppliance);
 
   private
-    class function HashPassword(pswd: string): string;
+    class function HashPassword(const pswd: string): string;
 
     procedure UpdateInDatabase();
 
@@ -75,7 +77,6 @@ type
     m_Forenames: string;
     m_Surname: string;
     m_PasswordHash: string;
-
     m_Appliances: PhAppliances;
   end;
 
@@ -83,12 +84,12 @@ type
   PhUsers = TArray<PhUser>;
 
 const
-  PH_TBL_FIELD_NAME_USERS_PK: string = 'UserGUID';
-  PH_TBL_FIELD_NAME_USERS_USERNAME: string = 'Username';
-  PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS: string = 'EmailAddress';
-  PH_TBL_FIELD_NAME_USERS_FORENAMES: string = 'Forenames';
-  PH_TBL_FIELD_NAME_USERS_SURNAME: string = 'Surname';
-  PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH: string = 'PasswordHash';
+  PH_TBL_FIELD_NAME_USERS_PK = 'UserGUID';
+  PH_TBL_FIELD_NAME_USERS_USERNAME = 'Username';
+  PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS = 'EmailAddress';
+  PH_TBL_FIELD_NAME_USERS_FORENAMES = 'Forenames';
+  PH_TBL_FIELD_NAME_USERS_SURNAME = 'Surname';
+  PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH = 'PasswordHash';
 
 var
   g_CurrentUser: PhUser;
@@ -97,7 +98,7 @@ implementation
 
 constructor PhUser.Create(const guid: PhGUID);
 var
-  foundGUID: boolean;
+  foundGUID: bool;
 begin
   m_GUID := guid;
   foundGUID := false;
@@ -163,7 +164,7 @@ begin
   Result := Create(guid);
 end;
 
-function PhUser.CheckPassword(pswd: string): boolean;
+function PhUser.CheckPassword(const pswd: string): bool;
 begin
   Result := HashPassword(pswd) = m_PasswordHash;
 end;
@@ -178,7 +179,7 @@ begin
   Result := m_Username;
 end;
 
-procedure PhUser.SetUsername(newUsrName: string);
+procedure PhUser.SetUsername(const newUsrName: string);
 begin
   m_Username := newUsrName;
 
@@ -190,7 +191,7 @@ begin
   Result := m_EmailAddress;
 end;
 
-procedure PhUser.SetEmailAddress(newAddress: string);
+procedure PhUser.SetEmailAddress(const newAddress: string);
 begin
   m_EmailAddress := newAddress;
 
@@ -202,7 +203,7 @@ begin
   Result := m_Forenames;
 end;
 
-procedure PhUser.SetForenames(newNames: string);
+procedure PhUser.SetForenames(const newNames: string);
 begin
   m_Forenames := newNames;
 
@@ -214,7 +215,7 @@ begin
   Result := m_Surname;
 end;
 
-procedure PhUser.SetSurname(newSurname: string);
+procedure PhUser.SetSurname(const newSurname: string);
 begin
   m_Surname := newSurname;
 
@@ -226,64 +227,66 @@ begin
   Result := m_PasswordHash;
 end;
 
-procedure PhUser.SetPassword(newPswd: string);
+procedure PhUser.SetPassword(const newPswd: string);
 begin
   m_PasswordHash := HashPassword(newPswd);
 
   UpdateInDatabase();
 end;
 
-procedure PhUser.GetAppliances(out Result: PhAppliances);
+procedure PhUser.GetAppliances(out outResult: PhAppliances);
 begin
-  Result := m_Appliances;
+  outResult := m_Appliances;
 end;
 
-procedure PhUser.SetAppliances(appliances: PhAppliances);
+procedure PhUser.SetAppliances(const appliances: PhAppliances);
 begin
   m_Appliances := appliances;
 end;
 
-procedure PhUser.GetApplianceByName(name: string; out result: PhAppliance);
+procedure PhUser.GetApplianceByName(const name: string;
+  out outResult: PhAppliance);
 var
-  i: integer;
+  i: int;
 begin
   for i := Low(m_Appliances) to High(m_Appliances) do
   begin
     if m_Appliances[i].GetName() = name then
     begin
-      result := m_Appliances[i];
+      outResult := m_Appliances[i];
       break;
     end;
   end;
 end;
 
-procedure PhUser.GetApplianceByGUID(const guid: PhGUID; out result: PhAppliance);
+procedure PhUser.GetApplianceByGUID(const guid: PhGUID;
+  out outResult: PhAppliance);
 var
-  i: integer;
+  i: int;
 begin
   for i := Low(m_Appliances) to High(m_Appliances) do
   begin
     if m_Appliances[i].GetGUID().Equals(guid) then
     begin
-      result := m_Appliances[i];
+      outResult := m_Appliances[i];
       break;
     end;
   end;
 end;
 
-class function PhUser.HashPassword(pswd: string): string;
+class function PhUser.HashPassword(const pswd: string): string;
 var
   MD5: THashMD5;
-  sHash, sDynamicSalt: string;
+  hash, dynamicSalt: string;
 begin
   MD5 := THashMD5.Create();
 
-  sHash := MD5.GetHashString(pswd);
-  sDynamicSalt := MD5.GetHashString(IntToStr(Length(pswd)));
-  sHash := sHash.Insert(Length(pswd), sDynamicSalt);
-  sHash := MD5.GetHashString(sHash) + '==';
+  hash := MD5.GetHashString(pswd);
+  dynamicSalt := MD5.GetHashString(IntToStr(Length(pswd)));
+  hash := hash.Insert(Length(pswd), dynamicSalt);
+  hash := MD5.GetHashString(hash) + '==';
 
-  Result := sHash;
+  Result := hash;
 end;
 
 procedure PhUser.UpdateInDatabase();

@@ -54,9 +54,9 @@ type
 
   private
     // TODO: If the logged in user has no save data, add them to the save.
-    procedure LoadUserAppliances(var inUser: PhUser; saveFilePath: string);
-    procedure LoginUser(var inUser: PhUser);
-    procedure CreateSaveFile(user: PhUser; saveFilePath: string);
+    procedure LoadUserAppliances(var refUser: PhUser; const savePath: string);
+    procedure LoginUser(var refUser: PhUser);
+    procedure CreateSaveFile(const user: PhUser; const savePath: string);
   end;
 
 var
@@ -69,7 +69,7 @@ implementation
 procedure TPhfLogin.btnLoginClick(Sender: TObject);
 var
   userName, pswd: string;
-  userFound: boolean;
+  userFound: bool;
   newUser: PhUser;
 begin
   userName := edtUsername.Text;
@@ -163,8 +163,8 @@ begin
   Self.Enabled := false;
 end;
 
-procedure TPhfLogin.LoadUserAppliances(var inUser: PhUser;
-  saveFilePath: string);
+procedure TPhfLogin.LoadUserAppliances(var refUser: PhUser;
+  const savePath: string);
 var
   jsonSrc: string;
   json: PhJsonSerializer;
@@ -173,26 +173,26 @@ var
   user: PhUser;
   appliances: PhAppliances;
 begin
-  jsonSrc := PhFileStream.ReadAllText(saveFilePath);
+  jsonSrc := PhFileStream.ReadAllText(savePath);
   json := PhJsonSerializer.Create();
   saveData := PhSaveData(json.DeserializeJson(jsonSrc));
   saveData.ToPhUsers(users);
 
   for user in users do
   begin
-    if user.GetGUID().Equals(inUser.GetGUID()) then
+    if user.GetGUID().Equals(refUser.GetGUID()) then
     begin
       user.GetAppliances(appliances);
-      inUser.SetAppliances(appliances);
+      refUser.SetAppliances(appliances);
 
       break;
     end;
   end;
 end;
 
-procedure TPhfLogin.LoginUser(var inUser: PhUser);
+procedure TPhfLogin.LoginUser(var refUser: PhUser);
 begin
-  g_CurrentUser := inUser;
+  g_CurrentUser := refUser;
 
   PhLogger.Info('Welcome %s %s!', [g_CurrentUser.GetForenames(),
     g_CurrentUser.GetSurname()]);
@@ -200,7 +200,7 @@ begin
   TransitionForms(@g_HomeForm);
 end;
 
-procedure TPhfLogin.CreateSaveFile(user: PhUser; saveFilePath: string);
+procedure TPhfLogin.CreateSaveFile(const user: PhUser; const savePath: string);
 var
   users: PhUsers;
   saveData: PhSaveData;
@@ -215,7 +215,7 @@ begin
   json := PhJsonSerializer.Create();
   jsonSrc := json.SerializeJson(saveData);
 
-  PhFileStream.WriteAllText(PH_SAVEFILE_NAME, jsonSrc, PhWriteMode.Overwrite);
+  PhFileStream.WriteAllText(savePath, jsonSrc, PhWriteMode.Overwrite);
 end;
 
 end.

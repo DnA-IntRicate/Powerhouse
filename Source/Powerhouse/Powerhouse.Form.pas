@@ -29,12 +29,13 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, System.SyncObjs, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
-  Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
+  Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Types;
 
 type
   PhFormPtr = ^PhForm;
   PhOnGetParentProc = reference to procedure(parentPtr: PhFormPtr);
 
+  // TODO: Make this virtual and give derived classes the choice to override.
   PhForm = class(TForm)
   public
     procedure Enable(); virtual; abstract;
@@ -45,8 +46,8 @@ type
 
     procedure Quit();
 
-    procedure GetParentForm(onGetParentProc: PhOnGetParentProc);
-    procedure SetParentForm(parentPtr: PhFormPtr);
+    procedure GetParentForm(const onGetParentProc: PhOnGetParentProc);
+    procedure SetParentForm(const parentPtr: PhFormPtr);
 
   protected
     m_Parent: PhFormPtr;
@@ -67,7 +68,7 @@ begin
   TransitionForms(@Self, newForm);
 end;
 
-procedure PhForm.GetParentForm(onGetParentProc: PhOnGetParentProc);
+procedure PhForm.GetParentForm(const onGetParentProc: PhOnGetParentProc);
 var
   mutex: TMutex;
 begin
@@ -79,7 +80,7 @@ begin
   mutex.Free();
 end;
 
-procedure PhForm.SetParentForm(parentPtr: PhFormPtr);
+procedure PhForm.SetParentForm(const parentPtr: PhFormPtr);
 begin
   m_Parent := parentPtr;
 end;

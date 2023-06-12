@@ -39,9 +39,9 @@ type
 type
   PhSaveData = class
   public
-    constructor Create(var _users: PhUsers);
+    constructor Create(var refUsers: PhUsers);
 
-    procedure ToPhUsers(out result: PhUsers);
+    procedure ToPhUsers(out outResult: PhUsers);
 
   public
     Users: TArray<PhUserData>;
@@ -49,17 +49,17 @@ type
 
 implementation
 
-constructor PhSaveData.Create(var _users: PhUsers);
+constructor PhSaveData.Create(var refUsers: PhUsers);
 var
   user: PhUser;
-  userIdx, applianceIdx: integer;
+  userIdx, applianceIdx: int;
   appliances: PhAppliances;
   appliance: PhAppliance;
 begin
-  SetLength(Users, Length(_users));
+  SetLength(Users, Length(refUsers));
   userIdx := 0;
 
-  for user in _users do
+  for user in refUsers do
   begin
     Users[userIdx].GUID := user.GetGUID();
     user.GetAppliances(appliances);
@@ -77,19 +77,19 @@ begin
   end;
 end;
 
-procedure PhSaveData.ToPhUsers(out result: PhUsers);
+procedure PhSaveData.ToPhUsers(out outResult: PhUsers);
 var
-  userIdx, applianceIdx: integer;
+  userIdx, applianceIdx: int;
   data: PhUserData;
   appliances: PhAppliances;
   applianceGUID: PhGUID;
 begin
-  SetLength(result, Length(Users));
+  SetLength(outResult, Length(Users));
   userIdx := 0;
 
   for data in Users do
   begin
-    result[userIdx] := PhUser.Create(data.GUID);
+    outResult[userIdx] := PhUser.Create(data.GUID);
 
     SetLength(appliances, Length(data.Appliances));
     applianceIdx := 0;
@@ -100,7 +100,7 @@ begin
       Inc(applianceIdx);
     end;
 
-    result[userIdx].SetAppliances(appliances);
+    outResult[userIdx].SetAppliances(appliances);
     Inc(userIdx);
   end;
 end;

@@ -29,8 +29,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Form, Powerhouse.Forms.Home,
-  Powerhouse.Forms.Login, Powerhouse.Forms.Registration, Powerhouse.Database;
+  Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Types, Powerhouse.Database,
+  Powerhouse.Form, Powerhouse.Forms.Home, Powerhouse.Forms.Login,
+  Powerhouse.Forms.Registration;
 
 type
   TPhfMain = class(PhForm)
@@ -82,7 +83,7 @@ end;
 
 procedure TPhfMain.SetFormStyle(const formPtr: PhFormPtr);
 var
-  oldStyle, newStyle: integer;
+  oldStyle, newStyle: int;
 begin
   formPtr.BorderStyle := bsSingle;
   formPtr.FormStyle := fsNormal;
