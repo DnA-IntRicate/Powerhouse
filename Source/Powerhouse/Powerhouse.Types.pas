@@ -74,7 +74,7 @@ type
     class operator implicit(const hexGuidStr: string): PhGUID; inline;
 
     class operator Equal(const left, right: PhGUID): bool; inline;
-    class operator NotEqual(const right, left: PhGUID): bool; inline;
+    class operator NotEqual(const left, right: PhGUID): bool; inline;
 
   private
     m_GUID: string;
@@ -154,9 +154,9 @@ begin
   Result := left.Equals(right);
 end;
 
-class operator PhGUID.NotEqual(const right, left: PhGUID): bool;
+class operator PhGUID.NotEqual(const left, right: PhGUID): bool;
 begin
-  Result := not(right = left);
+  Result := not(left = right);
 end;
 
 end.
