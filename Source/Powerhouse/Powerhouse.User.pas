@@ -61,7 +61,7 @@ type
     procedure SetAppliances(appliances: PhAppliances);
 
     procedure GetApplianceByName(name: string; out result: PhAppliance);
-    procedure GetApplianceByID(id: uint32; out result: PhAppliance);
+    procedure GetApplianceByGUID(const guid: PhGUID; out result: PhAppliance);
 
   private
     class function HashPassword(pswd: string): string;
@@ -257,13 +257,13 @@ begin
   end;
 end;
 
-procedure PhUser.GetApplianceByID(id: uint32; out result: PhAppliance);
+procedure PhUser.GetApplianceByGUID(const guid: PhGUID; out result: PhAppliance);
 var
   i: integer;
 begin
   for i := Low(m_Appliances) to High(m_Appliances) do
   begin
-    if m_Appliances[i].GetID() = id then
+    if m_Appliances[i].GetGUID().Equals(guid) then
     begin
       result := m_Appliances[i];
       break;

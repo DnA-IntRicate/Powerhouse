@@ -55,9 +55,6 @@ type
 
   voidptr = Pointer;
 
-  PhIDType = uint32;
-
-  // NOTE: We may want to use this for appliances as well instead of uint32s.
 type
   PhGUID = record
   public

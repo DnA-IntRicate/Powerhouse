@@ -33,7 +33,7 @@ uses
 type
   PhAppliance = class
   public
-    constructor Create(id: PhIDType); overload;
+    constructor Create(const guid: PhGUID);
 
     class function CreateAppliance(const name, manufacturer,
       batteryKind: string; const voltage, amperage, activePower, standbyPower,
@@ -42,7 +42,7 @@ type
 
     function CalculateCostPerHour(): float;
 
-    function GetID(): PhIDType;
+    function GetGUID(): PhGUID;
 
     function GetName(): string;
     procedure SetName(name: string);
@@ -87,13 +87,13 @@ type
     procedure SetSurgeProtection(surgeProtection: bool);
 
   private
-    class function FindAppliance(id: PhIDType): bool;
+    class function FindAppliance(const guid: PhGUID): bool;
     class function FromDatabase(field: string): Variant;
 
     procedure UpdateInDatabase();
 
   private
-    m_ID: PhIDType;
+    m_GUID: PhGUID;
     m_Name: string;
     m_Manufacturer: string;
     m_Voltage: float;
@@ -114,7 +114,7 @@ type
   PhAppliances = TArray<PhAppliance>;
 
 const
-  PH_TBL_FIELD_NAME_APPLIANCES_PK = 'ApplianceID';
+  PH_TBL_FIELD_NAME_APPLIANCES_PK = 'ApplianceGUID';
   PH_TBL_FIELD_NAME_APPLIANCES_NAME = 'ApplianceName';
   PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER = 'Manufacturer';
   PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE = 'Voltage';
@@ -132,13 +132,13 @@ const
 
 implementation
 
-constructor PhAppliance.Create(id: PhIDType);
+constructor PhAppliance.Create(const guid: PhGUID);
 var
   v: Variant;
 begin
-  m_ID := id;
+  m_GUID := guid;
 
-  if FindAppliance(id) then
+  if FindAppliance(m_GUID) then
   begin
     m_Name := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_NAME);
     m_Manufacturer := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER);
@@ -198,12 +198,10 @@ class function PhAppliance.CreateAppliance(const name, manufacturer,
   const energyRating: int; const surgeProtection: bool): PhAppliance;
 var
   query: string;
-  id: PhIDType;
+  guid: PhGUID;
   e: Exception;
 begin
-  g_Database.TblAppliances.Last();
-  id := g_Database.TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK] + 1;
-  g_Database.TblAppliances.First();
+  guid := PhGUID.Create();
 
   query := Format('INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ' +
     '%s, %s, %s, %s) VALUES (%d, ''%s'', ''%s'', %f, %f, %f, %f, %f, %f, %f, ' +
@@ -220,9 +218,9 @@ begin
     PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND,
-    PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, id, name, manufacturer,
-    voltage, amperage, activePower, standbyPower, inputPower, outputPower,
-    frequency, energyRating, powerFactor, batterySize, batteryKind,
+    PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, guid.ToString(), name,
+    manufacturer, voltage, amperage, activePower, standbyPower, inputPower,
+    outputPower, frequency, energyRating, powerFactor, batterySize, batteryKind,
     BoolToStr(surgeProtection, true)]);
 
   e := g_Database.RunQuery(query);
@@ -230,7 +228,7 @@ begin
   if e <> nil then
     PhLogger.Error('Error adding new appliance to database: %s', [e.Message]);
 
-  Result := Create(id);
+  Result := Create(guid);
 end;
 
 function PhAppliance.CalculateCostPerHour(): float;
@@ -239,9 +237,9 @@ begin
   Result := 0;
 end;
 
-function PhAppliance.GetID(): PhIDType;
+function PhAppliance.GetGUID(): PhGUID;
 begin
-  Result := m_ID;
+  Result := m_GUID;
 end;
 
 function PhAppliance.GetName(): string;
@@ -412,7 +410,7 @@ begin
   UpdateInDatabase();
 end;
 
-class function PhAppliance.FindAppliance(id: PhIDType): bool;
+class function PhAppliance.FindAppliance(const guid: PhGUID): bool;
 begin
   Result := false;
 
@@ -422,7 +420,7 @@ begin
 
     while not TblAppliances.Eof do
     begin
-      Result := id = FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_PK);
+      Result := guid.Equals(FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_PK));
       if Result then
         break;
 
@@ -459,7 +457,7 @@ begin
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE, m_BatterySize,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND, m_BatteryKind,
     PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, BoolToStr(m_SurgeProtection,
-    true), PH_TBL_FIELD_NAME_APPLIANCES_PK, m_ID]);
+    true), PH_TBL_FIELD_NAME_APPLIANCES_PK, m_GUID.ToString()]);
 
   e := g_Database.RunQuery(sQuery);
 

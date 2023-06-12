@@ -27,13 +27,13 @@ unit Powerhouse.SaveData;
 interface
 
 uses
-  System.SysUtils, System.StrUtils, System.Math, Powerhouse.Appliance,
-  Powerhouse.User;
+  System.SysUtils, System.StrUtils, System.Math, Powerhouse.Types,
+  Powerhouse.Appliance, Powerhouse.User;
 
 type
   PhUserData = record
     GUID: string;
-    Appliances: TArray<uint32>;
+    Appliances: TArray<string>;
   end;
 
 type
@@ -69,7 +69,7 @@ begin
 
     for appliance in appliances do
     begin
-      Users[userIdx].Appliances[applianceIdx] := appliance.GetID();
+      Users[userIdx].Appliances[applianceIdx] := appliance.GetGUID();
       Inc(applianceIdx);
     end;
 
@@ -82,7 +82,7 @@ var
   userIdx, applianceIdx: integer;
   data: PhUserData;
   appliances: PhAppliances;
-  applianceID: uint32;
+  applianceGUID: PhGUID;
 begin
   SetLength(result, Length(Users));
   userIdx := 0;
@@ -94,9 +94,9 @@ begin
     SetLength(appliances, Length(data.Appliances));
     applianceIdx := 0;
 
-    for applianceID in data.Appliances do
+    for applianceGUID in data.Appliances do
     begin
-      appliances[applianceIdx] := PhAppliance.Create(applianceID);
+      appliances[applianceIdx] := PhAppliance.Create(applianceGUID);
       Inc(applianceIdx);
     end;
 
