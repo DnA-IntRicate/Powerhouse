@@ -35,7 +35,10 @@ uses
 
 type
   TPhfMain = class(PhForm)
+    edtGUID: TEdit;
+    btnGUID: TButton;
     procedure FormCreate(Sender: TObject);
+    procedure btnGUIDClick(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -60,7 +63,7 @@ begin
   Application.CreateForm(TPhfHome, g_HomeForm);
 
   SetFormStyle(@g_LoginForm);
-  SetFormStyle(@g_HomeForm);
+SetFormStyle(@g_HomeForm);
 
   g_HomeForm.Disable();
 
@@ -72,6 +75,11 @@ begin
   inherited;
 
   Self.Show();
+end;
+
+procedure TPhfMain.btnGUIDClick(Sender: TObject);
+begin
+  edtGUID.Text := PhGUID.Create().ToString();
 end;
 
 procedure TPhfMain.Disable();
