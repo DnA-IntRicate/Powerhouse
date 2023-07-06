@@ -44,7 +44,8 @@ uses
   Powerhouse.FileStream in 'Source\Powerhouse\Powerhouse.FileStream.pas',
   Powerhouse.SaveData in 'Source\Powerhouse\Powerhouse.SaveData.pas',
   Powerhouse.Validator in 'Source\Powerhouse\Powerhouse.Validator.pas',
-  Powerhouse.Types in 'Source\Powerhouse\Powerhouse.Types.pas';
+  Powerhouse.Types in 'Source\Powerhouse\Powerhouse.Types.pas',
+  Powerhouse.Vector in 'Source\Powerhouse\Powerhouse.Vector.pas';
 
 {$R *.res}
 
@@ -56,6 +57,7 @@ begin
   // as the parent form for all other forms associated with the application.
   // Normally all other forms would be created here, but instead they are dynamically
   // created by the main form so that it can directly handle them by itself.
+
   Application.CreateForm(TPhfMain, g_MainForm);
   Application.Run();
 

@@ -63,7 +63,7 @@ begin
   Application.CreateForm(TPhfHome, g_HomeForm);
 
   SetFormStyle(@g_LoginForm);
-SetFormStyle(@g_HomeForm);
+  SetFormStyle(@g_HomeForm);
 
   g_HomeForm.Disable();
 
