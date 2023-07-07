@@ -28,7 +28,7 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, Powerhouse.Types,
-  Powerhouse.Appliance, Powerhouse.User;
+  Powerhouse.Vector, Powerhouse.Appliance, Powerhouse.User;
 
 type
   PhUserData = record
@@ -41,7 +41,7 @@ type
   public
     constructor Create(var refUsers: PhUsers);
 
-    procedure ToPhUsers(out outResult: PhUsers);
+    function ToPhUsers(): PhUsers;
 
   public
     Users: TArray<PhUserData>;
@@ -56,15 +56,15 @@ var
   appliances: PhAppliances;
   appliance: PhAppliance;
 begin
-  SetLength(Users, Length(refUsers));
+  SetLength(Users, refUsers.Size());
   userIdx := 0;
 
   for user in refUsers do
   begin
     Users[userIdx].GUID := user.GetGUID();
-    user.GetAppliances(appliances);
+    appliances := user.GetAppliances();
 
-    SetLength(Users[userIdx].Appliances, Length(appliances));
+    SetLength(Users[userIdx].Appliances, appliances.Size());
     applianceIdx := 0;
 
     for appliance in appliances do
@@ -77,21 +77,21 @@ begin
   end;
 end;
 
-procedure PhSaveData.ToPhUsers(out outResult: PhUsers);
+function PhSaveData.ToPhUsers(): PhUsers;
 var
   userIdx, applianceIdx: int;
   data: PhUserData;
   appliances: PhAppliances;
   applianceGUID: PhGUID;
 begin
-  SetLength(outResult, Length(Users));
+  Result := PhUsers.Create(Length(Users));
   userIdx := 0;
 
   for data in Users do
   begin
-    outResult[userIdx] := PhUser.Create(data.GUID);
+    Result[userIdx] := PhUser.Create(data.GUID);
 
-    SetLength(appliances, Length(data.Appliances));
+    appliances := PhAppliances.Create(Length(data.Appliances));
     applianceIdx := 0;
 
     for applianceGUID in data.Appliances do
@@ -100,7 +100,7 @@ begin
       Inc(applianceIdx);
     end;
 
-    outResult[userIdx].SetAppliances(appliances);
+    Result[userIdx].SetAppliances(appliances);
     Inc(userIdx);
   end;
 end;

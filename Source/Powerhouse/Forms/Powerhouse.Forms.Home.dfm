@@ -84,6 +84,21 @@ object PhfHome: TPhfHome
             ParentFont = False
           end
         end
+        object btnAddAppliance: TButton
+          Left = 11
+          Top = 371
+          Width = 239
+          Height = 38
+          Caption = 'Add Appliance'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 3
+          OnClick = btnAddApplianceClick
+        end
       end
       object tabInsights: TTabSheet
         Caption = 'Insights'

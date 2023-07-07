@@ -29,8 +29,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Form,
-  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
+  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Vector,
+  Powerhouse.Form, Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance,
+  Powerhouse.User, Powerhouse.Forms.Home.AddAppliance;
 
 type
   TPhfHome = class(PhForm)
@@ -46,7 +47,9 @@ type
     tabCalculator: TTabSheet;
     tabAccount: TTabSheet;
     tabHelp: TTabSheet;
+    btnAddAppliance: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnAddApplianceClick(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -83,12 +86,24 @@ begin
     end);
 end;
 
+procedure TPhfHome.btnAddApplianceClick(Sender: TObject);
+var
+  addApplianceForm: TPhfAddAppliance;
+  newAppliance: PhAppliance;
+begin
+  addApplianceForm := TPhfAddAppliance.Create(Self);
+  addApplianceForm.EnableModal();
+  newAppliance := addApplianceForm.GetNewAppliance();
+  addApplianceForm.Free();
+
+end;
+
 procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);
 var
   appliance: PhAppliance;
   appliances: PhAppliances;
 begin
-  refUser.GetAppliances(appliances);
+  appliances := refUser.GetAppliances();
 
   for appliance in appliances do
     lstAppliances.Items.Add(appliance.GetName());

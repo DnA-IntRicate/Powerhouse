@@ -123,6 +123,7 @@ begin
   surname := edtSurname.Text;
 
   CreateAccount(username, password, email, name, surname);
+  DisableModal();
 end;
 
 procedure TPhfRegistration.edtUsernameExit(Sender: TObject);
@@ -382,7 +383,6 @@ begin
     name, surname);
 
   PhLogger.Info('Your account has been created.');
-  Disable();
 end;
 
 end.

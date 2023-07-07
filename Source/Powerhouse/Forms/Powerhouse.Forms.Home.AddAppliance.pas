@@ -22,80 +22,73 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit Powerhouse.Forms.Main;
+unit Powerhouse.Forms.Home.AddAppliance;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Types, Powerhouse.Database,
-  Powerhouse.Form, Powerhouse.Forms.Home, Powerhouse.Forms.Login,
-  Powerhouse.Forms.Registration;
+  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Vector,
+  Powerhouse.Form, Powerhouse.Database, Powerhouse.Logger, Powerhouse.Appliance;
 
 type
-  TPhfMain = class(PhForm)
-    edtGUID: TEdit;
-    btnGUID: TButton;
+  TPhfAddAppliance = class(PhForm)
+    lstAllAppliances: TListBox;
+    btnAdd: TButton;
     procedure FormCreate(Sender: TObject);
-    procedure btnGUIDClick(Sender: TObject);
+    procedure btnAddClick(Sender: TObject);
 
   public
-    procedure Enable(); override;
-    procedure Disable(); override;
+    function GetNewAppliance(): PhAppliance;
 
   private
-    procedure SetFormStyle(const formPtr: PhFormPtr);
+    m_NewAppliance: PhAppliance;
+    m_AllAppliances: PhVector<PhAppliance>;
   end;
-
-var
-  g_MainForm: TPhfMain;
 
 implementation
 
 {$R *.dfm}
 
-procedure TPhfMain.FormCreate(Sender: TObject);
-begin
-  g_Database := PhDatabase.Create('Assets/PowerhouseDb.mdb');
-
-  Application.CreateForm(TPhfLogin, g_LoginForm);
-  Application.CreateForm(TPhfHome, g_HomeForm);
-
-  SetFormStyle(@g_LoginForm);
-  SetFormStyle(@g_HomeForm);
-
-  g_HomeForm.Disable();
-
-  TransitionForms(@g_LoginForm);
-end;
-
-procedure TPhfMain.Enable();
-begin
-  Self.Show();
-end;
-
-procedure TPhfMain.btnGUIDClick(Sender: TObject);
-begin
-  edtGUID.Text := PhGUID.Create().ToString();
-end;
-
-procedure TPhfMain.Disable();
-begin
-  Self.Hide();
-end;
-
-procedure TPhfMain.SetFormStyle(const formPtr: PhFormPtr);
+procedure TPhfAddAppliance.FormCreate(Sender: TObject);
 var
-  oldStyle, newStyle: int;
+  guid: PhGUID;
+  guids: PhVector<PhGUID>;
+  appliance: PhAppliance;
 begin
-  formPtr.BorderStyle := bsSingle;
-  formPtr.FormStyle := fsNormal;
+  with g_Database do
+  begin
+    m_AllAppliances := PhVector<PhAppliance>.Create(TblAppliances.RecordCount);
+    guids := PhVector<PhGUID>.Create(TblAppliances.RecordCount);
 
-  oldStyle := GetWindowLong(formPtr.Handle, GWL_EXSTYLE);
-  newStyle := oldStyle or WS_EX_APPWINDOW;
+    TblAppliances.First();
+    while not TblAppliances.Eof do
+    begin
+      guids.PushBack(TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK]);
+      TblAppliances.Next();
+    end;
 
-  SetWindowLong(formPtr.Handle, GWL_EXSTYLE, newStyle);
+    TblAppliances.First();
+
+    for guid in guids do
+      m_AllAppliances.PushBack(PhAppliance.Create(guid));
+  end;
+
+  for appliance in m_AllAppliances do
+    lstAllAppliances.Items.Add(appliance.GetName());
+end;
+
+procedure TPhfAddAppliance.btnAddClick(Sender: TObject);
+begin
+  m_NewAppliance := m_AllAppliances[lstAllAppliances.ItemIndex];
+
+  DisableModal();
+end;
+
+function TPhfAddAppliance.GetNewAppliance(): PhAppliance;
+begin
+  Result := m_NewAppliance;
 end;
 
 end.

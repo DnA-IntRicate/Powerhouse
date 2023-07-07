@@ -28,7 +28,7 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Variants,
-  Powerhouse.Types, Powerhouse.Database, Powerhouse.Logger;
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Database, Powerhouse.Logger;
 
 type
   PhAppliance = class
@@ -111,7 +111,7 @@ type
   end;
 
 type
-  PhAppliances = TArray<PhAppliance>;
+  PhAppliances = PhVector<PhAppliance>;
 
 const
   PH_TBL_FIELD_NAME_APPLIANCES_PK = 'ApplianceGUID';

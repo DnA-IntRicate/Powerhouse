@@ -29,8 +29,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ExtCtrls, Vcl.StdCtrls, Powerhouse.Types, Powerhouse.Form,
-  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
+  Vcl.ExtCtrls, Vcl.StdCtrls, Powerhouse.Types, Powerhouse.Vector,
+  Powerhouse.Form, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.JsonSerializer, Powerhouse.Logger, Powerhouse.Forms.Home,
   Powerhouse.Forms.Registration, Powerhouse.FileStream, Powerhouse.SaveData;
 
@@ -156,13 +156,13 @@ begin
   jsonSrc := PhFileStream.ReadAllText(savePath);
   json := PhJsonSerializer.Create();
   saveData := PhSaveData(json.DeserializeJson(jsonSrc));
-  saveData.ToPhUsers(users);
+  users := saveData.ToPhUsers();
 
   for user in users do
   begin
     if user.GetGUID() = refUser.GetGUID() then
     begin
-      user.GetAppliances(appliances);
+      appliances := user.GetAppliances();
       refUser.SetAppliances(appliances);
 
       break;
@@ -187,7 +187,7 @@ var
   json: PhJsonSerializer;
   jsonSrc: string;
 begin
-  SetLength(users, 1);
+  users := PhUsers.Create(1);
   users[0] := user;
 
   saveData := PhSaveData.Create(users);

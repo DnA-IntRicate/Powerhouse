@@ -28,7 +28,8 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash, Powerhouse.Types,
-  Powerhouse.Appliance, Powerhouse.Database, Powerhouse.Logger;
+  Powerhouse.Vector, Powerhouse.Appliance, Powerhouse.Database,
+  Powerhouse.Logger;
 
 type
   PhUser = class
@@ -57,13 +58,11 @@ type
     function GetPasswordHash(): string;
     procedure SetPassword(const newPswd: string);
 
-    procedure GetAppliances(out outResult: PhAppliances);
+    function GetAppliances(): PhAppliances;
     procedure SetAppliances(const appliances: PhAppliances);
 
-    procedure GetApplianceByName(const name: string;
-      out outResult: PhAppliance);
-    procedure GetApplianceByGUID(const guid: PhGUID;
-      out outResult: PhAppliance);
+    function GetApplianceByName(const name: string): PhAppliance;
+    function GetApplianceByGUID(const guid: PhGUID): PhAppliance;
 
   private
     class function HashPassword(const pswd: string): string;
@@ -81,7 +80,7 @@ type
   end;
 
 type
-  PhUsers = TArray<PhUser>;
+  PhUsers = PhVector<PhUser>;
 
 const
   PH_TBL_FIELD_NAME_USERS_PK = 'UserGUID';
@@ -101,6 +100,7 @@ var
   foundGUID: bool;
 begin
   m_GUID := guid;
+  m_Appliances := PhAppliances.Create();
   foundGUID := false;
 
   with g_Database do
@@ -234,9 +234,9 @@ begin
   UpdateInDatabase();
 end;
 
-procedure PhUser.GetAppliances(out outResult: PhAppliances);
+function PhUser.GetAppliances(): PhAppliances;
 begin
-  outResult := m_Appliances;
+  Result := m_Appliances;
 end;
 
 procedure PhUser.SetAppliances(const appliances: PhAppliances);
@@ -244,34 +244,36 @@ begin
   m_Appliances := appliances;
 end;
 
-procedure PhUser.GetApplianceByName(const name: string;
-  out outResult: PhAppliance);
+function PhUser.GetApplianceByName(const name: string): PhAppliance;
 var
   i: int;
 begin
-  for i := Low(m_Appliances) to High(m_Appliances) do
+  for i := 0 to m_Appliances.Size() do
   begin
     if m_Appliances[i].GetName() = name then
     begin
-      outResult := m_Appliances[i];
-      break;
+      Result := m_Appliances[i];
+      Exit();
     end;
   end;
+
+  Result := Default (PhAppliance);
 end;
 
-procedure PhUser.GetApplianceByGUID(const guid: PhGUID;
-  out outResult: PhAppliance);
+function PhUser.GetApplianceByGUID(const guid: PhGUID): PhAppliance;
 var
   i: int;
 begin
-  for i := Low(m_Appliances) to High(m_Appliances) do
+  for i := 0 to m_Appliances.Size() do
   begin
     if m_Appliances[i].GetGUID() = guid then
     begin
-      outResult := m_Appliances[i];
-      break;
+      Result := m_Appliances[i];
+      Exit();
     end;
   end;
+
+  Result := Default (PhAppliance);
 end;
 
 class function PhUser.HashPassword(const pswd: string): string;
