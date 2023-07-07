@@ -14,7 +14,7 @@ object PhfAddAppliance: TPhfAddAppliance
   OnCreate = FormCreate
   PixelsPerInch = 120
   TextHeight = 16
-  object lstAllAppliances: TListBox
+  object lstAvailableAppliances: TListBox
     Left = 8
     Top = 8
     Width = 529

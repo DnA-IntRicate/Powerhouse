@@ -66,6 +66,8 @@ type
     procedure Reserve(const newCapacity: uint64);
     procedure Clear();
 
+    function Contains(const value: IEquatable<_Ty>): bool;
+
     function Empty(): bool; inline;
     function Size(): uint64; inline;
     function Capacity(): uint64; inline;
@@ -320,6 +322,22 @@ begin
     PopBack();
 
   SetCapacity(0);
+end;
+
+function PhVector<_Ty>.Contains(const value: IEquatable<_Ty>): bool;
+var
+  i: uint64;
+begin
+  Result := false;
+
+  for i := Low(m_Data) to High(m_Data) do
+  begin
+    if value.Equals(m_Data[i]) then
+    begin
+      Result := true;
+      break;
+    end;
+  end;
 end;
 
 function PhVector<_Ty>.Empty(): bool;

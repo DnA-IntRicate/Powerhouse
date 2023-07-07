@@ -30,11 +30,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Vector,
-  Powerhouse.Form, Powerhouse.Database, Powerhouse.Logger, Powerhouse.Appliance;
+  Powerhouse.Form, Powerhouse.Database, Powerhouse.Logger, Powerhouse.Appliance,
+  Powerhouse.User;
 
 type
   TPhfAddAppliance = class(PhForm)
-    lstAllAppliances: TListBox;
+    lstAvailableAppliances: TListBox;
     btnAdd: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
@@ -44,7 +45,7 @@ type
 
   private
     m_NewAppliance: PhAppliance;
-    m_AllAppliances: PhVector<PhAppliance>;
+    m_AvailableAppliances: PhVector<PhAppliance>;
   end;
 
 implementation
@@ -53,14 +54,19 @@ implementation
 
 procedure TPhfAddAppliance.FormCreate(Sender: TObject);
 var
+  userAppliances: PhAppliances;
+  numAvailable: uint64;
   guid: PhGUID;
   guids: PhVector<PhGUID>;
   appliance: PhAppliance;
 begin
   with g_Database do
   begin
-    m_AllAppliances := PhVector<PhAppliance>.Create(TblAppliances.RecordCount);
-    guids := PhVector<PhGUID>.Create(TblAppliances.RecordCount);
+    userAppliances := g_CurrentUser.GetAppliances();
+    numAvailable := uint64(TblAppliances.RecordCount) - userAppliances.Size();
+
+    m_AvailableAppliances := PhVector<PhAppliance>.Create(numAvailable);
+    guids := PhVector<PhGUID>.Create(numAvailable);
 
     TblAppliances.First();
     while not TblAppliances.Eof do
@@ -72,16 +78,21 @@ begin
     TblAppliances.First();
 
     for guid in guids do
-      m_AllAppliances.PushBack(PhAppliance.Create(guid));
+    begin
+      appliance := PhAppliance.Create(guid);
+
+      if not userAppliances.Contains(appliance) then
+        m_AvailableAppliances.PushBack(appliance);
+    end;
   end;
 
-  for appliance in m_AllAppliances do
-    lstAllAppliances.Items.Add(appliance.GetName());
+  for appliance in m_AvailableAppliances do
+    lstAvailableAppliances.Items.Add(appliance.GetName());
 end;
 
 procedure TPhfAddAppliance.btnAddClick(Sender: TObject);
 begin
-  m_NewAppliance := m_AllAppliances[lstAllAppliances.ItemIndex];
+  m_NewAppliance := m_AvailableAppliances[lstAvailableAppliances.ItemIndex];
 
   DisableModal();
 end;

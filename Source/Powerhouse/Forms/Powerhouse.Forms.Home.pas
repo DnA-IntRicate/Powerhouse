@@ -96,6 +96,11 @@ begin
   newAppliance := addApplianceForm.GetNewAppliance();
   addApplianceForm.Free();
 
+  if newAppliance <> nil then
+  begin
+    g_CurrentUser.AddAppliance(newAppliance);
+    lstAppliances.Items.Add(newAppliance.GetName());
+  end;
 end;
 
 procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);

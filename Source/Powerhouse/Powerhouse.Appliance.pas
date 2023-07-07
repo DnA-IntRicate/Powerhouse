@@ -28,10 +28,11 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Variants,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Database, Powerhouse.Logger;
+  System.Generics.Defaults, Powerhouse.Types, Powerhouse.Vector,
+  Powerhouse.Database, Powerhouse.Logger;
 
 type
-  PhAppliance = class
+  PhAppliance = class(TInterfacedObject, IEquatable<PhAppliance>)
   public
     constructor Create(const guid: PhGUID);
 
@@ -41,6 +42,8 @@ type
       const energyRating: int; const surgeProtection: bool): PhAppliance;
 
     function CalculateCostPerHour(): float;
+
+    function Equals(other: PhAppliance): bool; reintroduce;
 
     function GetGUID(): PhGUID;
 
@@ -106,7 +109,8 @@ type
     m_EnergyRating: int;
     m_PowerFactor: float;
     m_BatterySize: float;
-    m_BatteryKind: string; // TODO: Use an enumerated type
+    m_BatteryKind: string;
+    // TODO: Use an enumerated type
     m_SurgeProtection: bool;
   end;
 
@@ -235,6 +239,14 @@ function PhAppliance.CalculateCostPerHour(): float;
 begin
   // TODO: Implement this.
   Result := 0;
+end;
+
+function PhAppliance.Equals(other: PhAppliance): bool;
+begin
+  if other = nil then
+    Result := false
+  else
+    Result := m_GUID = other.m_GUID;
 end;
 
 function PhAppliance.GetGUID(): PhGUID;

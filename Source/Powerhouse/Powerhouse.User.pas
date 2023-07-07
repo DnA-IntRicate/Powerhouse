@@ -32,7 +32,7 @@ uses
   Powerhouse.Logger;
 
 type
-  PhUser = class
+  PhUser = class(TInterfacedObject, IEquatable<PhUser>)
   public
     constructor Create(const guid: PhGUID);
 
@@ -40,6 +40,11 @@ type
       surname: string): PhUser;
 
     function CheckPassword(const pswd: string): bool;
+
+    procedure AddAppliance(const appliance: PhAppliance);
+    procedure RemoveAppliance(const appliance: PhAppliance);
+
+    function Equals(other: PhUser): bool; reintroduce;
 
     function GetGUID(): PhGUID;
 
@@ -167,6 +172,34 @@ end;
 function PhUser.CheckPassword(const pswd: string): bool;
 begin
   Result := HashPassword(pswd) = m_PasswordHash;
+end;
+
+procedure PhUser.AddAppliance(const appliance: PhAppliance);
+begin
+  Assert(m_Appliances <> nil, 'PhUser.AddAppliance() : m_Appliances was null!');
+  m_Appliances.PushBack(appliance);
+end;
+
+procedure PhUser.RemoveAppliance(const appliance: PhAppliance);
+var
+  i: int;
+begin
+  for i := 0 to m_Appliances.Size() do
+  begin
+    if m_Appliances[i] = appliance then
+    begin
+      m_Appliances.Erase(uint64(i));
+      break;
+    end;
+  end;
+end;
+
+function PhUser.Equals(other: PhUser): bool;
+begin
+  if other = nil then
+    Result := false
+  else
+    Result := m_GUID = other.m_GUID;
 end;
 
 function PhUser.GetGUID(): PhGUID;
