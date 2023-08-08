@@ -32,7 +32,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
   Vcl.ComCtrls,
   Powerhouse.Types, Powerhouse.Database, Powerhouse.SaveData, Powerhouse.Form,
-  Powerhouse.Forms.Home, Powerhouse.Forms.Login, Powerhouse.Forms.Registration;
+  Powerhouse.Forms.Home, Powerhouse.Forms.Login;
 
 type
   TPhfMain = class(PhForm)

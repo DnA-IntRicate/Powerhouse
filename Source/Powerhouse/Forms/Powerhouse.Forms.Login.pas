@@ -34,7 +34,8 @@ uses
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
   Powerhouse.Database, Powerhouse.JsonSerializer, Powerhouse.FileStream,
   Powerhouse.Appliance, Powerhouse.User, Powerhouse.SaveData,
-  Powerhouse.Forms.Home, Powerhouse.Forms.Registration;
+  Powerhouse.Forms.Home,
+  Powerhouse.Forms.Login.Registration;
 
 type
   TPhfLogin = class(PhForm)

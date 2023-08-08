@@ -22,7 +22,7 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit Powerhouse.Forms.Registration;
+unit Powerhouse.Forms.Login.Registration;
 
 interface
 

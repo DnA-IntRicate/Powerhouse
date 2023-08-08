@@ -32,8 +32,8 @@ uses
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Login.pas' {g_LoginForm} ,
   Powerhouse.Forms.Home
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.pas' {g_HomeForm} ,
-  Powerhouse.Forms.Registration
-    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Registration.pas' {g_RegistrationForm} ,
+  Powerhouse.Forms.Login.Registration
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Login.Registration.pas' {g_RegistrationForm} ,
   Powerhouse.Forms.Home.AddAppliance
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.AddAppliance.pas' {g_AddApplianceForm} ,
   Powerhouse.Database in 'Source\Powerhouse\Powerhouse.Database.pas',
