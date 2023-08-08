@@ -28,8 +28,8 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Variants,
-  System.Generics.Defaults, Powerhouse.Types, Powerhouse.Vector,
-  Powerhouse.Database, Powerhouse.Logger;
+  System.Generics.Defaults,
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Logger, Powerhouse.Database;
 
 type
   PhAppliance = class(TInterfacedObject, IEquatable<PhAppliance>)

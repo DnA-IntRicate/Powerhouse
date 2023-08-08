@@ -28,7 +28,8 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Variants, System.Classes,
-  System.RegularExpressions, Powerhouse.Types;
+  System.RegularExpressions,
+  Powerhouse.Types;
 
 type
   PhValidationFlag = (TooShort = 1, TooLong = 2, InvalidFormat = 4,

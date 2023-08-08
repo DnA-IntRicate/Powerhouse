@@ -27,7 +27,10 @@ unit Powerhouse.Database;
 interface
 
 uses
-  System.SysUtils, Data.DB, Data.Win.ADODB, Powerhouse.Types, Powerhouse.Logger;
+  System.SysUtils,
+  Data.DB,
+  Data.Win.ADODB,
+  Powerhouse.Types, Powerhouse.Logger;
 
 type
   PhDatabase = class

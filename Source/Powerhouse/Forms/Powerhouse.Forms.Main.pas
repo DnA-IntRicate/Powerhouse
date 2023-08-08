@@ -27,11 +27,12 @@ unit Powerhouse.Forms.Main;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Types, Powerhouse.Database,
-  Powerhouse.SaveData, Powerhouse.Form, Powerhouse.Forms.Home,
-  Powerhouse.Forms.Login, Powerhouse.Forms.Registration;
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  Vcl.ComCtrls,
+  Powerhouse.Types, Powerhouse.Database, Powerhouse.SaveData, Powerhouse.Form,
+  Powerhouse.Forms.Home, Powerhouse.Forms.Login, Powerhouse.Forms.Registration;
 
 type
   TPhfMain = class(PhForm)
@@ -50,7 +51,8 @@ type
   end;
 
 const
-  PH_SAVEFILE_NAME = 'PowerhouseSave.json';
+  PH_PATH_DATABASE = 'Assets/PowerhouseDb.mdb';
+  PH_PATH_SAVEFILE = 'PowerhouseSave.json';
 
 var
   g_MainForm: TPhfMain;
@@ -61,8 +63,8 @@ implementation
 
 procedure TPhfMain.FormCreate(Sender: TObject);
 begin
-  g_Database := PhDatabase.Create('Assets/PowerhouseDb.mdb');
-  g_SaveData := PhSaveData.Create(PH_SAVEFILE_NAME);
+  g_Database := PhDatabase.Create(PH_PATH_DATABASE);
+  g_SaveData := PhSaveData.Create(PH_PATH_SAVEFILE);
 
   Application.CreateForm(TPhfLogin, g_LoginForm);
   Application.CreateForm(TPhfHome, g_HomeForm);

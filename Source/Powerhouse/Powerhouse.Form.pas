@@ -27,9 +27,10 @@ unit Powerhouse.Form;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, System.SyncObjs, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
-  Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Types;
+  Winapi.Windows,
+  System.SysUtils, System.Variants, System.Classes, System.SyncObjs,
+  Vcl.Forms,
+  Powerhouse.Types;
 
 type
   PhFormPtr = ^PhForm;

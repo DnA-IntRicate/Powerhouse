@@ -28,7 +28,7 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash, System.JSON,
-  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Types;
+  Data.DBXJSON, Data.DBXJSONReflect;
 
 type
   PhJsonSerializer = class

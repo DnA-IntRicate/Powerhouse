@@ -27,8 +27,9 @@ unit Powerhouse.FileStream;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, Powerhouse.Types, Powerhouse.Appliance,
-  Powerhouse.Database, Powerhouse.Logger;
+  Winapi.Windows,
+  System.SysUtils,
+  Powerhouse.Types, Powerhouse.Logger;
 
 type
   PhWriteMode = (Append = 0, Overwrite);

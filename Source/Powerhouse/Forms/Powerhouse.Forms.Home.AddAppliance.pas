@@ -27,11 +27,12 @@ unit Powerhouse.Forms.Home.AddAppliance;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Vector,
-  Powerhouse.Form, Powerhouse.Database, Powerhouse.Logger, Powerhouse.Appliance,
-  Powerhouse.User;
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
+  Vcl.StdCtrls, Vcl.ExtCtrls,
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
+  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
 
 type
   TPhfAddAppliance = class(PhForm)

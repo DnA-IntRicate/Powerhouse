@@ -27,8 +27,9 @@ unit Powerhouse.Vector;
 interface
 
 uses
-  System.SysUtils, System.Generics.Defaults, System.Math,
-  System.Generics.Collections, Powerhouse.Types;
+  System.SysUtils, System.Math,
+  System.Generics.Defaults, System.Generics.Collections,
+  Powerhouse.Types;
 
 type
   PhVector<_Ty> = class

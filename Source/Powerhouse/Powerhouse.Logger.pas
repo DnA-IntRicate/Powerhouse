@@ -27,7 +27,8 @@ unit Powerhouse.Logger;
 interface
 
 uses
-  System.SysUtils, System.StrUtils, System.UITypes, Vcl.Dialogs,
+  System.SysUtils, System.StrUtils, System.UITypes,
+  Vcl.Dialogs,
   Powerhouse.Types;
 
 type

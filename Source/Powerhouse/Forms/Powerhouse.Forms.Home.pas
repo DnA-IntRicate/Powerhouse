@@ -27,11 +27,14 @@ unit Powerhouse.Forms.Home;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Vector,
-  Powerhouse.Form, Powerhouse.Logger, Powerhouse.Database, Powerhouse.SaveData,
-  Powerhouse.Appliance, Powerhouse.User, Powerhouse.Forms.Home.AddAppliance;
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
+  Vcl.StdCtrls, Vcl.ExtCtrls,
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
+  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.SaveData,
+  Powerhouse.Forms.Home.AddAppliance;
 
 type
   TPhfHome = class(PhForm)

@@ -171,7 +171,12 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 <DeployFile LocalName="Assets\Powerhouse_UWP_150p.png" Configuration="Debug" Class="UWP_DelphiLogo150"/>
                 <DeployFile LocalName="Assets\Powerhouse_UWP_44p.png" Configuration="Debug" Class="UWP_DelphiLogo44"/>
                 <DeployFile LocalName="bin\Win32\Debug\Powerhouse.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="bin\Win32\Debug\Powerhouse.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="bin\Win32\Debug\Powerhouse.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Powerhouse.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

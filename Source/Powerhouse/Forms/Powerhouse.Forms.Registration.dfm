@@ -4,123 +4,157 @@ object PhfRegistration: TPhfRegistration
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Powerhouse'
-  ClientHeight = 445
-  ClientWidth = 503
+  ClientHeight = 356
+  ClientWidth = 407
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -13
+  Font.Height = -10
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   OnCreate = FormCreate
-  PixelsPerInch = 120
-  TextHeight = 16
+  TextHeight = 12
   object pnlRegistration: TPanel
-    Left = 8
-    Top = 8
-    Width = 489
-    Height = 433
+    Left = 6
+    Top = 6
+    Width = 392
+    Height = 347
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
     TabOrder = 0
     object Label1: TLabel
-      Left = 69
+      Left = 55
       Top = 0
-      Width = 348
-      Height = 40
+      Width = 276
+      Height = 31
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Account Registration'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -33
+      Font.Height = -26
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label2: TLabel
-      Left = 21
-      Top = 74
-      Width = 64
-      Height = 16
+      Left = 17
+      Top = 59
+      Width = 50
+      Height = 12
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Username'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -10
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 21
-      Top = 146
-      Width = 63
-      Height = 16
+      Left = 17
+      Top = 117
+      Width = 49
+      Height = 12
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Password'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -10
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label4: TLabel
-      Left = 253
-      Top = 146
-      Width = 116
-      Height = 16
+      Left = 202
+      Top = 117
+      Width = 91
+      Height = 12
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Confirm password'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -10
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label5: TLabel
-      Left = 21
-      Top = 218
-      Width = 88
-      Height = 16
+      Left = 17
+      Top = 174
+      Width = 69
+      Height = 12
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Email address'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -10
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label6: TLabel
-      Left = 21
-      Top = 290
-      Width = 35
-      Height = 16
+      Left = 17
+      Top = 232
+      Width = 28
+      Height = 12
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Name'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -10
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label7: TLabel
-      Left = 253
-      Top = 290
-      Width = 57
-      Height = 16
+      Left = 202
+      Top = 232
+      Width = 44
+      Height = 12
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Surname'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -10
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object edtUsername: TEdit
-      Left = 21
-      Top = 96
-      Width = 452
-      Height = 29
+      Left = 17
+      Top = 77
+      Width = 361
+      Height = 25
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -17
+      Font.Height = -14
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -128,13 +162,17 @@ object PhfRegistration: TPhfRegistration
       OnExit = edtUsernameExit
     end
     object edtPassword: TEdit
-      Left = 21
-      Top = 168
-      Width = 220
-      Height = 29
+      Left = 17
+      Top = 134
+      Width = 176
+      Height = 25
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -17
+      Font.Height = -14
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -142,13 +180,17 @@ object PhfRegistration: TPhfRegistration
       OnExit = edtPasswordExit
     end
     object edtConfirmPassword: TEdit
-      Left = 253
-      Top = 168
-      Width = 220
-      Height = 29
+      Left = 202
+      Top = 134
+      Width = 176
+      Height = 25
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -17
+      Font.Height = -14
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -156,13 +198,17 @@ object PhfRegistration: TPhfRegistration
       OnExit = edtConfirmPasswordExit
     end
     object edtEmailAddress: TEdit
-      Left = 21
-      Top = 240
-      Width = 452
-      Height = 29
+      Left = 17
+      Top = 192
+      Width = 361
+      Height = 25
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -17
+      Font.Height = -14
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -170,13 +216,17 @@ object PhfRegistration: TPhfRegistration
       OnExit = edtEmailAddressExit
     end
     object edtName: TEdit
-      Left = 21
-      Top = 312
-      Width = 220
-      Height = 29
+      Left = 17
+      Top = 250
+      Width = 176
+      Height = 25
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -17
+      Font.Height = -14
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -184,13 +234,17 @@ object PhfRegistration: TPhfRegistration
       OnExit = edtNameExit
     end
     object edtSurname: TEdit
-      Left = 253
-      Top = 312
-      Width = 220
-      Height = 29
+      Left = 202
+      Top = 250
+      Width = 176
+      Height = 25
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -17
+      Font.Height = -14
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -198,14 +252,18 @@ object PhfRegistration: TPhfRegistration
       OnExit = edtSurnameExit
     end
     object btnRegister: TButton
-      Left = 21
-      Top = 368
-      Width = 452
-      Height = 49
+      Left = 17
+      Top = 294
+      Width = 361
+      Height = 40
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Register'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -25
+      Font.Height = -20
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False

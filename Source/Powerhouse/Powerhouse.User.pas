@@ -27,9 +27,9 @@ unit Powerhouse.User;
 interface
 
 uses
-  System.SysUtils, System.StrUtils, System.Math, System.Hash, Powerhouse.Types,
-  Powerhouse.Vector, Powerhouse.Appliance, Powerhouse.Database,
-  Powerhouse.Logger;
+  System.SysUtils, System.StrUtils, System.Math, System.Hash,
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Logger, Powerhouse.Database,
+  Powerhouse.Appliance;
 
 type
   PhUser = class(TInterfacedObject, IEquatable<PhUser>)
