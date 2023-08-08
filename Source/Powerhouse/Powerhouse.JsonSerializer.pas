@@ -28,8 +28,7 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash, System.JSON,
-  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Types, Powerhouse.Appliance,
-  Powerhouse.User, Powerhouse.SaveData, Powerhouse.FileStream;
+  Data.DBXJSON, Data.DBXJSONReflect, Powerhouse.Types;
 
 type
   PhJsonSerializer = class
@@ -44,9 +43,6 @@ type
     m_Marshal: TJSONMarshal;
     m_Unmarshal: TJSONUnMarshal;
   end;
-
-const
-  PH_SAVEFILE_NAME = 'PowerhouseSave.json';
 
 implementation
 

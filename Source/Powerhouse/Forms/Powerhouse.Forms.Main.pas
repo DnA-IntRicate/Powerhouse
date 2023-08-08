@@ -30,8 +30,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.ComCtrls, Powerhouse.Types, Powerhouse.Database,
-  Powerhouse.Form, Powerhouse.Forms.Home, Powerhouse.Forms.Login,
-  Powerhouse.Forms.Registration;
+  Powerhouse.SaveData, Powerhouse.Form, Powerhouse.Forms.Home,
+  Powerhouse.Forms.Login, Powerhouse.Forms.Registration;
 
 type
   TPhfMain = class(PhForm)
@@ -39,6 +39,7 @@ type
     btnGUID: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnGUIDClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -47,6 +48,9 @@ type
   private
     procedure SetFormStyle(const formPtr: PhFormPtr);
   end;
+
+const
+  PH_SAVEFILE_NAME = 'PowerhouseSave.json';
 
 var
   g_MainForm: TPhfMain;
@@ -58,6 +62,7 @@ implementation
 procedure TPhfMain.FormCreate(Sender: TObject);
 begin
   g_Database := PhDatabase.Create('Assets/PowerhouseDb.mdb');
+  g_SaveData := PhSaveData.Create(PH_SAVEFILE_NAME);
 
   Application.CreateForm(TPhfLogin, g_LoginForm);
   Application.CreateForm(TPhfHome, g_HomeForm);
@@ -68,6 +73,11 @@ begin
   g_HomeForm.Disable();
 
   TransitionForms(@g_LoginForm);
+end;
+
+procedure TPhfMain.FormDestroy(Sender: TObject);
+begin
+  g_Database.Destroy();
 end;
 
 procedure TPhfMain.Enable();

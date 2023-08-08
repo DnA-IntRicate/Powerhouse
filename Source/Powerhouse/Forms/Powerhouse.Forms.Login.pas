@@ -1,4 +1,4 @@
-{ ----------------------------------------------------------------------------
+ï»¿{ ----------------------------------------------------------------------------
   MIT License
 
   Copyright (c) 2023 Adam Foflonker
@@ -49,10 +49,8 @@ type
     procedure lblRegisterClick(Sender: TObject);
 
   private
-    // TODO: If the logged in user has no save data, add them to the save.
-    procedure LoadUserAppliances(var refUser: PhUser; const savePath: string);
+    procedure LoadUserAppliances(var refUser: PhUser);
     procedure LoginUser(var refUser: PhUser);
-    procedure CreateSaveFile(const user: PhUser; const savePath: string);
   end;
 
 var
@@ -92,11 +90,7 @@ begin
 
       if newUser.CheckPassword(pswd) then
       begin
-        if PhFileStream.IsFile(PH_SAVEFILE_NAME) then
-          LoadUserAppliances(newUser, PH_SAVEFILE_NAME)
-        else
-          CreateSaveFile(newUser, PH_SAVEFILE_NAME);
-
+        LoadUserAppliances(newUser);
         LoginUser(newUser);
       end
       else
@@ -133,7 +127,7 @@ begin
   if newUser <> nil then
   begin
     edtUsername.Text := newUser.GetUsername();
-    edtPassword.Text := '••••••••';
+    edtPassword.Text := 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢';
 
     Sleep(750);
 
@@ -143,31 +137,17 @@ begin
   regForm.Free();
 end;
 
-procedure TPhfLogin.LoadUserAppliances(var refUser: PhUser;
-  const savePath: string);
+procedure TPhfLogin.LoadUserAppliances(var refUser: PhUser);
 var
-  jsonSrc: string;
-  json: PhJsonSerializer;
-  saveData: PhSaveData;
-  users: PhUsers;
-  user: PhUser;
-  appliances: PhAppliances;
+  applianceGUIDs: PhVector<PhGUID>;
+  guid: PhGUID;
 begin
-  jsonSrc := PhFileStream.ReadAllText(savePath);
-  json := PhJsonSerializer.Create();
-  saveData := PhSaveData(json.DeserializeJson(jsonSrc));
-  users := saveData.ToPhUsers();
+  applianceGUIDs := g_SaveData.GetUserAppliances(refUser.GetGUID());
+  if applianceGUIDs.Empty() then
+    Exit();
 
-  for user in users do
-  begin
-    if user.GetGUID() = refUser.GetGUID() then
-    begin
-      appliances := user.GetAppliances();
-      refUser.SetAppliances(appliances);
-
-      break;
-    end;
-  end;
+  for guid in applianceGUIDs do
+    refUser.AddAppliance(PhAppliance.Create(guid));
 end;
 
 procedure TPhfLogin.LoginUser(var refUser: PhUser);
@@ -178,24 +158,6 @@ begin
     g_CurrentUser.GetSurname()]);
 
   TransitionForms(@g_HomeForm);
-end;
-
-procedure TPhfLogin.CreateSaveFile(const user: PhUser; const savePath: string);
-var
-  users: PhUsers;
-  saveData: PhSaveData;
-  json: PhJsonSerializer;
-  jsonSrc: string;
-begin
-  users := PhUsers.Create(1);
-  users[0] := user;
-
-  saveData := PhSaveData.Create(users);
-
-  json := PhJsonSerializer.Create();
-  jsonSrc := json.SerializeJson(saveData);
-
-  PhFileStream.WriteAllText(savePath, jsonSrc, PhWriteMode.Overwrite);
 end;
 
 end.

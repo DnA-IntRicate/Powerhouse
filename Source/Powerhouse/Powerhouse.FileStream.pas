@@ -41,7 +41,7 @@ type
     class procedure WriteAllText(const path, text: string;
       const writeMode: PhWriteMode);
 
-    class procedure CreateFile(const path: string); static;
+    class function CreateFile(const path: string): bool; static;
 
     class function IsFile(const path: string): bool; static;
     class function IsDir(const dir: string): bool; static;
@@ -92,13 +92,14 @@ begin
   CloseFile();
 end;
 
-class procedure PhFileStream.CreateFile(const path: string);
+class function PhFileStream.CreateFile(const path: string): bool;
 var
   fileHandle: THandle;
 begin
   fileHandle := FileCreate(path);
+  Result := fileHandle = INVALID_HANDLE_VALUE;
 
-  if fileHandle = INVALID_HANDLE_VALUE then
+  if Result then
     PhLogger.Error('Failed to create file: ' + path);
 
   FileClose(fileHandle);

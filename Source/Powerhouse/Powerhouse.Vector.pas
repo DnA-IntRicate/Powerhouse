@@ -64,6 +64,7 @@ type
 
     procedure Resize(const newSize: uint64);
     procedure Reserve(const newCapacity: uint64);
+    procedure ShrinkToFit();
     procedure Clear();
 
     function Contains(const value: IEquatable<_Ty>): bool;
@@ -75,6 +76,9 @@ type
     function Data(): TArray<_Ty>; inline;
     function Front(): _Ty;
     function Back(): _Ty;
+
+    function First(): uint64; inline;
+    function Last(): uint64; inline;
 
     function At(const index: uint64): _Ty; inline;
 
@@ -214,7 +218,7 @@ begin
   if m_Size > 0 then
   begin
     Dec(m_Size);
-    m_Data[m_size] := Default (_Ty);
+    m_Data[m_Size] := Default (_Ty);
   end;
 end;
 
@@ -224,7 +228,7 @@ var
 begin
   SetCapacity(m_Size + values.m_Size);
 
-  for i := 0 to values.m_Size - 1 do
+  for i := values.First() to values.Last() do
     PushBack(values[i]);
 end;
 
@@ -316,12 +320,18 @@ begin
     SetCapacity(newCapacity);
 end;
 
+procedure PhVector<_Ty>.ShrinkToFit();
+begin
+  if m_Size < GetCapacity() then
+    SetCapacity(m_Size);
+end;
+
 procedure PhVector<_Ty>.Clear();
 begin
   while m_Size > 0 do
     PopBack();
 
-  SetCapacity(0);
+  m_Size := 0;
 end;
 
 function PhVector<_Ty>.Contains(const value: IEquatable<_Ty>): bool;
@@ -363,7 +373,7 @@ end;
 function PhVector<_Ty>.Front(): _Ty;
 begin
   if m_Size > 0 then
-    Result := m_Data[0]
+    Result := m_Data[First()]
   else
     raise EListError.Create('Cannot get Front of an empty vector!');
 end;
@@ -371,9 +381,19 @@ end;
 function PhVector<_Ty>.Back(): _Ty;
 begin
   if m_Size > 0 then
-    Result := m_Data[m_Size - 1]
+    Result := m_Data[Last()]
   else
     raise EListError.Create('Cannot get Back of an empty vector!');
+end;
+
+function PhVector<_Ty>.First(): uint64;
+begin
+  Result := 0;
+end;
+
+function PhVector<_Ty>.Last(): uint64;
+begin
+  Result := m_Size - 1;
 end;
 
 function PhVector<_Ty>.At(const index: uint64): _Ty;
@@ -404,7 +424,7 @@ begin
   if not m_Vector.Empty() then
   begin
     if m_Index <> -1 then
-      Result := m_Index < (m_Vector.Size() - 1)
+      Result := m_Index < m_Vector.Last()
     else
       Result := true;
 

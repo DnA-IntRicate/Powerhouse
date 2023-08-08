@@ -30,8 +30,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Powerhouse.Types, Powerhouse.Vector,
-  Powerhouse.Form, Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance,
-  Powerhouse.User, Powerhouse.Forms.Home.AddAppliance;
+  Powerhouse.Form, Powerhouse.Logger, Powerhouse.Database, Powerhouse.SaveData,
+  Powerhouse.Appliance, Powerhouse.User, Powerhouse.Forms.Home.AddAppliance;
 
 type
   TPhfHome = class(PhForm)
@@ -56,6 +56,7 @@ type
 
   private
     procedure DisplayUserAppliances(var refUser: PhUser);
+    procedure AddAppliance();
   end;
 
 var
@@ -72,10 +73,7 @@ end;
 
 procedure TPhfHome.Enable();
 begin
-  inherited;
-
-  Self.Enabled := true;
-  Self.Show();
+  inherited Enable();
 
   DisplayUserAppliances(g_CurrentUser);
 
@@ -87,6 +85,22 @@ begin
 end;
 
 procedure TPhfHome.btnAddApplianceClick(Sender: TObject);
+begin
+  AddAppliance();
+end;
+
+procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);
+var
+  appliance: PhAppliance;
+  appliances: PhAppliances;
+begin
+  appliances := refUser.GetAppliances();
+
+  for appliance in appliances do
+    lstAppliances.Items.Add(appliance.GetName());
+end;
+
+procedure TPhfHome.AddAppliance();
 var
   addApplianceForm: TPhfAddAppliance;
   newAppliance: PhAppliance;
@@ -100,18 +114,9 @@ begin
   begin
     g_CurrentUser.AddAppliance(newAppliance);
     lstAppliances.Items.Add(newAppliance.GetName());
+
+    g_SaveData.AddOrUpdateUser(g_CurrentUser);
   end;
-end;
-
-procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);
-var
-  appliance: PhAppliance;
-  appliances: PhAppliances;
-begin
-  appliances := refUser.GetAppliances();
-
-  for appliance in appliances do
-    lstAppliances.Items.Add(appliance.GetName());
 end;
 
 end.
