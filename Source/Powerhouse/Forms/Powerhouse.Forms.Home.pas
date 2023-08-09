@@ -28,7 +28,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes,
+  System.SysUtils, System.StrUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.StdCtrls, Vcl.ExtCtrls,
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
@@ -51,14 +51,45 @@ type
     tabAccount: TTabSheet;
     tabHelp: TTabSheet;
     btnAddAppliance: TButton;
+    lblApplianceInformation2: TLabel;
+    lblManufacturer: TLabel;
+    lblApplianceName: TLabel;
+    lblApplianceInformation1: TLabel;
+    lblVoltage: TLabel;
+    lblApplianceInformation3: TLabel;
+    lblAmperage: TLabel;
+    lblApplianceInformation4: TLabel;
+    lblActivePowerConsumption: TLabel;
+    lblApplianceInformation5: TLabel;
+    lblInputPower: TLabel;
+    lblApplianceInformation6: TLabel;
+    lblOutputPower: TLabel;
+    lblApplianceInformation7: TLabel;
+    lblStandbyPowerConsumption: TLabel;
+    lblApplianceInformation8: TLabel;
+    lblPowerFactor: TLabel;
+    lblApplianceInformation9: TLabel;
+    lblFrequency: TLabel;
+    lblApplianceInformation10: TLabel;
+    lblEnergyEfficiencyRating: TLabel;
+    lblApplianceInformation11: TLabel;
+    lblSurgeProtection: TLabel;
+    lblApplianceInformation12: TLabel;
+    lblApplianceInformation13: TLabel;
+    lblBatterySize: TLabel;
+    lblApplianceInformation14: TLabel;
+    lblBatteryKind: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnAddApplianceClick(Sender: TObject);
+    procedure lstAppliancesClick(Sender: TObject);
+    procedure lstAppliancesMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
 
   public
     procedure Enable(); override;
 
   private
-    procedure DisplayUserAppliances(var refUser: PhUser);
+    procedure ShowApplianceInformationLabels(const show: bool);
     procedure AddAppliance();
   end;
 
@@ -74,11 +105,85 @@ begin
   Quit();
 end;
 
+procedure TPhfHome.btnAddApplianceClick(Sender: TObject);
+begin
+  AddAppliance();
+end;
+
+procedure TPhfHome.lstAppliancesClick(Sender: TObject);
+var
+  currentApplianceName: string;
+  appliance: PhAppliance;
+
+  voltage, amperage, activePower, inputPower, outputPower, standbyPower,
+    powerFactor, frequency, energyRating, surgeProtection, batterySize,
+    batteryKind: string;
+begin
+  if lstAppliances.ItemIndex = -1 then
+  begin
+    ShowApplianceInformationLabels(false);
+    Exit();
+  end;
+
+  currentApplianceName := lstAppliances.Items[lstAppliances.ItemIndex];
+  appliance := g_CurrentUser.GetApplianceByName(currentApplianceName);
+
+  voltage := Format('%fV', [appliance.GetVoltage()]);
+  amperage := Format('%fA', [appliance.GetAmperage()]);
+  activePower := Format('%fW', [appliance.GetActivePower()]);
+  inputPower := Format('%fW', [appliance.GetInputPower()]);
+  outputPower := IfThen(appliance.GetOutputPower() <> -1.0,
+    Format('%fW', [appliance.GetOutputPower()]), 'N/A');
+  standbyPower := Format('%fW', [appliance.GetStandbyPower()]);
+  powerFactor := Format('%f', [appliance.GetPowerFactor()]);
+  frequency := Format('%fHz', [appliance.GetFrequency()]);
+  energyRating := Format('%d', [appliance.GetEnergyRating()]);
+  surgeProtection := Ifthen(appliance.GetSurgeProtection(), 'Yes', 'No');
+  batterySize := IfThen(appliance.GetBatterySize() <> -1.0,
+    Format('%fmAH', [appliance.GetBatterySize()]), 'N/A');
+  batteryKind := IfThen(appliance.GetBatteryKind() <> '',
+    appliance.GetBatteryKind(), 'N/A');
+
+  lblApplianceName.Caption := appliance.GetName();
+  lblManufacturer.Caption := appliance.GetManufacturer();
+  lblVoltage.Caption := voltage;
+  lblAmperage.Caption := amperage;
+  lblActivePowerConsumption.Caption := activePower;
+  lblInputPower.Caption := inputPower;
+  lblOutputPower.Caption := outputPower;
+  lblStandbyPowerConsumption.Caption := standbyPower;
+  lblPowerFactor.Caption := powerFactor;
+  lblFrequency.Caption := frequency;
+  lblEnergyEfficiencyRating.Caption := energyRating;
+  lblSurgeProtection.Caption := surgeProtection;
+  lblBatterySize.Caption := batterySize;
+  lblBatteryKind.Caption := batteryKind;
+
+  ShowApplianceInformationLabels(true);
+end;
+
+procedure TPhfHome.lstAppliancesMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button <> TMouseButton.mbLeft then
+    Exit();
+
+  if lstAppliances.ItemAtPos(TPoint.Create(X, Y), true) = -1 then
+    lstAppliances.ItemIndex := -1;
+end;
+
 procedure TPhfHome.Enable();
+var
+  appliance: PhAppliance;
+  appliances: PhAppliances;
 begin
   inherited Enable();
 
-  DisplayUserAppliances(g_CurrentUser);
+  appliances := g_CurrentUser.GetAppliances();
+  for appliance in appliances do
+    lstAppliances.Items.Add(appliance.GetName());
+
+  ShowApplianceInformationLabels(false);
 
   GetParentForm(
     procedure(parentPtr: PhFormPtr)
@@ -87,20 +192,37 @@ begin
     end);
 end;
 
-procedure TPhfHome.btnAddApplianceClick(Sender: TObject);
+procedure TPhfHome.ShowApplianceInformationLabels(const show: bool);
 begin
-  AddAppliance();
-end;
+  lblApplianceInformation1.Visible := show;
+  lblApplianceInformation2.Visible := show;
+  lblApplianceInformation3.Visible := show;
+  lblApplianceInformation4.Visible := show;
+  lblApplianceInformation5.Visible := show;
+  lblApplianceInformation6.Visible := show;
+  lblApplianceInformation7.Visible := show;
+  lblApplianceInformation8.Visible := show;
+  lblApplianceInformation9.Visible := show;
+  lblApplianceInformation10.Visible := show;
+  lblApplianceInformation11.Visible := show;
+  lblApplianceInformation12.Visible := show;
+  lblApplianceInformation13.Visible := show;
+  lblApplianceInformation14.Visible := show;
 
-procedure TPhfHome.DisplayUserAppliances(var refUser: PhUser);
-var
-  appliance: PhAppliance;
-  appliances: PhAppliances;
-begin
-  appliances := refUser.GetAppliances();
-
-  for appliance in appliances do
-    lstAppliances.Items.Add(appliance.GetName());
+  lblApplianceName.Visible := show;
+  lblManufacturer.Visible := show;
+  lblVoltage.Visible := show;
+  lblAmperage.Visible := show;
+  lblActivePowerConsumption.Visible := show;
+  lblInputPower.Visible := show;
+  lblOutputPower.Visible := show;
+  lblStandbyPowerConsumption.Visible := show;
+  lblPowerFactor.Visible := show;
+  lblFrequency.Visible := show;
+  lblEnergyEfficiencyRating.Visible := show;
+  lblSurgeProtection.Visible := show;
+  lblBatterySize.Visible := show;
+  lblBatteryKind.Visible := show;
 end;
 
 procedure TPhfHome.AddAppliance();

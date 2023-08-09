@@ -329,11 +329,10 @@ var
   query: string;
   e: Exception;
 begin
-  query := Format('UPDATE %s' + #13#10 +
-    'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s''' +
-    #13#10 + 'WHERE %s = %s', [PH_TBL_NAME_USERS,
-    PH_TBL_FIELD_NAME_USERS_USERNAME, m_Username,
-    PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
+  query := Format('UPDATE %s ' +
+    'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'' ' +
+    'WHERE %s = ''%s'';', [PH_TBL_NAME_USERS, PH_TBL_FIELD_NAME_USERS_USERNAME,
+    m_Username, PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
     PH_TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames,
     PH_TBL_FIELD_NAME_USERS_SURNAME, m_Surname,
     PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,

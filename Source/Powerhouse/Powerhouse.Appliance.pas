@@ -124,15 +124,15 @@ const
   PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE = 'Voltage';
   PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE = 'Amperage';
   PH_TBL_FIELD_NAME_APPLIANCES_ACTIVE_POWER = 'ActivePowerConsumption';
-  PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER = 'StandbyPowerConsumption';
   PH_TBL_FIELD_NAME_APPLIANCES_INPUT_POWER = 'InputPower';
   PH_TBL_FIELD_NAME_APPLIANCES_OUTPUT_POWER = 'OutputPower';
+  PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER = 'StandbyPowerConsumption';
+  PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR = 'PowerFactor';
   PH_TBL_FIELD_NAME_APPLIANCES_FREQUENCY = 'Frequency';
   PH_TBL_FIELD_NAME_APPLIANCES_ENERGY_RATING = 'EnergyEfficiencyRating';
-  PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR = 'PowerFactor';
+  PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION = 'SurgeProtection';
   PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE = 'BatterySize';
   PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND = 'BatteryKind';
-  PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION = 'SurgeProtection';
 
 implementation
 
@@ -149,11 +149,11 @@ begin
     m_Voltage := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE);
     m_Amperage := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE);
     m_ActivePower := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_ACTIVE_POWER);
-    m_StandbyPower := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER);
     m_InputPower := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_INPUT_POWER);
+    m_StandbyPower := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER);
+    m_PowerFactor := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR);
     m_Frequency := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_FREQUENCY);
     m_EnergyRating := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_ENERGY_RATING);
-    m_PowerFactor := FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR);
     m_SurgeProtection :=
       FromDatabase(PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION);
 
@@ -208,24 +208,24 @@ begin
   guid := PhGUID.Create();
 
   query := Format('INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ' +
-    '%s, %s, %s, %s) VALUES (%d, ''%s'', ''%s'', %f, %f, %f, %f, %f, %f, %f, ' +
-    '%d, %f, ''%s'', %s);', [PH_TBL_NAME_APPLIANCES,
+    '%s, %s, %s, %s) VALUES (''%s'', ''%s'', ''%s'', %f, %f, %f, %f, %f, %f, ' +
+    '%f, %f, %d, %s, %f, ''%s'');', [PH_TBL_NAME_APPLIANCES,
     PH_TBL_FIELD_NAME_APPLIANCES_PK, PH_TBL_FIELD_NAME_APPLIANCES_NAME,
     PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER,
     PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE, PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE,
     PH_TBL_FIELD_NAME_APPLIANCES_ACTIVE_POWER,
-    PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER,
     PH_TBL_FIELD_NAME_APPLIANCES_INPUT_POWER,
     PH_TBL_FIELD_NAME_APPLIANCES_OUTPUT_POWER,
+    PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER,
+    PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR,
     PH_TBL_FIELD_NAME_APPLIANCES_FREQUENCY,
     PH_TBL_FIELD_NAME_APPLIANCES_ENERGY_RATING,
-    PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR,
+    PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE,
-    PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND,
-    PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, guid.ToString(), name,
-    manufacturer, voltage, amperage, activePower, standbyPower, inputPower,
-    outputPower, frequency, energyRating, powerFactor, batterySize, batteryKind,
-    BoolToStr(surgeProtection, true)]);
+    PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND, guid.ToString(), name,
+    manufacturer, voltage, amperage, activePower, inputPower, outputPower,
+    standbyPower, powerFactor, frequency, energyRating,
+    BoolToStr(surgeProtection, true), batterySize, batteryKind]);
 
   e := g_Database.RunQuery(query);
 
@@ -451,25 +451,25 @@ var
   sQuery: string;
   e: Exception;
 begin
-  sQuery := Format('UPDATE %s' + #13#10 +
-    'SET %s = ''%s'', %s = ''%s'', %s = %f, %s = %f, %s = %f, %s = %f, %s = %f, '
-    + '%s = %f, %s = %f, %s = %d, %s = %f, %s = %f, %s = ''%s'', %s = %s' +
-    #13#10 + 'WHERE %s = %d', [PH_TBL_NAME_APPLIANCES,
+  sQuery := Format('UPDATE %s ' +
+    'SET %s = ''%s'', %s = ''%s'', %s = %f, %s = %f, %s = %f, %s = %f, ' +
+    '%s = %f, %s = %f, %s = %f, %s = %f, %s = %d, %s = %s, %s = %f, ' +
+    '%s = ''%s'' WHERE %s = ''%s'';', [PH_TBL_NAME_APPLIANCES,
     PH_TBL_FIELD_NAME_APPLIANCES_NAME, m_Name,
     PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER, m_Manufacturer,
     PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE, m_Voltage,
     PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE, m_Amperage,
     PH_TBL_FIELD_NAME_APPLIANCES_ACTIVE_POWER, m_ActivePower,
-    PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER, m_StandbyPower,
     PH_TBL_FIELD_NAME_APPLIANCES_INPUT_POWER, m_InputPower,
     PH_TBL_FIELD_NAME_APPLIANCES_OUTPUT_POWER, m_OutputPower,
+    PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER, m_StandbyPower,
+    PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR, m_PowerFactor,
     PH_TBL_FIELD_NAME_APPLIANCES_FREQUENCY, m_Frequency,
     PH_TBL_FIELD_NAME_APPLIANCES_ENERGY_RATING, m_EnergyRating,
-    PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR, m_PowerFactor,
-    PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE, m_BatterySize,
-    PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND, m_BatteryKind,
     PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, BoolToStr(m_SurgeProtection,
-    true), PH_TBL_FIELD_NAME_APPLIANCES_PK, m_GUID.ToString()]);
+    true), PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE, m_BatterySize,
+    PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND, m_BatteryKind,
+    PH_TBL_FIELD_NAME_APPLIANCES_PK, m_GUID.ToString()]);
 
   e := g_Database.RunQuery(sQuery);
 

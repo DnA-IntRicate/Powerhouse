@@ -1,6 +1,7 @@
 object PhfAddAppliance: TPhfAddAppliance
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu]
   Caption = 'Add Appliance'
   ClientHeight = 402
   ClientWidth = 574

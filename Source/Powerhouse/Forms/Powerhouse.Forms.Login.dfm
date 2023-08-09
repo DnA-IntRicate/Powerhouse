@@ -1,6 +1,7 @@
 object PhfLogin: TPhfLogin
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Powerhouse'
   ClientHeight = 196
   ClientWidth = 388
