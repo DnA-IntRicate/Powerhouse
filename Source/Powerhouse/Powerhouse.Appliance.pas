@@ -84,7 +84,7 @@ type
     procedure SetEnegeryRating(const rating: int);
 
     function GetPowerFactor(): float;
-    procedure SetPowerfactor(const factor: float);
+    procedure SetPowerFactor(const factor: float);
 
     function GetBatterySize(): float;
     procedure SetBatterySize(const size: float);
@@ -446,7 +446,7 @@ begin
   Result := m_PowerFactor;
 end;
 
-procedure PhAppliance.SetPowerfactor(const factor: float);
+procedure PhAppliance.SetPowerFactor(const factor: float);
 begin
   m_PowerFactor := factor;
 end;

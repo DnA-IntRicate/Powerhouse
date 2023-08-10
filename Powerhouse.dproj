@@ -131,6 +131,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Home.AddAppliance.pas">
             <Form>g_AddApplianceForm</Form>
         </DCCReference>
+        <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Home.ModifyAppliance.pas">
+            <Form>g_ModifyApplianceForm</Form>
+        </DCCReference>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Database.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Appliance.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.User.pas"/>
@@ -1017,7 +1020,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q 
+&amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
@@ -1025,7 +1030,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q 
+&amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
@@ -1033,7 +1040,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q 
+&amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
@@ -1041,7 +1050,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q &amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R</PostBuildEvent>
+        <PostBuildEvent>rmdir &quot;$(OUTPUTDIR)Assets&quot; /s /q 
+&amp;&amp;xcopy &quot;$(PROJECTDIR)\Assets&quot; &quot;$(OUTPUTDIR)Assets&quot; /E /I /R
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>

@@ -74,6 +74,7 @@ object PhfHome: TPhfHome
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 0
+          OnClick = btnModifyApplianceClick
         end
         object lstAppliances: TListBox
           Left = 9
@@ -121,7 +122,7 @@ object PhfHome: TPhfHome
             Left = 4
             Top = 36
             Width = 64
-            Height = 16
+            Height = 12
             Caption = 'Manufacturer:'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
@@ -134,7 +135,7 @@ object PhfHome: TPhfHome
             Left = 94
             Top = 36
             Width = 86
-            Height = 16
+            Height = 12
             Alignment = taRightJustify
             Caption = 'MANUFACTURER'
             Font.Charset = DEFAULT_CHARSET
@@ -256,7 +257,7 @@ object PhfHome: TPhfHome
             Left = 109
             Top = 93
             Width = 71
-            Height = 11
+            Height = 12
             Alignment = taRightJustify
             Caption = 'INPUTPOWER'
             Font.Charset = DEFAULT_CHARSET
@@ -270,7 +271,7 @@ object PhfHome: TPhfHome
             Left = 4
             Top = 93
             Width = 61
-            Height = 11
+            Height = 12
             Caption = 'Input Power:'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText

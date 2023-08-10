@@ -34,7 +34,7 @@ uses
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
   Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.SaveData,
-  Powerhouse.Forms.Home.AddAppliance;
+  Powerhouse.Forms.Home.AddAppliance, Powerhouse.Forms.Home.ModifyAppliance;
 
 type
   TPhfHome = class(PhForm)
@@ -84,17 +84,23 @@ type
     procedure lstAppliancesClick(Sender: TObject);
     procedure lstAppliancesMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure btnModifyApplianceClick(Sender: TObject);
 
   public
     procedure Enable(); override;
 
   private
+    procedure DisplayAppliances();
+
     procedure ShowApplianceInformationLabels(const show: bool);
+    procedure ShowApplianceInformation(const show: bool);
+
     procedure AddAppliance();
   end;
 
 var
   g_HomeForm: TPhfHome;
+  g_Appliance: PhAppliance;
 
 implementation
 
@@ -111,55 +117,8 @@ begin
 end;
 
 procedure TPhfHome.lstAppliancesClick(Sender: TObject);
-var
-  currentApplianceName: string;
-  appliance: PhAppliance;
-
-  voltage, amperage, activePower, inputPower, outputPower, standbyPower,
-    powerFactor, frequency, energyRating, surgeProtection, batterySize,
-    batteryKind: string;
 begin
-  if lstAppliances.ItemIndex = -1 then
-  begin
-    ShowApplianceInformationLabels(false);
-    Exit();
-  end;
-
-  currentApplianceName := lstAppliances.Items[lstAppliances.ItemIndex];
-  appliance := g_CurrentUser.GetApplianceByName(currentApplianceName);
-
-  voltage := Format('%fV', [appliance.GetVoltage()]);
-  amperage := Format('%fA', [appliance.GetAmperage()]);
-  activePower := Format('%fW', [appliance.GetActivePower()]);
-  inputPower := Format('%fW', [appliance.GetInputPower()]);
-  outputPower := IfThen(appliance.GetOutputPower() <> -1.0,
-    Format('%fW', [appliance.GetOutputPower()]), 'N/A');
-  standbyPower := Format('%fW', [appliance.GetStandbyPower()]);
-  powerFactor := Format('%f', [appliance.GetPowerFactor()]);
-  frequency := Format('%fHz', [appliance.GetFrequency()]);
-  energyRating := Format('%d', [appliance.GetEnergyRating()]);
-  surgeProtection := Ifthen(appliance.GetSurgeProtection(), 'Yes', 'No');
-  batterySize := IfThen(appliance.GetBatterySize() <> -1.0,
-    Format('%fmAH', [appliance.GetBatterySize()]), 'N/A');
-  batteryKind := IfThen(appliance.GetBatteryKind() <> '',
-    appliance.GetBatteryKind(), 'N/A');
-
-  lblApplianceName.Caption := appliance.GetName();
-  lblManufacturer.Caption := appliance.GetManufacturer();
-  lblVoltage.Caption := voltage;
-  lblAmperage.Caption := amperage;
-  lblActivePowerConsumption.Caption := activePower;
-  lblInputPower.Caption := inputPower;
-  lblOutputPower.Caption := outputPower;
-  lblStandbyPowerConsumption.Caption := standbyPower;
-  lblPowerFactor.Caption := powerFactor;
-  lblFrequency.Caption := frequency;
-  lblEnergyEfficiencyRating.Caption := energyRating;
-  lblSurgeProtection.Caption := surgeProtection;
-  lblBatterySize.Caption := batterySize;
-  lblBatteryKind.Caption := batteryKind;
-
-  ShowApplianceInformationLabels(true);
+  ShowApplianceInformation(lstAppliances.ItemIndex <> -1);
 end;
 
 procedure TPhfHome.lstAppliancesMouseDown(Sender: TObject; Button: TMouseButton;
@@ -172,24 +131,41 @@ begin
     lstAppliances.ItemIndex := -1;
 end;
 
-procedure TPhfHome.Enable();
+procedure TPhfHome.btnModifyApplianceClick(Sender: TObject);
 var
-  appliance: PhAppliance;
-  appliances: PhAppliances;
+  modifyApplianceForm: TPhfModifyAppliance;
+begin
+  modifyApplianceForm := TPhfModifyAppliance.Create(Self);
+  modifyApplianceForm.SetContext(@g_Appliance);
+  modifyApplianceForm.EnableModal();
+  modifyApplianceForm.Free();
+
+  DisplayAppliances();
+  ShowApplianceInformation(true);
+end;
+
+procedure TPhfHome.Enable();
 begin
   inherited Enable();
+
+  DisplayAppliances();
+  ShowApplianceInformation(false);
+end;
+
+procedure TPhfHome.DisplayAppliances();
+var
+  appliances: PhAppliances;
+  appliance: PhAppliance;
+  backupIdx: int;
+begin
+  backupIdx := lstAppliances.ItemIndex;
+  lstAppliances.Clear();
 
   appliances := g_CurrentUser.GetAppliances();
   for appliance in appliances do
     lstAppliances.Items.Add(appliance.GetName());
 
-  ShowApplianceInformationLabels(false);
-
-  GetParentForm(
-    procedure(parentPtr: PhFormPtr)
-    begin
-      ShowMessage(parentPtr.Caption);
-    end);
+  lstAppliances.ItemIndex := backupIdx;
 end;
 
 procedure TPhfHome.ShowApplianceInformationLabels(const show: bool);
@@ -223,6 +199,60 @@ begin
   lblSurgeProtection.Visible := show;
   lblBatterySize.Visible := show;
   lblBatteryKind.Visible := show;
+
+  btnModifyAppliance.Enabled := show;
+end;
+
+procedure TPhfHome.ShowApplianceInformation(const show: bool);
+var
+  currentApplianceName: string;
+  voltage, amperage, activePower, inputPower, outputPower, standbyPower,
+    powerFactor, frequency, energyRating, surgeProtection, batterySize,
+    batteryKind: string;
+begin
+  g_Appliance := nil;
+
+  if show then
+  begin
+    currentApplianceName := lstAppliances.Items[lstAppliances.ItemIndex];
+    g_Appliance := g_CurrentUser.GetApplianceByName(currentApplianceName);
+
+    if g_Appliance <> nil then
+    begin
+      voltage := Format('%fV', [g_Appliance.GetVoltage()]);
+      amperage := Format('%fA', [g_Appliance.GetAmperage()]);
+      activePower := Format('%fW', [g_Appliance.GetActivePower()]);
+      inputPower := Format('%fW', [g_Appliance.GetInputPower()]);
+      outputPower := IfThen(g_Appliance.GetOutputPower() <> -1.0,
+        Format('%fW', [g_Appliance.GetOutputPower()]), 'N/A');
+      standbyPower := Format('%fW', [g_Appliance.GetStandbyPower()]);
+      powerFactor := Format('%f', [g_Appliance.GetPowerFactor()]);
+      frequency := Format('%fHz', [g_Appliance.GetFrequency()]);
+      energyRating := Format('%d', [g_Appliance.GetEnergyRating()]);
+      surgeProtection := Ifthen(g_Appliance.GetSurgeProtection(), 'Yes', 'No');
+      batterySize := IfThen(g_Appliance.GetBatterySize() <> -1.0,
+        Format('%fmAH', [g_Appliance.GetBatterySize()]), 'N/A');
+      batteryKind := IfThen(g_Appliance.GetBatteryKind() <> '',
+        g_Appliance.GetBatteryKind(), 'N/A');
+
+      lblApplianceName.Caption := g_Appliance.GetName();
+      lblManufacturer.Caption := g_Appliance.GetManufacturer();
+      lblVoltage.Caption := voltage;
+      lblAmperage.Caption := amperage;
+      lblActivePowerConsumption.Caption := activePower;
+      lblInputPower.Caption := inputPower;
+      lblOutputPower.Caption := outputPower;
+      lblStandbyPowerConsumption.Caption := standbyPower;
+      lblPowerFactor.Caption := powerFactor;
+      lblFrequency.Caption := frequency;
+      lblEnergyEfficiencyRating.Caption := energyRating;
+      lblSurgeProtection.Caption := surgeProtection;
+      lblBatterySize.Caption := batterySize;
+      lblBatteryKind.Caption := batteryKind;
+    end;
+  end;
+
+  ShowApplianceInformationLabels(show);
 end;
 
 procedure TPhfHome.AddAppliance();
@@ -241,6 +271,10 @@ begin
     lstAppliances.Items.Add(newAppliance.GetName());
 
     g_SaveData.AddOrUpdateUser(g_CurrentUser);
+
+    g_Appliance := newAppliance;
+    lstAppliances.ItemIndex := lstAppliances.Count - 1;
+    lstAppliancesClick(nil);
   end;
 end;
 
