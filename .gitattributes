@@ -23,10 +23,10 @@
 #*.DOC   diff=astextplain
 *.docx  diff=astextplain
 *.DOCX  diff=astextplain
-*.accdb diff=astextplain
-*.ACCDB diff=astextplain
-*.mdb   diff=astextplain
-*.MDB   diff=astextplain
+#*.accdb diff=astextplain
+#*.ACCDB diff=astextplain
+#*.mdb   diff=astextplain
+#*.MDB   diff=astextplain
 #*.dot   diff=astextplain
 #*.DOT   diff=astextplain
 *.pdf   diff=astextplain
