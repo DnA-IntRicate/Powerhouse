@@ -115,6 +115,7 @@ type
   end;
 
 type
+  PhAppliancePtr = ^PhAppliance;
   PhAppliances = PhVector<PhAppliance>;
 
 const
@@ -149,14 +150,36 @@ class function PhAppliance.CreateAppliance(const name, manufacturer,
   const energyRating: int; const surgeProtection: bool): PhAppliance;
 var
   query: string;
+  fmtSettings: TFormatSettings;
   guid: PhGUID;
+  myVoltage, myAmperage, myActivePower, myInputPower, myOutputPower,
+    myStandbyPower, myPowerFactor, myFrequency, mySurgeProtection,
+    myBatterySize: string;
   e: Exception;
 begin
+  fmtSettings := TFormatSettings.Create();
+  fmtSettings.DecimalSeparator := '.';
+  fmtSettings.ThousandSeparator := char(0);
+
   guid := PhGUID.Create();
 
+  myVoltage := FormatFloat('#,##0.00', voltage, fmtSettings);
+  myAmperage := FormatFloat('#,##0.00', amperage, fmtSettings);
+  myActivePower := FormatFloat('#,##0.00', activePower, fmtSettings);
+  myInputPower := FormatFloat('#,##0.00', inputPower, fmtSettings);
+  myOutputPower := IfThen(outputPower = -1.0, 'Null',
+    FormatFloat('#,##0.00', outputPower, fmtSettings));
+
+  myStandbyPower := FormatFloat('#,##0.00', standbyPower, fmtSettings);
+  myPowerFactor := FormatFloat('#,##0.00', powerFactor, fmtSettings);
+  myFrequency := FormatFloat('#,##0.00', frequency, fmtSettings);
+  mySurgeProtection := BoolToStr(surgeProtection, true);
+  myBatterySize := IfThen(batterySize = -1.0, 'Null',
+    FormatFloat('#,##0.00', batterySize, fmtSettings));
+
   query := Format('INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ' +
-    '%s, %s, %s, %s) VALUES (''%s'', ''%s'', ''%s'', %f, %f, %f, %f, %f, %f, ' +
-    '%f, %f, %d, %s, %f, ''%s'');', [PH_TBL_NAME_APPLIANCES,
+    '%s, %s, %s, %s) VALUES (''%s'', ''%s'', ''%s'', %s, %s, %s, %s, %s, %s, ' +
+    '%s, %s, %d, %s, %s, ''%s'');', [PH_TBL_NAME_APPLIANCES,
     PH_TBL_FIELD_NAME_APPLIANCES_PK, PH_TBL_FIELD_NAME_APPLIANCES_NAME,
     PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER,
     PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE, PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE,
@@ -170,9 +193,9 @@ begin
     PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND, guid.ToString(), name,
-    manufacturer, voltage, amperage, activePower, inputPower, outputPower,
-    standbyPower, powerFactor, frequency, energyRating,
-    BoolToStr(surgeProtection, true), batterySize, batteryKind]);
+    manufacturer, myVoltage, myAmperage, myActivePower, myInputPower,
+    myOutputPower, myStandbyPower, myPowerFactor, myFrequency, energyRating,
+    mySurgeProtection, myBatterySize, batteryKind]);
 
   e := g_Database.RunQuery(query);
 
@@ -185,25 +208,46 @@ end;
 procedure PhAppliance.Push();
 var
   query: string;
+  fmtSettings: TFormatSettings;
+  voltage, amperage, activePower, inputPower, outputPower, standbyPower,
+    powerFactor, frequency, surgeProtection, batterySize: string;
   e: Exception;
 begin
+  fmtSettings := TFormatSettings.Create();
+  fmtSettings.DecimalSeparator := '.';
+  fmtSettings.ThousandSeparator := char(0);
+
+  voltage := FormatFloat('#,##0.00', m_Voltage, fmtSettings);
+  amperage := FormatFloat('#,##0.00', m_Amperage, fmtSettings);
+  activePower := FormatFloat('#,##0.00', m_ActivePower, fmtSettings);
+  inputPower := FormatFloat('#,##0.00', m_InputPower, fmtSettings);
+  outputPower := IfThen(m_OutputPower = -1.0, 'Null',
+    FormatFloat('#,##0.00', m_OutputPower, fmtSettings));
+
+  standbyPower := FormatFloat('#,##0.00', m_StandbyPower, fmtSettings);
+  powerFactor := FormatFloat('#,##0.00', m_PowerFactor, fmtSettings);
+  frequency := FormatFloat('#,##0.00', m_Frequency, fmtSettings);
+  surgeProtection := BoolToStr(m_SurgeProtection, true);
+  batterySize := IfThen(m_BatterySize = -1.0, 'Null',
+    FormatFloat('#,##0.00', m_BatterySize, fmtSettings));
+
   query := Format('UPDATE %s ' +
-    'SET %s = ''%s'', %s = ''%s'', %s = %f, %s = %f, %s = %f, %s = %f, ' +
-    '%s = %f, %s = %f, %s = %f, %s = %f, %s = %d, %s = %s, %s = %f, ' +
+    'SET %s = ''%s'', %s = ''%s'', %s = %s, %s = %s, %s = %s, %s = %s, ' +
+    '%s = %s, %s = %s, %s = %s, %s = %s, %s = %d, %s = %s, %s = %s, ' +
     '%s = ''%s'' WHERE %s = ''%s'';', [PH_TBL_NAME_APPLIANCES,
     PH_TBL_FIELD_NAME_APPLIANCES_NAME, m_Name,
     PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER, m_Manufacturer,
-    PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE, m_Voltage,
-    PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE, m_Amperage,
-    PH_TBL_FIELD_NAME_APPLIANCES_ACTIVE_POWER, m_ActivePower,
-    PH_TBL_FIELD_NAME_APPLIANCES_INPUT_POWER, m_InputPower,
-    PH_TBL_FIELD_NAME_APPLIANCES_OUTPUT_POWER, m_OutputPower,
-    PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER, m_StandbyPower,
-    PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR, m_PowerFactor,
-    PH_TBL_FIELD_NAME_APPLIANCES_FREQUENCY, m_Frequency,
+    PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE, voltage,
+    PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE, amperage,
+    PH_TBL_FIELD_NAME_APPLIANCES_ACTIVE_POWER, activePower,
+    PH_TBL_FIELD_NAME_APPLIANCES_INPUT_POWER, inputPower,
+    PH_TBL_FIELD_NAME_APPLIANCES_OUTPUT_POWER, outputPower,
+    PH_TBL_FIELD_NAME_APPLIANCES_STANDBY_POWER, standbyPower,
+    PH_TBL_FIELD_NAME_APPLIANCES_POWER_FACTOR, powerFactor,
+    PH_TBL_FIELD_NAME_APPLIANCES_FREQUENCY, frequency,
     PH_TBL_FIELD_NAME_APPLIANCES_ENERGY_RATING, m_EnergyRating,
-    PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, BoolToStr(m_SurgeProtection,
-    true), PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE, m_BatterySize,
+    PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION, surgeProtection,
+    PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE, batterySize,
     PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND, m_BatteryKind,
     PH_TBL_FIELD_NAME_APPLIANCES_PK, m_GUID.ToString()]);
 
@@ -242,22 +286,13 @@ begin
         [PH_TBL_FIELD_NAME_APPLIANCES_SURGE_PROTECTION];
 
       v := tblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_OUTPUT_POWER];
-      if not VarIsNull(v) then
-        m_OutputPower := v
-      else
-        m_OutputPower := -1.0;
+      m_OutputPower := IfThen(VarIsNull(v), -1.0, v);
 
       v := tblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_SIZE];
-      if not VarIsNull(v) then
-        m_BatterySize := v
-      else
-        m_BatterySize := -1.0;
+      m_BatterySize := IfThen(VarIsNull(v), -1.0, v);
 
       v := tblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND];
-      if not VarIsNull(v) then
-        m_BatteryKind := v
-      else
-        m_BatteryKind := '';
+      m_BatteryKind := IfThen(VarIsNull(v), '', v);
     end
     else
     begin
