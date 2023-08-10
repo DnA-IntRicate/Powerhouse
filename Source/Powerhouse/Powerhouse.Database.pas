@@ -33,12 +33,17 @@ uses
   Powerhouse.Types, Powerhouse.Logger;
 
 type
+  PhOnRunQueryProc = reference to procedure(var query: TADOQuery);
+
+type
   PhDatabase = class
   public
     constructor Create(const dbPath: string);
     destructor Destroy(); override;
 
-    function RunQuery(const sqlQuery: string): EADOError;
+    function RunQuery(const sqlQuery: string;
+      const onRunQueryProc: PhOnRunQueryProc): EADOError; overload;
+    function RunQuery(const sqlQuery: string): EADOError; overload;
 
     function GetPath(): string;
 
@@ -112,6 +117,33 @@ begin
   Connection := nil;
 end;
 
+function PhDatabase.RunQuery(const sqlQuery: string;
+  const onRunQueryProc: PhOnRunQueryProc): EADOError;
+var
+  query: TADOQuery;
+begin
+  Result := nil;
+  query := TADOQuery.Create(nil);
+
+  try
+    query.Connection := Connection;
+    query.SQL.Text := sqlQuery;
+
+    try
+      query.ExecSQL();
+      onRunQueryProc(query);
+    except
+      on e: EADOError do
+        Result := e;
+    end;
+
+  finally
+    query.Free();
+  end;
+
+  Reload();
+end;
+
 function PhDatabase.RunQuery(const sqlQuery: string): EADOError;
 var
   query: TADOQuery;
@@ -135,6 +167,7 @@ begin
   end;
 
   Reload();
+
 end;
 
 function PhDatabase.GetPath(): string;
