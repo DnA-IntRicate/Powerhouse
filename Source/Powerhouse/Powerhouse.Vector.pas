@@ -32,7 +32,7 @@ uses
   Powerhouse.Types;
 
 type
-  PhVector<_Ty> = class
+  PhVector<_Ty> = class(TInterfacedObject, IEquatable<PhVector<_Ty>>)
   public
     constructor Create(const capacity: uint64); overload;
     constructor Create(const values: PhVector<_Ty>); overload;
@@ -69,6 +69,7 @@ type
     procedure Clear();
 
     function Contains(const value: IEquatable<_Ty>): bool;
+    function Equals(other: PhVector<_Ty>): bool; reintroduce;
 
     function Empty(): bool; inline;
     function Size(): uint64; inline;
@@ -349,6 +350,11 @@ begin
       break;
     end;
   end;
+end;
+
+function PhVector<_Ty>.Equals(other: PhVector<_Ty>): bool;
+begin
+  Result := Self.m_Data = other.m_Data;
 end;
 
 function PhVector<_Ty>.Empty(): bool;
