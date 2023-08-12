@@ -178,8 +178,8 @@ begin
     FormatFloat('#,##0.00', batterySize, fmtSettings));
 
   query := Format('INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ' +
-    '%s, %s, %s, %s) VALUES (''%s'', ''%s'', ''%s'', %s, %s, %s, %s, %s, %s, ' +
-    '%s, %s, %d, %s, %s, ''%s'');', [PH_TBL_NAME_APPLIANCES,
+    '%s, %s, %s, %s, %s) VALUES (''%s'', ''%s'', ''%s'', %s, %s, %s, %s, %s, %s, '
+    + '%s, %s, %d, %s, %s, ''%s'');', [PH_TBL_NAME_APPLIANCES,
     PH_TBL_FIELD_NAME_APPLIANCES_PK, PH_TBL_FIELD_NAME_APPLIANCES_NAME,
     PH_TBL_FIELD_NAME_APPLIANCES_MANUFACTURER,
     PH_TBL_FIELD_NAME_APPLIANCES_VOLTAGE, PH_TBL_FIELD_NAME_APPLIANCES_AMPERAGE,

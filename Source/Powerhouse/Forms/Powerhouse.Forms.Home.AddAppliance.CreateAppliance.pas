@@ -22,7 +22,7 @@
   SOFTWARE.
   ---------------------------------------------------------------------------- }
 
-unit Powerhouse.Forms.Home.ModifyAppliance;
+unit Powerhouse.Forms.Home.AddAppliance.CreateAppliance;
 
 interface
 
@@ -34,11 +34,11 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.Samples.Spin,
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Validator,
-  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance;
+  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
 
 type
-  TPhfModifyAppliance = class(PhForm)
-    btnSave: TButton;
+  TPhfCreateAppliance = class(PhForm)
+    btnCreate: TButton;
     pnlModifyAppliance: TPanel;
     edtName: TEdit;
     Label1: TLabel;
@@ -69,7 +69,7 @@ type
     cbxSurgeProtection: TCheckBox;
     btnCancel: TButton;
     Label14: TLabel;
-    procedure btnSaveClick(Sender: TObject);
+    procedure btnCreateClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure edtNameExit(Sender: TObject);
     procedure edtManufacturerExit(Sender: TObject);
@@ -86,7 +86,8 @@ type
 
   public
     procedure EnableModal(); override;
-    procedure SetContext(const appliancePtr: PhAppliancePtr);
+
+    function GetNewAppliance(): PhAppliance;
 
   private
     function ValidateName(const name: string): bool;
@@ -102,10 +103,10 @@ type
     function ValidateBatterySize(const batterySizeStr: string): bool;
     function ValidateBatteryKind(const batteryKind: string): bool;
 
-    procedure TryEnableBtnSave();
+    procedure TryEnableBtnCreate();
 
   private
-    m_AppliancePtr: PhAppliancePtr;
+    m_NewAppliance: PhAppliance;
 
     m_ValidName: bool;
     m_ValidManufacturer: bool;
@@ -129,197 +130,176 @@ implementation
 
 {$R *.dfm}
 
-procedure TPhfModifyAppliance.btnSaveClick(Sender: TObject);
+procedure TPhfCreateAppliance.btnCreateClick(Sender: TObject);
+var
+  name, manufacturer, batteryKind: string;
+  voltage, amperage, activePower, inputPower, outputPower, standbyPower,
+    powerFactor, frequency, batterySize: float;
+  efficiencyRating: int;
 begin
-  m_AppliancePtr.SetName(edtName.Text);
-  m_AppliancePtr.SetManufacturer(edtManufacturer.Text);
-  m_AppliancePtr.SetVoltage(StrToFloat(edtVoltage.Text));
-  m_AppliancePtr.SetAmperage(StrToFloat(edtAmperage.Text));
-  m_AppliancePtr.SetActivePower(StrToFloat(edtActivePower.Text));
-  m_AppliancePtr.SetInputPower(StrToFloat(edtInputPower.Text));
+  name := edtName.Text;
+  manufacturer := edtManufacturer.Text;
+  batteryKind := IfThen(edtBatteryKind.Text <> 'N/A', edtBatteryKind.Text, '');
+
+  voltage := StrToFloat(edtVoltage.Text);
+  amperage := StrToFloat(edtAmperage.Text);
+  activePower := StrToFloat(edtActivePower.Text);
+  inputPower := StrToFloat(edtInputPower.Text);
 
   if edtOutputPower.Text <> 'N/A' then
-    m_AppliancePtr.SetOutputPower(StrToFloat(edtOutputPower.Text))
+    outputPower := StrToFloat(edtOutputPower.Text)
   else
-    m_AppliancePtr.SetOutputPower(-1.0);
+    outputPower := -1.0;
 
-  m_AppliancePtr.SetStandbyPower(StrToFloat(edtStandbyPower.Text));
-  m_AppliancePtr.SetPowerFactor(StrToFloat(edtPowerFactor.Text));
-  m_AppliancePtr.SetFrequency(StrToFloat(edtFrequency.Text));
+  standbyPower := StrToFloat(edtStandbyPower.Text);
+  powerFactor := StrToFloat(edtPowerFactor.Text);
+  frequency := StrToFloat(edtFrequency.Text);
 
   if edtBatterySize.Text <> 'N/A' then
-    m_AppliancePtr.SetBatterySize(StrToFloat(edtBatterySize.Text))
+    batterySize := StrToFloat(edtBatterySize.Text)
   else
-    m_AppliancePtr.SetBatterySize(-1.0);
+    batterySize := -1.0;
 
-  m_AppliancePtr.SetBatteryKind(IfThen(edtBatteryKind.Text <> 'N/A',
-    edtBatteryKind.Text, ''));
+  efficiencyRating := sedEfficiencyRating.Value;
 
-  m_AppliancePtr.Sync();
-  PhLogger.Info('Appliance has been successfully updated.');
+  m_NewAppliance := PhAppliance.CreateAppliance(name, manufacturer, batteryKind,
+    voltage, amperage, activePower, standbyPower, inputPower, outputPower,
+    frequency, powerFactor, batterySize, efficiencyRating,
+    cbxSurgeProtection.Checked);
 
   DisableModal();
 end;
 
-procedure TPhfModifyAppliance.btnCancelClick(Sender: TObject);
+procedure TPhfCreateAppliance.btnCancelClick(Sender: TObject);
 begin
+  m_NewAppliance := nil;
+
   DisableModal();
 end;
 
-procedure TPhfModifyAppliance.edtNameExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtNameExit(Sender: TObject);
 begin
   m_ValidName := ValidateName(edtName.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtManufacturerExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtManufacturerExit(Sender: TObject);
 begin
   m_ValidManufacturer := ValidateManufacturer(edtManufacturer.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtVoltageExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtVoltageExit(Sender: TObject);
 begin
   m_ValidVoltage := ValidateVoltage(edtVoltage.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtAmperageExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtAmperageExit(Sender: TObject);
 begin
   m_ValidAmperage := ValidateAmperage(edtAmperage.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtActivePowerExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtActivePowerExit(Sender: TObject);
 begin
   m_ValidActivePower := ValidateActivePower(edtActivePower.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtStandbyPowerExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtStandbyPowerExit(Sender: TObject);
 begin
   m_ValidStandbyPower := ValidateStandbyPower(edtStandbyPower.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtInputPowerExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtInputPowerExit(Sender: TObject);
 begin
   m_ValidInputPower := ValidateInputPower(edtInputPower.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtOutputPowerExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtOutputPowerExit(Sender: TObject);
 begin
-  if edtOutputPower.Text = '' then
+  if (edtOutputPower.Text = '') or (UpperCase(edtOutputPower.Text) = 'N/A') then
     edtOutputPower.Text := 'N/A';
 
   m_ValidOutputPower := ValidateOutputPower(edtOutputPower.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtPowerFactorExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtPowerFactorExit(Sender: TObject);
 begin
   m_ValidPowerFactor := ValidatePowerFactor(edtPowerFactor.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtFrequencyExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtFrequencyExit(Sender: TObject);
 begin
   m_ValidFrequency := ValidateFrequency(edtFrequency.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtBatterySizeExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtBatterySizeExit(Sender: TObject);
 begin
-  if edtBatterySize.Text = '' then
+  if (edtBatterySize.Text = '') or (UpperCase(edtBatterySize.Text) = 'N/A') then
     edtBatterySize.Text := 'N/A';
 
   m_ValidBatterySize := ValidateBatterySize(edtBatterySize.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.edtBatteryKindExit(Sender: TObject);
+procedure TPhfCreateAppliance.edtBatteryKindExit(Sender: TObject);
 begin
-  if edtBatteryKind.Text = '' then
+  if (edtBatteryKind.Text = '') or (UpperCase(edtBatteryKind.Text) = 'N/A') then
     edtBatteryKind.Text := 'N/A';
 
   m_ValidBatteryKind := ValidateBatteryKind(edtBatteryKind.Text);
 
-  TryEnableBtnSave();
+  TryEnableBtnCreate();
 end;
 
-procedure TPhfModifyAppliance.EnableModal();
+procedure TPhfCreateAppliance.EnableModal();
 begin
-  Self.Caption := Format('Appliance Modification - %s',
-    [m_AppliancePtr.GetName()]);
+  Self.Caption := Format('Create Appliance - %s',
+    [g_CurrentUser.GetUsername()]);
 
-  m_ValidName := true;
-  edtName.Text := m_AppliancePtr.GetName();
+  btnCreate.Enabled := false;
 
-  m_ValidManufacturer := true;
-  edtManufacturer.Text := m_AppliancePtr.GetManufacturer();
-
-  m_ValidVoltage := true;
-  edtVoltage.Text := FloatToStrF(m_AppliancePtr.GetVoltage(), ffGeneral, 4, 2);
-
-  m_ValidAmperage := true;
-  edtAmperage.Text := FloatToStrF(m_AppliancePtr.GetAmperage(),
-    ffGeneral, 4, 2);
-
-  m_ValidActivePower := true;
-  edtActivePower.Text := FloatToStrF(m_AppliancePtr.GetActivePower(),
-    ffGeneral, 4, 2);
-
-  m_ValidInputPower := true;
-  edtInputPower.Text := FloatToStrF(m_AppliancePtr.GetInputPower(),
-    ffGeneral, 4, 2);
+  m_ValidName := false;
+  m_ValidManufacturer := false;
+  m_ValidVoltage := false;
+  m_ValidAmperage := false;
+  m_ValidActivePower := false;
+  m_ValidInputPower := false;
+  m_ValidStandbyPower := false;
+  m_ValidPowerFactor := false;
+  m_ValidFrequency := false;
 
   m_ValidOutputPower := true;
-  edtOutputPower.Text := IfThen(m_AppliancePtr.GetOutputPower() <> -1.0,
-    FloatToStrF(m_AppliancePtr.GetOutputPower(), ffGeneral, 4, 2), 'N/A');
-
-  m_ValidStandbyPower := true;
-  edtStandbyPower.Text := FloatToStrF(m_AppliancePtr.GetStandbyPower(),
-    ffGeneral, 4, 2);
-
-  m_ValidPowerFactor := true;
-  edtPowerFactor.Text := FloatToStrF(m_AppliancePtr.GetPowerFactor(),
-    ffGeneral, 4, 2);
-
-  m_ValidFrequency := true;
-  edtFrequency.Text := FloatToStrF(m_AppliancePtr.GetFrequency(),
-    ffGeneral, 4, 2);
-
-  sedEfficiencyRating.Value := m_AppliancePtr.GetEnergyRating();
-
   m_ValidBatterySize := true;
-  edtBatterySize.Text := IfThen(m_AppliancePtr.GetBatterySize() <> -1.0,
-    FloatToStrF(m_AppliancePtr.GetBatterySize(), ffGeneral, 4, 2), 'N/A');
-
   m_ValidBatteryKind := true;
-  edtBatteryKind.Text := IfThen(m_AppliancePtr.GetBatteryKind() <> '',
-    m_AppliancePtr.GetBatteryKind(), 'N/A');
 
   inherited EnableModal();
 end;
 
-procedure TPhfModifyAppliance.SetContext(const appliancePtr: PhAppliancePtr);
+function TPhfCreateAppliance.GetNewAppliance(): PhAppliance;
 begin
-  m_AppliancePtr := appliancePtr;
+  Result := m_NewAppliance;
 end;
 
-function TPhfModifyAppliance.ValidateName(const name: string): bool;
+function TPhfCreateAppliance.ValidateName(const name: string): bool;
 var
   validation: PhValidation;
 begin
@@ -340,7 +320,7 @@ begin
 
     if PhValidationFlag.TooLong in validation.Flags then
     begin
-      PhLogger.Warn('Appliance name cannot exceed %d characters.',
+      PhLogger.Warn('Appliance name cannot exceed %d characters!',
         [PH_MAX_LENGTH_APPLIANCE_STR]);
     end;
 
@@ -352,7 +332,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateManufacturer(const manufacturer
+function TPhfCreateAppliance.ValidateManufacturer(const manufacturer
   : string): bool;
 var
   validation: PhValidation;
@@ -374,7 +354,7 @@ begin
 
     if PhValidationFlag.TooLong in validation.Flags then
     begin
-      PhLogger.Warn('Manufacturer name cannot exceed %d characters.',
+      PhLogger.Warn('Manufacturer name cannot exceed %d characters!',
         [PH_MAX_LENGTH_APPLIANCE_STR]);
     end;
 
@@ -386,7 +366,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateVoltage(const voltageStr: string): bool;
+function TPhfCreateAppliance.ValidateVoltage(const voltageStr: string): bool;
 var
   validation: PhValidation;
   f: float;
@@ -415,7 +395,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateAmperage(const amperageStr: string): bool;
+function TPhfCreateAppliance.ValidateAmperage(const amperageStr: string): bool;
 var
   validation: PhValidation;
   f: float;
@@ -444,7 +424,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateActivePower(const activePowerStr
+function TPhfCreateAppliance.ValidateActivePower(const activePowerStr
   : string): bool;
 var
   validation: PhValidation;
@@ -474,7 +454,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateInputPower(const inputPowerStr
+function TPhfCreateAppliance.ValidateInputPower(const inputPowerStr
   : string): bool;
 var
   validation: PhValidation;
@@ -504,7 +484,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateOutputPower(const outputPowerStr
+function TPhfCreateAppliance.ValidateOutputPower(const outputPowerStr
   : string): bool;
 var
   validation: PhValidation;
@@ -531,7 +511,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateStandbyPower(const standbyPowerStr
+function TPhfCreateAppliance.ValidateStandbyPower(const standbyPowerStr
   : string): bool;
 var
   validation: PhValidation;
@@ -561,7 +541,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidatePowerFactor(const powerFactorStr
+function TPhfCreateAppliance.ValidatePowerFactor(const powerFactorStr
   : string): bool;
 var
   validation: PhValidation;
@@ -591,7 +571,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateFrequency(const frequencyStr
+function TPhfCreateAppliance.ValidateFrequency(const frequencyStr
   : string): bool;
 var
   validation: PhValidation;
@@ -621,7 +601,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateBatterySize(const batterySizeStr
+function TPhfCreateAppliance.ValidateBatterySize(const batterySizeStr
   : string): bool;
 var
   validation: PhValidation;
@@ -648,7 +628,7 @@ begin
   end;
 end;
 
-function TPhfModifyAppliance.ValidateBatteryKind(const batteryKind
+function TPhfCreateAppliance.ValidateBatteryKind(const batteryKind
   : string): bool;
 var
   validation: PhValidation;
@@ -679,12 +659,13 @@ begin
   end;
 end;
 
-procedure TPhfModifyAppliance.TryEnableBtnSave();
+procedure TPhfCreateAppliance.TryEnableBtnCreate();
 begin
-  btnSave.Enabled := m_ValidName and m_ValidManufacturer and m_ValidVoltage and
-    m_ValidAmperage and m_ValidActivePower and m_ValidInputPower and
-    m_ValidOutputPower and m_ValidStandbyPower and m_ValidPowerFactor and
-    m_ValidFrequency and m_ValidBatterySize and m_ValidBatteryKind;
+  btnCreate.Enabled := m_ValidName and m_ValidManufacturer and
+    m_ValidVoltage and m_ValidAmperage and m_ValidActivePower and
+    m_ValidInputPower and m_ValidOutputPower and m_ValidStandbyPower and
+    m_ValidPowerFactor and m_ValidFrequency and m_ValidBatterySize and
+    m_ValidBatteryKind;
 end;
 
 end.

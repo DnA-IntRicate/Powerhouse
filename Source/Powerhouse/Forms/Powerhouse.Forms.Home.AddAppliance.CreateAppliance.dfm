@@ -1,10 +1,10 @@
-object PhfModifyAppliance: TPhfModifyAppliance
+object PhfCreateAppliance: TPhfCreateAppliance
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Appliance Modification'
-  ClientHeight = 498
-  ClientWidth = 423
+  Caption = 'Create Appliance'
+  ClientHeight = 500
+  ClientWidth = 419
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -242,13 +242,13 @@ object PhfModifyAppliance: TPhfModifyAppliance
     object Label14: TLabel
       Left = 102
       Top = 16
-      Width = 224
+      Width = 221
       Height = 31
       Margins.Left = 2
       Margins.Top = 2
       Margins.Right = 2
       Margins.Bottom = 2
-      Caption = 'Modify Appliance'
+      Caption = 'Create Appliance'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -26
@@ -256,12 +256,12 @@ object PhfModifyAppliance: TPhfModifyAppliance
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object btnSave: TButton
+    object btnCreate: TButton
       Left = 17
       Top = 440
       Width = 284
       Height = 41
-      Caption = 'Save'
+      Caption = 'Create'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -20
@@ -269,7 +269,7 @@ object PhfModifyAppliance: TPhfModifyAppliance
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 0
-      OnClick = btnSaveClick
+      OnClick = btnCreateClick
     end
     object edtName: TEdit
       Left = 17

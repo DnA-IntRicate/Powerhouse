@@ -34,7 +34,7 @@ uses
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
   Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.SaveData,
-  Powerhouse.Forms.Home.AddAppliance, Powerhouse.Forms.Home.ModifyAppliance;
+  Powerhouse.Forms.Home.ModifyAppliance, Powerhouse.Forms.Home.AddAppliance;
 
 type
   TPhfHome = class(PhForm)
@@ -148,6 +148,8 @@ procedure TPhfHome.Enable();
 begin
   inherited Enable();
 
+  Self.Caption := Format('Powerhouse - %s', [g_CurrentUser.GetUsername()]);
+
   DisplayAppliances();
   ShowApplianceInformation(false);
 end;
@@ -225,6 +227,7 @@ begin
       inputPower := Format('%fW', [g_Appliance.GetInputPower()]);
       outputPower := IfThen(g_Appliance.GetOutputPower() <> -1.0,
         Format('%fW', [g_Appliance.GetOutputPower()]), 'N/A');
+
       standbyPower := Format('%fW', [g_Appliance.GetStandbyPower()]);
       powerFactor := Format('%f', [g_Appliance.GetPowerFactor()]);
       frequency := Format('%fHz', [g_Appliance.GetFrequency()]);
@@ -232,6 +235,7 @@ begin
       surgeProtection := Ifthen(g_Appliance.GetSurgeProtection(), 'Yes', 'No');
       batterySize := IfThen(g_Appliance.GetBatterySize() <> -1.0,
         Format('%fmAH', [g_Appliance.GetBatterySize()]), 'N/A');
+
       batteryKind := IfThen(g_Appliance.GetBatteryKind() <> '',
         g_Appliance.GetBatteryKind(), 'N/A');
 

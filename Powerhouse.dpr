@@ -36,6 +36,10 @@ uses
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Login.Registration.pas' {g_RegistrationForm} ,
   Powerhouse.Forms.Home.AddAppliance
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.AddAppliance.pas' {g_AddApplianceForm} ,
+  Powerhouse.Forms.Home.ModifyAppliance
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.ModifyAppliance.pas' {g_ModifyApplianceForm} ,
+  Powerhouse.Forms.Home.AddAppliance.CreateAppliance
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.AddAppliance.CreateAppliance.pas' {g_CreateApplianceForm} ,
   Powerhouse.Database in 'Source\Powerhouse\Powerhouse.Database.pas',
   Powerhouse.Appliance in 'Source\Powerhouse\Powerhouse.Appliance.pas',
   Powerhouse.User in 'Source\Powerhouse\Powerhouse.User.pas',
@@ -47,9 +51,7 @@ uses
   Powerhouse.SaveData in 'Source\Powerhouse\Powerhouse.SaveData.pas',
   Powerhouse.Validator in 'Source\Powerhouse\Powerhouse.Validator.pas',
   Powerhouse.Types in 'Source\Powerhouse\Powerhouse.Types.pas',
-  Powerhouse.Vector in 'Source\Powerhouse\Powerhouse.Vector.pas',
-  Powerhouse.Forms.Home.ModifyAppliance
-    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.ModifyAppliance.pas' {Form1};
+  Powerhouse.Vector in 'Source\Powerhouse\Powerhouse.Vector.pas';
 
 {$R *.res}
 
