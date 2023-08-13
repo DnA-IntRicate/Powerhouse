@@ -3,8 +3,8 @@ object PhfHome: TPhfHome
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Powerhouse'
-  ClientHeight = 415
-  ClientWidth = 432
+  ClientHeight = 419
+  ClientWidth = 427
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object PhfHome: TPhfHome
   object pnlHomeForm: TPanel
     Left = 6
     Top = 6
-    Width = 417
-    Height = 404
+    Width = 419
+    Height = 411
     Margins.Left = 2
     Margins.Top = 2
     Margins.Right = 2
@@ -43,8 +43,8 @@ object PhfHome: TPhfHome
     object pgcHome: TPageControl
       Left = 6
       Top = 43
-      Width = 404
-      Height = 355
+      Width = 403
+      Height = 358
       Margins.Left = 2
       Margins.Top = 2
       Margins.Right = 2
@@ -59,9 +59,9 @@ object PhfHome: TPhfHome
         Caption = 'My Appliances'
         object btnModifyAppliance: TButton
           Left = 203
-          Top = 269
+          Top = 271
           Width = 187
-          Height = 40
+          Height = 56
           Margins.Left = 2
           Margins.Top = 2
           Margins.Right = 2
@@ -500,13 +500,13 @@ object PhfHome: TPhfHome
         object btnAddAppliance: TButton
           Left = 9
           Top = 297
-          Width = 191
+          Width = 90
           Height = 30
           Margins.Left = 2
           Margins.Top = 2
           Margins.Right = 2
           Margins.Bottom = 2
-          Caption = 'Add Appliance'
+          Caption = 'Add'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -12
@@ -515,6 +515,25 @@ object PhfHome: TPhfHome
           ParentFont = False
           TabOrder = 3
           OnClick = btnAddApplianceClick
+        end
+        object btnRemoveAppliance: TButton
+          Left = 110
+          Top = 297
+          Width = 90
+          Height = 30
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
+          Caption = 'Remove'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 4
+          OnClick = btnRemoveApplianceClick
         end
       end
       object tabInsights: TTabSheet

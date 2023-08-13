@@ -79,12 +79,14 @@ type
     lblBatterySize: TLabel;
     lblApplianceInformation14: TLabel;
     lblBatteryKind: TLabel;
+    btnRemoveAppliance: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnAddApplianceClick(Sender: TObject);
     procedure lstAppliancesClick(Sender: TObject);
     procedure lstAppliancesMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure btnModifyApplianceClick(Sender: TObject);
+    procedure btnRemoveApplianceClick(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -96,6 +98,7 @@ type
     procedure ShowApplianceInformation(const show: bool);
 
     procedure AddAppliance();
+    procedure RemoveAppliance();
   end;
 
 var
@@ -142,6 +145,11 @@ begin
 
   DisplayAppliances();
   ShowApplianceInformation(true);
+end;
+
+procedure TPhfHome.btnRemoveApplianceClick(Sender: TObject);
+begin
+  RemoveAppliance();
 end;
 
 procedure TPhfHome.Enable();
@@ -203,6 +211,7 @@ begin
   lblBatteryKind.Visible := show;
 
   btnModifyAppliance.Enabled := show;
+  btnRemoveAppliance.Enabled := show;
 end;
 
 procedure TPhfHome.ShowApplianceInformation(const show: bool);
@@ -280,6 +289,33 @@ begin
     lstAppliances.ItemIndex := lstAppliances.Count - 1;
     lstAppliancesClick(nil);
   end;
+end;
+
+procedure TPhfHome.RemoveAppliance();
+var
+  applianceName: string;
+  dlgResult: int;
+  appliance: PhAppliance;
+begin
+  applianceName := lstAppliances.Items[lstAppliances.ItemIndex];
+
+  PhLogger.Warn('Are you sure you want to remove ''%s'' from your appliances?',
+    dlgResult, [applianceName]);
+
+  if dlgResult <> mrOk then
+    Exit();
+
+  appliance := g_CurrentUser.GetApplianceByName(applianceName);
+  g_CurrentUser.RemoveAppliance(appliance);
+  g_SaveData.AddOrUpdateUser(g_CurrentUser);
+
+  PhLogger.Info('''%s'' has been removed from your appliances.',
+    [applianceName]);
+
+  lstAppliances.ItemIndex := -1;
+
+  DisplayAppliances();
+  ShowApplianceInformation(false);
 end;
 
 end.
