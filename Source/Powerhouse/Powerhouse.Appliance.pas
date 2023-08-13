@@ -28,30 +28,23 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Variants,
-  System.Generics.Defaults,
-  Data.DB,
-  Data.Win.ADODB,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Logger, Powerhouse.Database;
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Base, Powerhouse.Logger,
+  Powerhouse.Database;
 
 type
-  PhAppliance = class(TInterfacedObject, IEquatable<PhAppliance>)
+  PhAppliance = class(PhDatabaseObjectBase, IEquatable<PhAppliance>)
   public
-    constructor Create(const guid: PhGUID);
-
     class function CreateAppliance(const name, manufacturer,
       batteryKind: string; const voltage, amperage, activePower, standbyPower,
       inputPower, outputPower, frequency, powerFactor, batterySize: float;
       const energyRating: int; const surgeProtection: bool): PhAppliance;
 
-    procedure Push();
-    procedure Pull();
-    procedure Sync();
+    procedure Push(); override;
+    procedure Pull(); override;
 
     function CalculateCostPerHour(): float;
 
     function Equals(other: PhAppliance): bool; reintroduce;
-
-    function GetGUID(): PhGUID;
 
     function GetName(): string;
     procedure SetName(const name: string);
@@ -96,7 +89,6 @@ type
     procedure SetSurgeProtection(const surgeProtection: bool);
 
   private
-    m_GUID: PhGUID;
     m_Name: string;
     m_Manufacturer: string;
     m_Voltage: float;
@@ -136,13 +128,6 @@ const
   PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND = 'BatteryKind';
 
 implementation
-
-constructor PhAppliance.Create(const guid: PhGUID);
-begin
-  m_GUID := guid;
-
-  Pull();
-end;
 
 class function PhAppliance.CreateAppliance(const name, manufacturer,
   batteryKind: string; const voltage, amperage, activePower, standbyPower,
@@ -316,12 +301,6 @@ begin
   end;
 end;
 
-procedure PhAppliance.Sync();
-begin
-  Push();
-  Pull();
-end;
-
 function PhAppliance.CalculateCostPerHour(): float;
 begin
   // TODO: Implement this.
@@ -334,11 +313,6 @@ begin
     Result := false
   else
     Result := m_GUID = other.m_GUID;
-end;
-
-function PhAppliance.GetGUID(): PhGUID;
-begin
-  Result := m_GUID;
 end;
 
 function PhAppliance.GetName(): string;

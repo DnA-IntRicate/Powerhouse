@@ -29,10 +29,10 @@ interface
 uses
   System.SysUtils, System.Math,
   System.Generics.Defaults, System.Generics.Collections,
-  Powerhouse.Types;
+  Powerhouse.Types, Powerhouse.Base;
 
 type
-  PhVector<_Ty> = class(TInterfacedObject, IEquatable<PhVector<_Ty>>)
+  PhVector<_Ty> = class(PhBase, IEquatable<PhVector<_Ty>>)
   public
     constructor Create(const capacity: uint64); overload;
     constructor Create(const values: PhVector<_Ty>); overload;

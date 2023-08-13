@@ -148,6 +148,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Validator.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Types.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Vector.pas"/>
+        <DCCReference Include="Source\Powerhouse\Powerhouse.Base.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

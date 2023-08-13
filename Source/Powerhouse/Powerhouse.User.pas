@@ -28,16 +28,19 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Hash,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Logger, Powerhouse.Database,
-  Powerhouse.Appliance;
+  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Base, Powerhouse.Logger,
+  Powerhouse.Database, Powerhouse.Appliance;
 
 type
-  PhUser = class(TInterfacedObject, IEquatable<PhUser>)
+  PhUser = class(PhDatabaseObjectBase, IEquatable<PhUser>)
   public
-    constructor Create(const guid: PhGUID);
+    constructor Create(const guid: PhGUID); override;
 
     class function CreateUserAccount(const usr, pswd, email, names,
       surname: string): PhUser;
+
+    procedure Push(); override;
+    procedure Pull(); override;
 
     function CheckPassword(const pswd: string): bool;
 
@@ -45,8 +48,6 @@ type
     procedure RemoveAppliance(const appliance: PhAppliance);
 
     function Equals(other: PhUser): bool; reintroduce;
-
-    function GetGUID(): PhGUID;
 
     function GetUsername(): string;
     procedure SetUsername(const newUsrName: string);
@@ -72,10 +73,7 @@ type
   private
     class function HashPassword(const pswd: string): string;
 
-    procedure UpdateInDatabase();
-
   private
-    m_GUID: PhGUID;
     m_Username: string;
     m_EmailAddress: string;
     m_Forenames: string;
@@ -101,45 +99,10 @@ var
 implementation
 
 constructor PhUser.Create(const guid: PhGUID);
-var
-  foundGUID: bool;
 begin
-  m_GUID := guid;
   m_Appliances := PhAppliances.Create();
-  foundGUID := false;
 
-  with g_Database do
-  begin
-    TblUsers.First();
-
-    while not TblUsers.Eof do
-    begin
-      foundGUID := m_GUID = TblUsers[PH_TBL_FIELD_NAME_USERS_PK];
-      if foundGUID then
-        break;
-
-      TblUsers.Next();
-    end;
-
-    if foundGUID then
-    begin
-      m_Username := TblUsers[PH_TBL_FIELD_NAME_USERS_USERNAME];
-      m_EmailAddress := TblUsers[PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
-      m_Forenames := TblUsers[PH_TBL_FIELD_NAME_USERS_FORENAMES];
-      m_Surname := TblUsers[PH_TBL_FIELD_NAME_USERS_SURNAME];
-      m_PasswordHash := TblUsers[PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH];
-    end
-    else
-    begin
-      m_Username := '';
-      m_EmailAddress := '';
-      m_Forenames := '';
-      m_Surname := '';
-      m_PasswordHash := '';
-    end;
-
-    TblUsers.First();
-  end;
+  inherited Create(guid);
 end;
 
 class function PhUser.CreateUserAccount(const usr, pswd, email, names,
@@ -167,6 +130,51 @@ begin
     PhLogger.Error('Error creating new user in database: %s', [e.Message]);
 
   Result := Create(guid);
+end;
+
+procedure PhUser.Push();
+var
+  query: string;
+  e: Exception;
+begin
+  query := Format('UPDATE %s ' +
+    'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'' ' +
+    'WHERE %s = ''%s'';', [PH_TBL_NAME_USERS, PH_TBL_FIELD_NAME_USERS_USERNAME,
+    m_Username, PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
+    PH_TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames,
+    PH_TBL_FIELD_NAME_USERS_SURNAME, m_Surname,
+    PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
+    PH_TBL_FIELD_NAME_USERS_PK, m_GUID.ToString()]);
+
+  e := g_Database.RunQuery(query);
+
+  if e <> nil then
+    PhLogger.Error('Error updating database: %s', [e.Message]);
+end;
+
+procedure PhUser.Pull();
+begin
+  with g_Database do
+  begin
+    if TblUsers.Locate(PH_TBL_FIELD_NAME_USERS_PK, m_GUID.ToString(), []) then
+    begin
+      m_Username := TblUsers[PH_TBL_FIELD_NAME_USERS_USERNAME];
+      m_EmailAddress := TblUsers[PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS];
+      m_Forenames := TblUsers[PH_TBL_FIELD_NAME_USERS_FORENAMES];
+      m_Surname := TblUsers[PH_TBL_FIELD_NAME_USERS_SURNAME];
+      m_PasswordHash := TblUsers[PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH];
+    end
+    else
+    begin
+      m_Username := '';
+      m_EmailAddress := '';
+      m_Forenames := '';
+      m_Surname := '';
+      m_PasswordHash := '';
+    end;
+
+    TblUsers.First();
+  end;
 end;
 
 function PhUser.CheckPassword(const pswd: string): bool;
@@ -202,11 +210,6 @@ begin
     Result := m_GUID = other.m_GUID;
 end;
 
-function PhUser.GetGUID(): PhGUID;
-begin
-  Result := m_GUID;
-end;
-
 function PhUser.GetUsername(): string;
 begin
   Result := m_Username;
@@ -215,8 +218,6 @@ end;
 procedure PhUser.SetUsername(const newUsrName: string);
 begin
   m_Username := newUsrName;
-
-  UpdateInDatabase();
 end;
 
 function PhUser.GetEmailAddress(): string;
@@ -227,8 +228,6 @@ end;
 procedure PhUser.SetEmailAddress(const newAddress: string);
 begin
   m_EmailAddress := newAddress;
-
-  UpdateInDatabase();
 end;
 
 function PhUser.GetForenames(): string;
@@ -239,8 +238,6 @@ end;
 procedure PhUser.SetForenames(const newNames: string);
 begin
   m_Forenames := newNames;
-
-  UpdateInDatabase();
 end;
 
 function PhUser.GetSurname(): string;
@@ -251,8 +248,6 @@ end;
 procedure PhUser.SetSurname(const newSurname: string);
 begin
   m_Surname := newSurname;
-
-  UpdateInDatabase();
 end;
 
 function PhUser.GetPasswordHash(): string;
@@ -263,8 +258,6 @@ end;
 procedure PhUser.SetPassword(const newPswd: string);
 begin
   m_PasswordHash := HashPassword(newPswd);
-
-  UpdateInDatabase();
 end;
 
 function PhUser.GetAppliances(): PhAppliances;
@@ -322,26 +315,6 @@ begin
   hash := MD5.GetHashString(hash) + '==';
 
   Result := hash;
-end;
-
-procedure PhUser.UpdateInDatabase();
-var
-  query: string;
-  e: Exception;
-begin
-  query := Format('UPDATE %s ' +
-    'SET %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'', %s = ''%s'' ' +
-    'WHERE %s = ''%s'';', [PH_TBL_NAME_USERS, PH_TBL_FIELD_NAME_USERS_USERNAME,
-    m_Username, PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS, m_EmailAddress,
-    PH_TBL_FIELD_NAME_USERS_FORENAMES, m_Forenames,
-    PH_TBL_FIELD_NAME_USERS_SURNAME, m_Surname,
-    PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH, m_PasswordHash,
-    PH_TBL_FIELD_NAME_USERS_PK, m_GUID.ToString()]);
-
-  e := g_Database.RunQuery(query);
-
-  if e <> nil then
-    PhLogger.Error('Error updating database: %s', [e.Message]);
 end;
 
 end.

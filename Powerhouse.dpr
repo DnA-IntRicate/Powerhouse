@@ -51,7 +51,8 @@ uses
   Powerhouse.SaveData in 'Source\Powerhouse\Powerhouse.SaveData.pas',
   Powerhouse.Validator in 'Source\Powerhouse\Powerhouse.Validator.pas',
   Powerhouse.Types in 'Source\Powerhouse\Powerhouse.Types.pas',
-  Powerhouse.Vector in 'Source\Powerhouse\Powerhouse.Vector.pas';
+  Powerhouse.Vector in 'Source\Powerhouse\Powerhouse.Vector.pas',
+  Powerhouse.Base in 'Source\Powerhouse\Powerhouse.Base.pas';
 
 {$R *.res}
 
