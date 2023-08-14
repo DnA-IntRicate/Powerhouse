@@ -32,19 +32,65 @@ uses
   Powerhouse.Types, Powerhouse.Logger;
 
 type
+  /// <summary>
+  /// Specifies the write mode for file operations.
+  /// </summary>
   PhWriteMode = (Append = 0, Overwrite);
 
 type
+  /// <summary>
+  /// Provides basic utility methods for working with text files.
+  /// </summary>
   PhFileStream = class
   public
+    /// <summary>
+    /// Reads all text from a file and returns its content as a string.
+    /// </summary>
+    /// <param name="path">
+    /// The path of the file to read.
+    /// </param>
     class function ReadAllText(const path: string): string;
 
+    /// <summary>
+    /// Writes the specified text to a file.
+    /// </summary>
+    /// <param name="path">
+    /// The path of the file to write to.
+    /// </param>
+    /// <param name="text">
+    /// The text to write to the file.
+    /// </param>
+    /// <param name="writeMode">
+    /// The write mode for the file operation.
+    /// </param>
     class procedure WriteAllText(const path, text: string;
       const writeMode: PhWriteMode);
 
+    /// <summary>
+    /// Creates a new file at the specified path.
+    /// </summary>
+    /// <param name="path">
+    /// The path of the file to create.
+    // </param>
+    /// <returns>
+    /// True if the file was successfully created, otherwise false.
+    /// </returns>
     class function CreateFile(const path: string): bool; static;
 
+    /// <summary>
+    /// Checks if the specified path points to a file.
+    /// </summary>
+    /// <param name="path">
+    /// The path to check.
+    /// </param>
     class function IsFile(const path: string): bool; static;
+
+    /// <summary>
+    /// Checks if the specified path points to a directory.
+    /// </summary>
+    /// <param name="dir">
+    /// The path to check.
+    /// </param>
     class function IsDir(const dir: string): bool; static;
 
   private

@@ -33,18 +33,55 @@ uses
   Powerhouse.Types, Powerhouse.Logger;
 
 type
+  /// <summary>
+  /// Typedef for the lambda procedure to be executed in PhDatabase.RunQuery().
+  /// </summary>
   PhOnRunQueryProc = reference to procedure(var query: TADOQuery);
 
 type
+  /// <summary>
+  /// Encapsulates the logical interface to the Powerhouse database.
+  /// </summary>
   PhDatabase = class
   public
+    /// <summary>
+    /// Establishes a connection to the database and opens its tables.
+    /// </summary>
+    /// <param name="dbPath">
+    /// The path to the database.
+    /// </param>
     constructor Create(const dbPath: string);
+
+    /// <summary>
+    /// Closes the database connection and all tables.
+    /// </summary>
     destructor Destroy(); override;
 
+    /// <summary>
+    /// Executes a SQL query on the current database.
+    /// </summary>
+    /// <param name="sqlQuery">
+    /// The SQL query string that will be executed.
+    /// </param>
+    /// <param name="onRunQueryProc">
+    /// A reference to a lambda procedure which will be called immediately after
+    /// the query has been executed.
+    /// Lambda signature: procedure(var query: TADOQuery).
+    /// </param>
     function RunQuery(const sqlQuery: string;
       const onRunQueryProc: PhOnRunQueryProc): EADOError; overload;
+
+    /// <summary>
+    /// Executes a SQL query on the current database.
+    /// </summary>
+    /// <param name="sqlQuery">
+    /// The SQL query string that will be executed.
+    /// </param>
     function RunQuery(const sqlQuery: string): EADOError; overload;
 
+    /// <summary>
+    /// Returns the path to the current database.
+    /// </summary>
     function GetPath(): string;
 
   public
@@ -62,11 +99,25 @@ type
   end;
 
 const
+  /// <summary>
+  /// The name of the 'appliances' table in the Powerhouse database.
+  /// </summary>
   PH_TBL_NAME_APPLIANCES = 'tblAppliances';
+
+  /// <summary>
+  /// The name of the 'tips' table in the Powerhouse database.
+  /// </summary>
   PH_TBL_NAME_TIPS = 'tblTips';
+
+  /// <summary>
+  /// The name of the 'users' table in the Powerhouse database.
+  /// </summary>
   PH_TBL_NAME_USERS = 'tblUsers';
 
 var
+  /// <summary>
+  /// The current global instance of the Powerhouse database.
+  /// </summary>
   g_Database: PhDatabase;
 
 implementation
@@ -98,8 +149,6 @@ end;
 
 destructor PhDatabase.Destroy();
 begin
-  inherited;
-
   TblAppliances.Close();
   TblAppliances.Free();
   TblAppliances := nil;
@@ -115,6 +164,8 @@ begin
   Connection.Close();
   Connection.Free();
   Connection := nil;
+
+  inherited Destroy();
 end;
 
 function PhDatabase.RunQuery(const sqlQuery: string;

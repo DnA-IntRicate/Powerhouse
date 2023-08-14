@@ -32,29 +32,98 @@ uses
   Powerhouse.Types;
 
 type
+  /// <summary>
+  /// Flags indicating various validation issues.
+  /// </summary>
   PhValidationFlag = (TooShort = 1, TooLong = 2, InvalidFormat = 4,
     ForbiddenCharacter = 8, Empty = 16, Null = Empty);
+
+  /// <summary>
+  /// Set of <c>PhValidationFlag</c>.
+  /// </summary>
   PhValidationFlags = set of PhValidationFlag;
 
+  /// <summary>
+  /// Options for string validation.
+  /// </summary>
   PhValidationOption = (Letters = 1, Numbers = 2, Symbols = 4, All = 8);
+
+  /// <summary>
+  /// Set of <c>PhValidationOptions</c>.
+  /// </summary>s
   PhValidationOptions = set of PhValidationOption;
 
 type
+  /// <summary>
+  /// Represents the result of a validation operation.
+  /// </summary>
   PhValidation = record
+    /// <summary>
+    /// Flags indicating validation issues.
+    /// </summary>
     Flags: PhValidationFlags;
+
+    /// <summary>
+    /// Indicates if the validation passed.
+    /// </summary>
     Valid: bool;
   end;
 
 type
+  /// <summary>
+  /// Provides methods for validating strings and email addresses.
+  /// </summary>
   PhValidator = class
   public
+    /// <summary>
+    /// Validates the length of a string.
+    /// </summary>
+    /// <param name="str">
+    /// The string to validate.
+    /// </param>
+    /// <param name="min">
+    /// The minimum allowed length.
+    /// </param>
+    /// <param name="max">
+    /// The maximum allowed length.
+    /// </param>
+    /// <returns>
+    /// A <c>PhValidation</c> result indicating validation outcome.
+    /// </returns>
     class function ValidateStringLength(const str: string; const min, max: int)
       : PhValidation;
 
+    /// <summary>
+    /// Validates a string based on specified options and length constraints.
+    /// </summary>
+    /// <param name="str">
+    /// The string to validate.
+    /// </param>
+    /// <param name="options">
+    /// The validation options to apply.
+    /// </param>
+    /// <param name="min">
+    /// The minimum allowed length.
+    /// </param>
+    /// <param name="max">
+    /// The maximum allowed length.
+    /// </param>
+    /// <returns>
+    /// A <c>PhValidation</c> result indicating validation outcome.
+    /// </returns>
     class function ValidateString(const str: string;
       options: PhValidationOptions = []; const min: int = -1;
       const max: int = -1): PhValidation;
 
+    /// <summary>
+    /// Validates an email address.
+    /// </summary>
+    /// <param name="email">
+    /// The email address to validate.
+    /// </param>
+    /// <returns>
+    /// A <c>PhValidation</c> result indicating validation outcome.
+    /// </returns>
     class function ValidateEmailAddress(const email: string): PhValidation;
 
   private
@@ -64,6 +133,8 @@ type
     class function HasOption(const options: PhValidationOptions;
       const option: PhValidationOption): bool;
   end;
+
+implementation
 
 const
   PH_REGEX_WHITELIST = '^[a-zA-Z0-9_+\-=.,@ ]+$';
@@ -78,8 +149,6 @@ const
   PH_REGEX_NUMBERS_SYMBOLS = '^[0-9\p{P}]+$';
 
   PH_REGEX_SYMBOLS = '^[p{P}]+$';
-
-implementation
 
 class function PhValidator.ValidateStringLength(const str: string;
   const min, max: int): PhValidation;

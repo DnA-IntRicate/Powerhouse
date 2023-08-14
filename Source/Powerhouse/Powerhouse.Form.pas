@@ -33,23 +33,80 @@ uses
   Powerhouse.Types;
 
 type
+  /// <summary>
+  /// Typedef for a pointer to a <c>PhForm</c> object.
+  /// </summary>
   PhFormPtr = ^PhForm;
+
+  /// <summary>
+  /// Typedef for the lambda procedure to be executed in PhForm.GetParentForm().
+  /// Since different forms run on different threads; a mutex has to be used to
+  /// sync access to the parent form pointer accross different threads to
+  /// prevent race-conditions and memory-access violations.
+  /// </summary>
   PhOnGetParentProc = reference to procedure(parentPtr: PhFormPtr);
 
+  /// <summary>
+  /// Base class for all custom forms in Powerhouse.
+  /// </summary>
   PhForm = class(TForm)
   public
+    /// <summary>
+    /// Enables the form and its controls.
+    /// </summary>
     procedure Enable(); virtual;
+
+    /// <summary>
+    /// Disables the form and its controls.
+    /// </summary>
     procedure Disable(); virtual;
 
+    /// <summary>
+    /// Enables the form and shows it as a modal form.
+    /// </summary>
     procedure EnableModal(); virtual;
+
+    /// <summary>
+    /// Disables the form and closes it as a modal form.
+    /// </summary>
     procedure DisableModal(); virtual;
 
+    /// <summary>
+    /// Transitions visibilty and control between two forms.
+    /// </summary>
+    /// <param name="oldForm">
+    /// Pointer to the old form.
+    /// </param>
+    /// <param name="newForm">
+    /// Pointer to the new form.
+    /// </param>
     procedure TransitionForms(const oldForm, newForm: PhFormPtr); overload;
+
+    /// <summary>
+    /// Transitions visibilty and control between two forms.
+    /// </summary>s
+    /// <param name="newForm">
+    /// Pointer to the new form.
+    /// </param>
     procedure TransitionForms(const newForm: PhFormPtr); overload;
 
+    /// <summary>
+    /// Quits the application.
+    /// </summary>
     procedure Quit();
 
+    /// <summary>
+    /// Retrieves the parent form using a lambda-callback procedure.
+    /// </summary>
+    /// <param name="onGetParentProc">
+    /// The callback procedure to retrieve the parent form pointer whilst a
+    /// mutex lock is acquired on the current thread.
+    /// </param>
     procedure GetParentForm(const onGetParentProc: PhOnGetParentProc);
+
+    /// <summary>
+    /// Sets the parent form pointer for this form.
+    /// </summary
     procedure SetParentForm(const parentPtr: PhFormPtr);
 
   protected

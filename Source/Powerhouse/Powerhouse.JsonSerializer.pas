@@ -31,12 +31,41 @@ uses
   Data.DBXJSON, Data.DBXJSONReflect;
 
 type
+  /// <summary>
+  /// Provides JSON serialization and deserialization utility methods.
+  /// </summary>
   PhJsonSerializer = class
   public
+    /// <summary>
+    /// Creates a new instance of the <c>PhJsonSerializer</c> class.
+    /// </summary>
     constructor Create();
+
+    /// <summary>
+    /// Destroys the instance of the <c>PhJsonSerializer</c> class.
+    /// </summary>
     destructor Destroy(); override;
 
+    /// <summary>
+    /// Serializes an object to its JSON representation.
+    /// </summary>
+    /// <param name="obj">
+    /// The object to be serialized.
+    /// </param>
+    /// <returns>
+    /// The JSON representation of the object as a string.
+    /// </returns>
     function SerializeJson(obj: TObject): string;
+
+    /// <summary>
+    /// Deserializes a JSON string into an object.
+    /// </summary>
+    /// <param name="jsonStr">
+    /// The JSON string to be deserialized.
+    /// </param>
+    /// <returns>
+    /// The deserialized object.
+    /// </returns>
     function DeserializeJson(const jsonStr: string): TObject;
 
   private

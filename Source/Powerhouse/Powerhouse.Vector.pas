@@ -32,56 +32,288 @@ uses
   Powerhouse.Types, Powerhouse.Base;
 
 type
-  PhVector<_Ty> = class(PhBase, IEquatable<PhVector<_Ty>>)
+  /// <summary>
+  /// Dynamic array-like container class that provides various methods for
+  /// managing and manipulating elements.
+  /// </summary>
+  /// <typeparam name="_Ty">
+  /// The type of elements stored in the vector.
+  /// </typeparam>
+  PhVector<_Ty> = class(PhBase, IEquatable < PhVector < _Ty >> )
   public
+    /// <summary>
+    /// Creates a new <c>PhVector</c> instance with the specified
+    /// initial capacity.
+    /// </summary>
+    /// <param name="capacity">
+    /// The initial capacity of the vector.
+    /// </param>
     constructor Create(const capacity: uint64); overload;
+
+    /// <summary>
+    /// Creates a new <c>PhVector</c> instance with the same elements as
+    /// another vector.
+    /// </summary>
+    /// <param name="values">
+    /// The vector to copy elements from.
+    /// </param>
     constructor Create(const values: PhVector<_Ty>); overload;
+
+    /// <summary>
+    /// Creates a new <c>PhVector</c> instance with elements from an array.
+    /// </summary>
+    /// <param name="values">
+    /// The array of elements to initialize the vector with.
+    /// </param>
     constructor Create(const values: array of _Ty); overload;
+
+    /// <summary>
+    /// Creates a new <c>PhVector</c> instance with elements from a dynamic
+    /// array.
+    /// </summary>
+    /// <param name="values">
+    /// The dynamic array of elements to initialize the vector with.
+    /// </param>
     constructor Create(const values: TArray<_Ty>); overload;
+
+    /// <summary>
+    /// Creates a new <c>PhVector</c> instance with elements from an
+    /// <c>IEnumerable</c> collection.
+    /// </summary>
+    /// <param name="collection">
+    /// The <c>IEnumerable</c> collection to initialize the vector with.
+    /// </param>
     constructor Create(const collection: IEnumerable<_Ty>); overload;
+
+    /// <summary>
+    /// Creates a new <c>PhVector</c> instance with elements from a
+    /// <c>TEnumerable</c> collection.
+    /// </summary>
+    /// <param name="collection">
+    /// The <c>TEnumerable</c> collection to initialize the vector with.
+    /// </param>
     constructor Create(const collection: TEnumerable<_Ty>); overload;
+
+    /// <summary>
+    /// Creates a new empty <c>PhVector</c> instance.
+    /// </summary>
     constructor Create(); overload;
+
+    /// <summary>
+    /// Destructor for the <c>PhVector</c> instance.
+    /// </summary>
     destructor Destroy(); override;
 
+    /// <summary>
+    /// Assigns elements from another <c>PhVector</c> to this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The source vector to copy elements from.
+    /// </param>
     procedure Assign(const values: PhVector<_Ty>); overload;
+
+    /// <summary>
+    /// Assigns elements from an array to this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The source array to copy elements from.
+    /// </param>
     procedure Assign(const values: array of _Ty); overload;
+
+    /// <summary>
+    /// Assigns elements from a dynamic array to this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The source array to copy elements from.
+    /// </param>
     procedure Assign(const values: TArray<_Ty>); overload;
+
+    /// <summary>
+    /// Assigns elements from an <c>IEnumerable</c> collection to this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The source <c>IEnumerable</c> collection to copy elements from.
+    /// </param>
     procedure Assign(const collection: IEnumerable<_Ty>); overload;
+
+    /// <summary>
+    /// Assigns elements from a <c>TEnumerable</c> collection to this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The source <c>TEnumerable</c> collection to copy elements from.
+    /// </param>
     procedure Assign(const collection: TEnumerable<_Ty>); overload;
 
+    /// <summary>
+    /// Creates a copy of the <c>PhVector</c> instance.
+    /// </summary>
+    /// <returns>
+    /// A new <c>PhVector</c> instance with the same elements.
+    /// </returns>
     function Copy(): PhVector<_Ty>;
 
+    /// <summary>
+    /// Appends an element to the end of the vector.
+    /// </summary>
+    /// <param name="value">
+    /// The element to add to the vector.
+    /// </param>
     procedure PushBack(const value: _Ty);
+
+    /// <summary>
+    /// Removes the last element from the vector.
+    /// </summary>
     procedure PopBack();
 
+    /// <summary>
+    /// Appends elements from another vector to the end of this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The source vector containing elements to be added.
+    /// </param>
     procedure PushBackRange(const values: PhVector<_Ty>); overload;
+
+    /// <summary>
+    /// Appends elements from an array to the end of this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The array of elements to be added.
+    /// </param>
     procedure PushBackRange(const values: array of _Ty); overload;
+
+    /// <summary>
+    /// Appends elements from a dynamic array to the end of this vector.
+    /// </summary>
+    /// <param name="values">
+    /// The dynamic array of elements to be added.
+    /// </param>
     procedure PushBackRange(const values: TArray<_Ty>); overload;
+
+    /// <summary>
+    /// Appends elements from an <c>IEnumerable</c> collection to the end of
+    /// this vector.
+    /// </summary>
+    /// <param name="collection">
+    /// The <c>IEnumerable</c> collection of elements to be added.
+    /// </param>
     procedure PushBackRange(const collection: IEnumerable<_Ty>); overload;
+
+    /// <summary>
+    /// Appends elements from a <c>TEnumerable</c> collection to the end of
+    /// this vector.
+    /// </summary>
+    /// <param name="collection">
+    /// The <c>TEnumerable</c> collection of elements to be added.
+    /// </param>
     procedure PushBackRange(const collection: TEnumerable<_Ty>); overload;
 
+    /// <summary>
+    /// Inserts an element at the specified index in the vector.
+    /// </summary>
+    /// <param name="index">
+    /// The index at which to insert the element.
+    /// </param>
+    /// <param name="value">
+    /// The element to insert.
+    /// </param>
     procedure Insert(const index: uint64; const value: _Ty);
+
+    /// <summary>
+    /// Removes an element at the specified index from the vector.
+    /// </summary>
+    /// <param name="index">
+    /// The index of the element to remove.
+    /// </param>
     procedure Erase(const index: uint64);
 
+    /// <summary>
+    /// Resizes the vector to the specified new size.
+    /// </summary>
+    /// <param name="newSize">
+    /// The new size of the vector.
+    /// </param>
     procedure Resize(const newSize: uint64);
+
+    /// <summary>
+    /// Reserves space for the vector to accommodate the specified new capacity.
+    /// </summary>
+    /// <param name="newCapacity">
+    /// The new capacity to reserve.
+    /// </param>
     procedure Reserve(const newCapacity: uint64);
+
+    /// <summary>
+    /// Reduces the capacity of the vector to fit its current size.
+    /// </summary>
     procedure ShrinkToFit();
+
+    /// <summary>
+    /// Removes all elements from the vector.
+    /// </summary>
     procedure Clear();
 
+    /// <summary>
+    /// Checks if the vector contains the specified element.
+    /// </summary>
+    /// <param name="value">
+    /// The element to search for.
+    /// </param>
     function Contains(const value: IEquatable<_Ty>): bool;
+
+    /// <summary>
+    /// Compares this vector with another vector for equality.
+    /// </summary>
+    /// <param name="other">
+    /// The vector to compare with.
+    /// </param>
     function Equals(other: PhVector<_Ty>): bool; reintroduce;
 
+    /// <summary>
+    /// Checks if the vector is empty.
+    /// </summary>
     function Empty(): bool; inline;
+
+    /// <summary>
+    /// Returns the number of elements in the vector.
+    /// </summary>
     function Size(): uint64; inline;
+
+    /// <summary>
+    /// Returns the current capacity of the vector.
+    /// </summary>
     function Capacity(): uint64; inline;
 
+    /// <summary>
+    /// Returns a pointer to the internal data array of the vector.
+    /// </summary>
     function Data(): TArray<_Ty>; inline;
+
+    /// <summary>
+    /// Returns the first element of the vector.
+    /// </summary>
     function Front(): _Ty;
+
+    /// <summary>
+    /// Returns the last element of the vector.
+    /// </summary>
     function Back(): _Ty;
 
+    /// <summary>
+    /// Returns the index of the first element in the vector.
+    /// </summary>
     function First(): uint64; inline;
+
+    /// <summary>
+    /// Returns the index of the last element in the vector.
+    /// </summary>
     function Last(): uint64; inline;
 
+    /// <summary>
+    /// Returns the element at the specified index.
+    /// </summary>
+    /// <param name="index">
+    /// The index of the element to retrieve.
+    /// </param>
     function At(const index: uint64): _Ty; inline;
 
   private
@@ -89,6 +321,7 @@ type
     procedure SetItem(const index: uint64; const value: _Ty);
 
   public
+    // Overload the '[]' indexing operator.
     property Items[const index: uint64]: _Ty read GetItem
       write SetItem; default;
 
@@ -108,6 +341,13 @@ type
     end;
 
   public
+    /// <summary>
+    /// Returns an enumerator that iterates through the elements of
+    /// the <c>PhVector</c>.
+    /// </summary>
+    /// <returns>
+    /// An enumerator for the <c>PhVector</c> elements.
+    /// </returns>
     function GetEnumerator(): Iterator;
 
   private

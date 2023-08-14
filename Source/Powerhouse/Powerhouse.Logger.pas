@@ -32,13 +32,32 @@ uses
   Powerhouse.Types;
 
 type
+  /// <summary>
+  /// Represents the types of log messages.
+  /// </summary>
   PhMessageType = (Trace = 0, Information, Warning, Error);
 
 type
+  /// <summary>
+  /// Provides message-dialogue logging functionality for various message types.
+  /// </summary>
   PhLogger = class
   public
+    /// <summary>
+    /// Logs a message with the specified message type.
+    /// </summary>
+    /// <param name="msg">
+    /// The message to be logged.
+    /// </param>
+    /// <param name="msgType">
+    /// The type of the message to be logged.
+    /// </param>
+    /// <returns>
+    /// An integer representing the log result.
+    /// </returns>
     class function LogMessage(const msg: string; msgType: PhMessageType): int;
 
+    // Trace Methods
     class procedure Trace(const msg: string; out outResult: int); overload;
     class procedure Trace(const msg: string); overload;
     class procedure Trace(const fmt: string; out outResult: int;
@@ -46,6 +65,7 @@ type
     class procedure Trace(const fmt: string;
       const args: array of const); overload;
 
+    // Information Methods
     class procedure Info(const msg: string; out outResult: int); overload;
     class procedure Info(const msg: string); overload;
     class procedure Info(const fmt: string; out outResult: int;
@@ -53,6 +73,7 @@ type
     class procedure Info(const fmt: string;
       const args: array of const); overload;
 
+    // Warning Methods
     class procedure Warn(const msg: string; out outResult: int); overload;
     class procedure Warn(const msg: string); overload;
     class procedure Warn(const fmt: string; out outResult: int;
@@ -60,6 +81,7 @@ type
     class procedure Warn(const fmt: string;
       const args: array of const); overload;
 
+    // Error Methods
     class procedure Error(const msg: string; out outResult: int); overload;
     class procedure Error(const msg: string); overload;
     class procedure Error(const fmt: string; out outResult: int;

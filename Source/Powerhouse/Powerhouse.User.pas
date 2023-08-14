@@ -32,42 +32,149 @@ uses
   Powerhouse.Database, Powerhouse.Appliance;
 
 type
+  /// <summary>
+  /// Object used to interact with user accounts in the Powerhouse database.
+  /// </summary>
   PhUser = class(PhDatabaseObjectBase, IEquatable<PhUser>)
   public
+    /// <summary>
+    /// Creates a new instance of <c>PhUser</c> by pulling all the values from
+    /// the Powerhouse database associated with the specified GUID.
+    /// </summary>
     constructor Create(const guid: PhGUID); override;
 
+    /// <summary>
+    /// Creates a new user account in the database.
+    /// </summary>
+    /// <param name="usr">
+    /// The username for the new user account.
+    /// </param>
+    /// <param name="pswd">
+    /// The password for the new user account.
+    /// </param>
+    /// <param name="email">
+    /// The email address for the new user account.
+    /// </param>
+    /// <param name="names">
+    /// The forenames for the new user account.
+    /// </param>
+    /// <param name="surname">
+    /// The surname for the new user account.
+    /// </param>
+    /// <returns>
+    /// The newly created user account.
+    /// </returns>
     class function CreateUserAccount(const usr, pswd, email, names,
       surname: string): PhUser;
 
+    /// <summary>
+    /// Pushes the current state of this user account to the database by
+    /// overwriting it with the current values of this instance.
+    /// </summary>
     procedure Push(); override;
+
+    /// <summary>
+    /// Pulls the state of this user account from the database and overwrites
+    /// this instance with the values from the database.
+    /// </summary>
     procedure Pull(); override;
 
+    /// <summary>
+    /// Hashes the provided password and checks if it matches the user
+    /// account's password hash.
+    /// </summary>
+    /// <param name="pswd">
+    /// The password to check against.
+    /// </param>
     function CheckPassword(const pswd: string): bool;
 
+    /// <summary>
+    /// Adds an appliance to the user's account.
+    /// </summary>
     procedure AddAppliance(const appliance: PhAppliance);
+
+    /// <summary>
+    /// Removes an appliance from the user's account.
+    /// </summary>
     procedure RemoveAppliance(const appliance: PhAppliance);
 
+    /// <summary>
+    /// Compares this user account with another <c>PhUser</c> instance for
+    /// equality.
+    /// </summary>
+    /// <param name="other">
+    /// The user account to compare against.
+    /// </param>
     function Equals(other: PhUser): bool; reintroduce;
 
+    /// <summary>
+    /// Returns the username of the user account.
+    /// </summary>
     function GetUsername(): string;
+
+    /// <summary>
+    /// Sets the username of the user account.
+    /// </summary>
     procedure SetUsername(const newUsrName: string);
 
+    /// <summary>
+    /// Returns the email address of the user account.
+    /// </summary>
     function GetEmailAddress(): string;
+
+    /// <summary>
+    /// Sets the email address of the user account.
+    /// </summary>
     procedure SetEmailAddress(const newAddress: string);
 
+    /// <summary>
+    /// Returns the forenames of the user account.
+    /// </summary>
     function GetForenames(): string;
+
+    /// <summary>
+    /// Sets the forenames of the user account.
+    /// </summary>
     procedure SetForenames(const newNames: string);
 
+    /// <summary>
+    /// Returns the surname of the user account.
+    /// </summary>
     function GetSurname(): string;
+
+    /// <summary>
+    /// Sets the surname of the user account.
+    /// </summary>
     procedure SetSurname(const newSurname: string);
 
+    /// <summary>
+    /// Returns the password hash of the user account.
+    /// </summary>
     function GetPasswordHash(): string;
+
+    /// <summary>
+    /// Sets the password of the user account.
+    /// </summary>
     procedure SetPassword(const newPswd: string);
 
+    /// <summary>
+    /// Returns a vector of appliances associated with the user account.
+    /// </summary>
     function GetAppliances(): PhAppliances;
+
+    /// <summary>
+    /// Sets the vector of appliances associated with the user account.
+    /// </summary>
     procedure SetAppliances(const appliances: PhAppliances);
 
+    /// <summary>
+    /// Returns an appliance by name associated with the user account.
+    /// </summary>
     function GetApplianceByName(const name: string): PhAppliance;
+
+    /// <summary>
+    /// Returns an appliance by GUID associated with the user account.
+    /// </summary>
     function GetApplianceByGUID(const guid: PhGUID): PhAppliance;
 
   private
@@ -83,18 +190,57 @@ type
   end;
 
 type
+  /// <summary>
+  /// Typedef for a pointer to a <c>PhUser</c> object.
+  /// </summary>
   PhUserPtr = ^PhUser;
+
+  /// <summary>
+  /// Typedef for a vector of <c>PhUser</c>.
+  /// </summary>
   PhUsers = PhVector<PhUser>;
 
 const
+  /// <summary>
+  /// The name of the primary key field in the 'users' table in the
+  /// Powerhouse database.
+  /// </summary>
   PH_TBL_FIELD_NAME_USERS_PK = 'UserGUID';
+
+  /// <summary>
+  /// The name of the username field in the 'users' table in the
+  /// Powerhouse database.
+  /// </summary>
   PH_TBL_FIELD_NAME_USERS_USERNAME = 'Username';
+
+  /// <summary>
+  /// The name of the email address field in the 'users' table in the
+  /// Powerhouse database.
+  /// </summary>
   PH_TBL_FIELD_NAME_USERS_EMAIL_ADDRESS = 'EmailAddress';
+
+  /// <summary>
+  /// The name of the forenames field in the 'users' table in the
+  /// Powerhouse database.
+  /// </summary>
   PH_TBL_FIELD_NAME_USERS_FORENAMES = 'Forenames';
+
+  /// <summary>
+  /// The name of the surname field in the 'users' table in the
+  /// Powerhouse database.
+  /// </summary>
   PH_TBL_FIELD_NAME_USERS_SURNAME = 'Surname';
+
+  /// <summary>
+  /// The name of the password hash field in the 'users' table in the
+  /// Powerhouse database.
+  /// </summary>
   PH_TBL_FIELD_NAME_USERS_PASSWORD_HASH = 'PasswordHash';
 
 var
+  /// <summary>
+  /// The current global instance of the logged-in user.
+  /// </summary>
   g_CurrentUser: PhUser;
 
 implementation

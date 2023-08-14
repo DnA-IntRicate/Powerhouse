@@ -33,14 +33,41 @@ uses
   Powerhouse.User;
 
 type
+  /// <summary>
+  /// Manages saving and loading user data to and from a JSON file.
+  /// </summary>
   PhSaveData = class
   public
+    /// <summary>
+    /// Creates a new instance of the <c>PhSaveData</c> class.
+    /// </summary>
+    /// <param name="path">
+    /// The path to the save data file.
+    /// </param>
     constructor Create(const path: string);
 
+    /// <summary>
+    /// Adds or updates user data in the save file.
+    /// </summary>
+    /// <param name="user">
+    /// The user data to add or update.
+    /// </param>
     procedure AddOrUpdateUser(const user: PhUser);
 
+    /// <summary>
+    /// Retrieves the list of appliance GUIDs associated with a user.
+    /// </summary>
+    /// <param name="userGUID">
+    /// The GUID of the user.
+    /// </param>
+    /// <returns>
+    /// A vector containing appliance GUIDs.
+    /// </returns>
     function GetUserAppliances(const userGUID: PhGUID): PhVector<PhGUID>;
 
+    /// <summary>
+    /// Returns the path to the save data file.
+    /// </summary>
     function GetPath(): string;
 
   private

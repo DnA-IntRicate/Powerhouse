@@ -31,18 +31,46 @@ uses
   Powerhouse.Types;
 
 type
+  /// <summary>
+  /// The base class for all Powerhouse-specific objects.
+  /// </summary>
   PhBase = class(TInterfacedObject)
   end;
 
 type
+  /// <summary>
+  /// The base class for database-related objects in Powerhouse.
+  /// </summary>
   PhDatabaseObjectBase = class(PhBase)
   public
+    /// <summary>
+    /// Creates a new instance of the PhDatabaseObjectBase class.
+    /// </summary>
+    /// <param name="guid">
+    /// The globally unique identifier for the object which acts as the primary
+    /// key for the object in the Powerhouse database.
+    /// </param>
     constructor Create(const guid: PhGUID); virtual;
 
+    /// <summary>
+    /// Pushes changes made to the object to the Powerhouse database.
+    /// </summary>
     procedure Push(); virtual; abstract;
+
+    /// <summary>
+    /// Pulls data from the Powerhouse database to update the object's state.
+    /// </summary>
     procedure Pull(); virtual; abstract;
+
+    /// <summary>
+    /// Synchronizes the object's state with the Powerhouse database by
+    /// performing a Push and then a Pull.
+    /// </summary>
     procedure Sync(); virtual;
 
+    /// <summary>
+    /// Returns the GUID of the database-object.
+    /// </summary>
     function GetGUID(): PhGUID;
 
   protected
