@@ -40,6 +40,8 @@ uses
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.ModifyAppliance.pas' {g_ModifyApplianceForm} ,
   Powerhouse.Forms.Home.AddAppliance.CreateAppliance
     in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.AddAppliance.CreateAppliance.pas' {g_CreateApplianceForm} ,
+  Powerhouse.Forms.Home.ModifyUser
+    in 'Source\Powerhouse\Forms\Powerhouse.Forms.Home.ModifyUser.pas' {g_ModifyUserForm} ,
   Powerhouse.Database in 'Source\Powerhouse\Powerhouse.Database.pas',
   Powerhouse.Appliance in 'Source\Powerhouse\Powerhouse.Appliance.pas',
   Powerhouse.User in 'Source\Powerhouse\Powerhouse.User.pas',

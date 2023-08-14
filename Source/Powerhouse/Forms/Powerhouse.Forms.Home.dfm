@@ -559,6 +559,224 @@ object PhfHome: TPhfHome
         Margins.Bottom = 2
         Caption = 'My Account'
         ImageIndex = 3
+        object pnlUserInformation: TPanel
+          Left = 3
+          Top = 6
+          Width = 389
+          Height = 253
+          TabOrder = 0
+          object lblAccount1: TLabel
+            Left = 9
+            Top = 36
+            Width = 55
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Username: '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label2: TLabel
+            Left = 134
+            Top = 7
+            Width = 119
+            Height = 17
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'User Information'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -14
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblUsername: TLabel
+            Left = 325
+            Top = 36
+            Width = 60
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Alignment = taRightJustify
+            Caption = 'USERNAME'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblEmailAddress: TLabel
+            Left = 298
+            Top = 55
+            Width = 87
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Alignment = taRightJustify
+            Caption = 'EMAILADDRESS'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblAccount2: TLabel
+            Left = 9
+            Top = 55
+            Width = 70
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Email Address:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblAccount3: TLabel
+            Left = 9
+            Top = 76
+            Width = 31
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Name:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblName: TLabel
+            Left = 354
+            Top = 76
+            Width = 31
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Alignment = taRightJustify
+            Caption = 'NAME'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblSurname: TLabel
+            Left = 331
+            Top = 95
+            Width = 54
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Alignment = taRightJustify
+            Caption = 'SURNAME'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblAccount4: TLabel
+            Left = 9
+            Top = 95
+            Width = 46
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Surname:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblApplianceCount: TLabel
+            Left = 287
+            Top = 114
+            Width = 98
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Alignment = taRightJustify
+            Caption = 'APPLIANCECOUNT'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblAccount5: TLabel
+            Left = 9
+            Top = 114
+            Width = 55
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Appliances:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+        end
+        object btnModifyUser: TButton
+          Left = 206
+          Top = 264
+          Width = 187
+          Height = 65
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
+          Caption = 'Modify'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          OnClick = btnModifyUserClick
+        end
       end
       object tabHelp: TTabSheet
         Margins.Left = 2

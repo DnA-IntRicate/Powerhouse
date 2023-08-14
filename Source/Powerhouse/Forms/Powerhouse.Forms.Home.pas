@@ -34,7 +34,8 @@ uses
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
   Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.SaveData,
-  Powerhouse.Forms.Home.ModifyAppliance, Powerhouse.Forms.Home.AddAppliance;
+  Powerhouse.Forms.Home.ModifyAppliance, Powerhouse.Forms.Home.AddAppliance,
+  Powerhouse.Forms.Home.ModifyUser;
 
 type
   TPhfHome = class(PhForm)
@@ -80,6 +81,19 @@ type
     lblApplianceInformation14: TLabel;
     lblBatteryKind: TLabel;
     btnRemoveAppliance: TButton;
+    lblAccount1: TLabel;
+    pnlUserInformation: TPanel;
+    Label2: TLabel;
+    lblUsername: TLabel;
+    lblEmailAddress: TLabel;
+    lblAccount2: TLabel;
+    lblAccount3: TLabel;
+    lblName: TLabel;
+    lblSurname: TLabel;
+    lblAccount4: TLabel;
+    lblApplianceCount: TLabel;
+    lblAccount5: TLabel;
+    btnModifyUser: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnAddApplianceClick(Sender: TObject);
     procedure lstAppliancesClick(Sender: TObject);
@@ -87,12 +101,14 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure btnModifyApplianceClick(Sender: TObject);
     procedure btnRemoveApplianceClick(Sender: TObject);
+    procedure btnModifyUserClick(Sender: TObject);
 
   public
     procedure Enable(); override;
 
   private
     procedure DisplayAppliances();
+    procedure DisplayUserInformation();
 
     procedure ShowApplianceInformationLabels(const show: bool);
     procedure ShowApplianceInformation(const show: bool);
@@ -152,6 +168,18 @@ begin
   RemoveAppliance();
 end;
 
+procedure TPhfHome.btnModifyUserClick(Sender: TObject);
+var
+  modifyUserForm: TPhfModifyUser;
+begin
+  modifyUserForm := TPhfModifyUser.Create(Self);
+  modifyUserForm.SetContext(@g_CurrentUser);
+  modifyUserForm.EnableModal();
+  modifyUserForm.Free();
+
+  DisplayUserInformation();
+end;
+
 procedure TPhfHome.Enable();
 begin
   inherited Enable();
@@ -159,6 +187,7 @@ begin
   Self.Caption := Format('Powerhouse - %s', [g_CurrentUser.GetUsername()]);
 
   DisplayAppliances();
+  DisplayUserInformation();
   ShowApplianceInformation(false);
 end;
 
@@ -176,6 +205,15 @@ begin
     lstAppliances.Items.Add(appliance.GetName());
 
   lstAppliances.ItemIndex := backupIdx;
+end;
+
+procedure TPhfHome.DisplayUserInformation();
+begin
+  lblUsername.Caption := g_CurrentUser.GetUsername();
+  lblEmailAddress.Caption := g_CurrentUser.GetEmailAddress();
+  lblName.Caption := g_CurrentUser.GetForenames();
+  lblSurname.Caption := g_CurrentUser.GetSurname();
+  lblApplianceCount.Caption := IntToStr(g_CurrentUser.GetAppliances().Size());
 end;
 
 procedure TPhfHome.ShowApplianceInformationLabels(const show: bool);
@@ -241,7 +279,7 @@ begin
       powerFactor := Format('%f', [g_Appliance.GetPowerFactor()]);
       frequency := Format('%fHz', [g_Appliance.GetFrequency()]);
       energyRating := Format('%d', [g_Appliance.GetEnergyRating()]);
-      surgeProtection := Ifthen(g_Appliance.GetSurgeProtection(), 'Yes', 'No');
+      surgeProtection := IfThen(g_Appliance.GetSurgeProtection(), 'Yes', 'No');
       batterySize := IfThen(g_Appliance.GetBatterySize() <> -1.0,
         Format('%fmAH', [g_Appliance.GetBatterySize()]), 'N/A');
 

@@ -83,6 +83,7 @@ type
   end;
 
 type
+  PhUserPtr = ^PhUser;
   PhUsers = PhVector<PhUser>;
 
 const

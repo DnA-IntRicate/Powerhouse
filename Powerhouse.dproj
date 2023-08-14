@@ -137,6 +137,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Home.AddAppliance.CreateAppliance.pas">
             <Form>g_CreateApplianceForm</Form>
         </DCCReference>
+        <DCCReference Include="Source\Powerhouse\Forms\Powerhouse.Forms.Home.ModifyUser.pas">
+            <Form>g_ModifyUserForm</Form>
+        </DCCReference>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Database.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.Appliance.pas"/>
         <DCCReference Include="Source\Powerhouse\Powerhouse.User.pas"/>
