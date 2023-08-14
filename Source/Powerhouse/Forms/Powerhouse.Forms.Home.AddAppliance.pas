@@ -266,7 +266,7 @@ begin
       powerFactor := Format('%f', [g_SelectedAppliance.GetPowerFactor()]);
       frequency := Format('%fHz', [g_SelectedAppliance.GetFrequency()]);
       energyRating := Format('%d', [g_SelectedAppliance.GetEnergyRating()]);
-      surgeProtection := Ifthen(g_SelectedAppliance.GetSurgeProtection(),
+      surgeProtection := IfThen(g_SelectedAppliance.GetSurgeProtection(),
         'Yes', 'No');
 
       batterySize := IfThen(g_SelectedAppliance.GetBatterySize() <> -1.0,
@@ -304,7 +304,9 @@ begin
 
   if createApplianceForm.GetNewAppliance() = nil then
   begin
-    PhLogger.Error('There was an error creating your appliance!');
+    if not createApplianceForm.Cancelled() then
+      PhLogger.Error('There was an error creating your appliance!');
+
     createApplianceForm.Free();
     Exit(nil);
   end;

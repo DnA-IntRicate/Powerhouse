@@ -167,7 +167,6 @@ begin
   end;
 
   Reload();
-
 end;
 
 function PhDatabase.GetPath(): string;

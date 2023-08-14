@@ -87,6 +87,8 @@ type
   public
     procedure EnableModal(); override;
 
+    function Cancelled(): bool;
+
     function GetNewAppliance(): PhAppliance;
 
   private
@@ -107,6 +109,7 @@ type
 
   private
     m_NewAppliance: PhAppliance;
+    m_Cancelled: bool;
 
     m_ValidName: bool;
     m_ValidManufacturer: bool;
@@ -173,6 +176,7 @@ end;
 procedure TPhfCreateAppliance.btnCancelClick(Sender: TObject);
 begin
   m_NewAppliance := nil;
+  m_Cancelled := true;
 
   DisableModal();
 end;
@@ -277,6 +281,7 @@ begin
 
   btnCreate.Enabled := false;
 
+  m_Cancelled := false;
   m_ValidName := false;
   m_ValidManufacturer := false;
   m_ValidVoltage := false;
@@ -292,6 +297,11 @@ begin
   m_ValidBatteryKind := true;
 
   inherited EnableModal();
+end;
+
+function TPhfCreateAppliance.Cancelled(): bool;
+begin
+  Result := m_Cancelled;
 end;
 
 function TPhfCreateAppliance.GetNewAppliance(): PhAppliance;
