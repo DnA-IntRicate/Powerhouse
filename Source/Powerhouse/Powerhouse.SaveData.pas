@@ -55,15 +55,26 @@ type
     procedure AddOrUpdateUser(const user: PhUser);
 
     /// <summary>
-    /// Retrieves the list of appliance GUIDs associated with a user.
+    /// Retrieves the electricity tariff associated with a user.
     /// </summary>
     /// <param name="userGUID">
     /// The GUID of the user.
     /// </param>
     /// <returns>
-    /// A vector containing appliance GUIDs.
+    /// An electricity tariff in c/kWh.
     /// </returns>
-    function GetUserAppliances(const userGUID: PhGUID): PhVector<PhGUID>;
+    function GetUserElectricityTariff(const userGUID: PhGUID): float;
+
+    /// <summary>
+    /// Retrieves the list of appliances associated with a user.
+    /// </summary>
+    /// <param name="userGUID">
+    /// The GUID of the user.
+    /// </param>
+    /// <returns>
+    /// A vector containing appliances.
+    /// </returns>
+    function GetUserAppliances(const userGUID: PhGUID): PhAppliances;
 
     /// <summary>
     /// Returns the path to the save data file.
@@ -75,9 +86,15 @@ type
     procedure OverwriteSaveFile(const path: string);
 
   private type
+    ApplianceData = record
+      GUID: string;
+      DailyUsage: int;
+    end;
+
     UserData = record
       GUID: string;
-      Appliances: PhVector<string>;
+      ElectricityTariff: float;
+      Appliances: PhVector<ApplianceData>;
     end;
 
   private type
@@ -140,7 +157,8 @@ var
   i: int;
   appliance: PhAppliance;
   updatedUser: bool;
-  newData: UserData;
+  data: ApplianceData;
+  currentData, newData: UserData;
 begin
   updatedUser := false;
 
@@ -148,12 +166,21 @@ begin
   begin
     if m_Data[i].GUID = user.GetGUID() then
     begin
-      m_Data[i].Appliances.Clear();
+      currentData := m_Data[i];
+
+      currentData.ElectricityTariff := user.GetElectricityTariff();
+      currentData.Appliances.Clear();
 
       for appliance in user.GetAppliances() do
-        m_Data[i].Appliances.PushBack(appliance.GetGUID());
+      begin
+        data.GUID := appliance.GetGUID();
+        data.DailyUsage := appliance.GetDailyUsage();
 
-      m_Data[i].Appliances.ShrinkToFit();
+        currentData.Appliances.PushBack(data);
+      end;
+
+      currentData.Appliances.ShrinkToFit();
+      m_Data[i] := currentData;
       updatedUser := true;
 
       break;
@@ -163,10 +190,17 @@ begin
   if not updatedUser then
   begin
     newData.GUID := user.GetGUID();
-    newData.Appliances := PhVector<string>.Create(user.GetAppliances().Size());
+    newData.ElectricityTariff := user.GetElectricityTariff();
+    newData.Appliances := PhVector<ApplianceData>.Create
+      (user.GetAppliances().Size());
 
     for appliance in user.GetAppliances() do
-      newData.Appliances.PushBack(appliance.GetGUID());
+    begin
+      data.GUID := appliance.GetGUID();
+      data.DailyUsage := appliance.GetDailyUsage();
+
+      newData.Appliances.PushBack(data);
+    end;
 
     m_Data.PushBack(newData);
   end;
@@ -174,24 +208,50 @@ begin
   OverwriteSaveFile(m_Path);
 end;
 
-function PhSaveData.GetUserAppliances(const userGUID: PhGUID): PhVector<PhGUID>;
+function PhSaveData.GetUserElectricityTariff(const userGUID: PhGUID): float;
 var
-  i: int;
-  guidStr: string;
+  i: uint64;
 begin
-  for i := m_Data.First() to m_Data.Last() do
+  if not m_Data.Empty() then
   begin
-    if m_Data[i].GUID = userGUID then
+    for i := m_Data.First() to m_Data.Last() do
     begin
-      Result := PhVector<PhGUID>.Create(m_Data[i].Appliances.Size());
-      for guidStr in m_Data[i].Appliances do
-        Result.PushBack(PhGUID(guidStr));
-
-      Exit();
+      if m_Data[i].GUID = userGUID then
+        Exit(m_Data[i].ElectricityTariff);
     end;
   end;
 
-  Result := PhVector<PhGUID>.Create();
+  Result := 0.0;
+end;
+
+function PhSaveData.GetUserAppliances(const userGUID: PhGUID): PhAppliances;
+var
+  i: uint64;
+  data: ApplianceData;
+  appliance: PhAppliance;
+begin
+  if not m_Data.Empty() then
+  begin
+    for i := m_Data.First() to m_Data.Last() do
+    begin
+      if m_Data[i].GUID = userGUID then
+      begin
+        Result := PhAppliances.Create(m_Data[i].Appliances.Size());
+
+        for data in m_Data[i].Appliances do
+        begin
+          appliance := PhAppliance.Create(PhGUID(data.GUID));
+          appliance.SetDailyUsage(data.DailyUsage);
+
+          Result.PushBack(appliance);
+        end;
+
+        Exit();
+      end;
+    end;
+  end;
+
+  Result := PhAppliances.Create();
 end;
 
 function PhSaveData.GetPath(): string;

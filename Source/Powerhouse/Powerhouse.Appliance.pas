@@ -38,6 +38,12 @@ type
   PhAppliance = class(PhDatabaseObjectBase, IEquatable<PhAppliance>)
   public
     /// <summary>
+    /// Creates a new instance of <c>PhAppliance</c> by pulling all the values
+    /// from the Powerhouse database associated with the specified GUID.
+    /// </summary>
+    constructor Create(const guid: PhGUID); override;
+
+    /// <summary>
     /// Creates a new appliance in the database.
     /// </summary>
     /// <param name="name">
@@ -106,9 +112,56 @@ type
     procedure Pull(); override;
 
     /// <summary>
-    /// TODO: Implement this function.
+    /// Calculates the energy consumption of the appliance.
     /// </summary>
-    function CalculateCostPerHour(): float;
+    /// <param name="hours">
+    /// The amount of hours to calculate the energy consumption on.
+    /// </param>
+    /// <returns>
+    /// The energy consumption of the appliance in Joules.
+    /// </returns>
+    function CalculateActiveEnergyConsumption(const hours: int): float;
+
+    /// <summary>
+    /// Calculates the standby energy consumption of the appliance.
+    /// </summary>
+    /// <param name="hours">
+    /// The amount of hours to calculate the standby energy consumption on.
+    /// </param>
+    /// <returns>
+    /// The standby energy consumption of the appliance in Joules.
+    /// </returns>
+    function CalculateStandbyEnergyConsumption(const hours: int): float;
+
+    /// <summary>
+    /// Calculates the running cost of the appliance.
+    /// </summary>
+    /// <param name="tariff">
+    /// The cost per kilowatt hour of electricity measured in c/kWh.
+    /// </param>
+    /// <param name="hours>
+    /// The amount of hours to calculate the running cost on.
+    /// </param>
+    /// <returns>
+    /// The running cost of the appliance in Rands.
+    /// </returns>
+    function CalculateActiveRunningCost(const tariff: float;
+      const hours: int): float;
+
+    /// <summary>
+    /// Calculates the standby running cost of the appliance.
+    /// </summary>
+    /// <param name="tariff">
+    /// The cost per kilowatt hour of electricity measured in c/kWh.
+    /// </param>
+    /// <param name="hours>
+    /// The amount of hours to calculate the standby running cost on.
+    /// </param>
+    /// <returns>
+    /// The standby running cost of the appliance in Rands.
+    /// </returns>
+    function CalculateStandbyRunningCost(const tariff: float;
+      const hours: int): float;
 
     /// <summary>
     /// Compares the GUIDs of this appliance and 'other' to check for equality.
@@ -261,6 +314,16 @@ type
     /// </summary>
     procedure SetSurgeProtection(const surgeProtection: bool);
 
+    /// <summary>
+    /// Returns the user-specific daily usage of the appliance in hours.
+    /// </summary>
+    function GetDailyUsage(): int;
+
+    /// <summary>
+    /// Sets the user-specific daily usage of the appliance in hours.
+    /// </summary>
+    procedure SetDailyUsage(const dailyUsage: int);
+
   private
     m_Name: string;
     m_Manufacturer: string;
@@ -276,6 +339,8 @@ type
     m_BatterySize: float;
     m_BatteryKind: string;
     m_SurgeProtection: bool;
+
+    m_DailyUsage: int;
   end;
 
 type
@@ -381,6 +446,13 @@ const
   PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND = 'BatteryKind';
 
 implementation
+
+constructor PhAppliance.Create(const guid: PhGUID);
+begin
+  m_DailyUsage := 0;
+
+  inherited Create(guid);
+end;
 
 class function PhAppliance.CreateAppliance(const name, manufacturer,
   batteryKind: string; const voltage, amperage, activePower, standbyPower,
@@ -554,10 +626,26 @@ begin
   end;
 end;
 
-function PhAppliance.CalculateCostPerHour(): float;
+function PhAppliance.CalculateActiveEnergyConsumption(const hours: int): float;
 begin
-  // TODO: Implement this.
-  Result := 0;
+  Result := float(hours) * m_ActivePower;
+end;
+
+function PhAppliance.CalculateStandbyEnergyConsumption(const hours: int): float;
+begin
+  Result := float(hours) * m_StandbyPower;
+end;
+
+function PhAppliance.CalculateActiveRunningCost(const tariff: float;
+  const hours: int): float;
+begin
+  Result := CalculateActiveEnergyConsumption(hours) * tariff;
+end;
+
+function PhAppliance.CalculateStandbyRunningCost(const tariff: float;
+  const hours: int): float;
+begin
+  Result := CalculateStandbyEnergyConsumption(hours) * tariff;
 end;
 
 function PhAppliance.Equals(other: PhAppliance): bool;
@@ -706,6 +794,16 @@ end;
 procedure PhAppliance.SetSurgeProtection(const surgeProtection: bool);
 begin
   m_SurgeProtection := surgeProtection;
+end;
+
+function PhAppliance.GetDailyUsage(): int;
+begin
+  Result := m_DailyUsage;
+end;
+
+procedure PhAppliance.SetDailyUsage(const dailyUsage: int);
+begin
+  m_DailyUsage := dailyUsage;
 end;
 
 end.

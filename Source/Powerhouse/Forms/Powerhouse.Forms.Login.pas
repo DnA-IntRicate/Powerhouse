@@ -52,7 +52,7 @@ type
     procedure lblRegisterClick(Sender: TObject);
 
   private
-    procedure LoadUserAppliances(var refUser: PhUser);
+    procedure LoadUserLocalData(var refUser: PhUser);
     procedure LoginUser(var refUser: PhUser);
   end;
 
@@ -93,7 +93,7 @@ begin
 
       if newUser.CheckPassword(pswd) then
       begin
-        LoadUserAppliances(newUser);
+        LoadUserLocalData(newUser);
         LoginUser(newUser);
       end
       else
@@ -140,17 +140,18 @@ begin
   regForm.Free();
 end;
 
-procedure TPhfLogin.LoadUserAppliances(var refUser: PhUser);
+procedure TPhfLogin.LoadUserLocalData(var refUser: PhUser);
 var
-  applianceGUIDs: PhVector<PhGUID>;
-  guid: PhGUID;
+  appliances: PhAppliances;
 begin
-  applianceGUIDs := g_SaveData.GetUserAppliances(refUser.GetGUID());
-  if applianceGUIDs.Empty() then
+  refUser.SetElectricityTariff(g_SaveData.GetUserElectricityTariff
+    (refUser.GetGUID()));
+
+  appliances := g_SaveData.GetUserAppliances(refUser.GetGUID());
+  if appliances.Empty() then
     Exit();
 
-  for guid in applianceGUIDs do
-    refUser.AddAppliance(PhAppliance.Create(guid));
+  refUser.SetAppliances(appliances);
 end;
 
 procedure TPhfLogin.LoginUser(var refUser: PhUser);

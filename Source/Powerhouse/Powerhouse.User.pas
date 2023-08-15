@@ -177,6 +177,16 @@ type
     /// </summary>
     function GetApplianceByGUID(const guid: PhGUID): PhAppliance;
 
+    /// <summary>
+    /// Returns the user's electricity tariff in c/kWh.
+    /// </summary>
+    function GetElectricityTariff(): float;
+
+    /// <summary>
+    /// Sets the user's electricity tariff in c/kWh.
+    /// </summary>
+    procedure SetElectricityTariff(const tarrif: float);
+
   private
     class function HashPassword(const pswd: string): string;
 
@@ -187,6 +197,8 @@ type
     m_Surname: string;
     m_PasswordHash: string;
     m_Appliances: PhAppliances;
+
+    m_ElectricityTariff: float;
   end;
 
 type
@@ -248,6 +260,7 @@ implementation
 constructor PhUser.Create(const guid: PhGUID);
 begin
   m_Appliances := PhAppliances.Create();
+  m_ElectricityTariff := 0.0;
 
   inherited Create(guid);
 end;
@@ -447,6 +460,16 @@ begin
   end;
 
   Result := Default (PhAppliance);
+end;
+
+function PhUser.GetElectricityTariff(): float;
+begin
+  Result := m_ElectricityTariff;
+end;
+
+procedure PhUser.SetElectricityTariff(const tarrif: float);
+begin
+  m_ElectricityTariff := tarrif;
 end;
 
 class function PhUser.HashPassword(const pswd: string): string;
