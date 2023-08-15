@@ -12,7 +12,6 @@ object PhfRegistration: TPhfRegistration
   Font.Height = -10
   Font.Name = 'Tahoma'
   Font.Style = []
-  OnCreate = FormCreate
   TextHeight = 12
   object pnlRegistration: TPanel
     Left = 6
