@@ -51,7 +51,6 @@ type
     Label7: TLabel;
     edtSurname: TEdit;
     btnRegister: TButton;
-    procedure FormCreate(Sender: TObject);
     procedure btnRegisterClick(Sender: TObject);
     procedure edtUsernameExit(Sender: TObject);
     procedure edtPasswordExit(Sender: TObject);
@@ -61,6 +60,8 @@ type
     procedure edtSurnameExit(Sender: TObject);
 
   public
+    procedure EnableModal(); override;
+
     function GetNewUser(): PhUser;
 
   private
@@ -98,20 +99,6 @@ const
 implementation
 
 {$R *.dfm}
-
-procedure TPhfRegistration.FormCreate(Sender: TObject);
-begin
-  btnRegister.Enabled := false;
-
-  m_NewUser := nil;
-
-  m_ValidUsername := false;
-  m_ValidPassword := false;
-  m_PasswordConfirmed := false;
-  m_ValidEmailAddress := false;
-  m_ValidName := false;
-  m_ValidSurname := false;
-end;
 
 procedure TPhfRegistration.btnRegisterClick(Sender: TObject);
 var
@@ -169,6 +156,22 @@ begin
   m_ValidSurname := ValidateName(edtSurname.Text);
 
   TryEnableBtnRegister();
+end;
+
+procedure TPhfRegistration.EnableModal();
+begin
+  btnRegister.Enabled := false;
+
+  m_NewUser := nil;
+
+  m_ValidUsername := false;
+  m_ValidPassword := false;
+  m_PasswordConfirmed := false;
+  m_ValidEmailAddress := false;
+  m_ValidName := false;
+  m_ValidSurname := false;
+
+  inherited EnableModal();
 end;
 
 function TPhfRegistration.GetNewUser(): PhUser;
