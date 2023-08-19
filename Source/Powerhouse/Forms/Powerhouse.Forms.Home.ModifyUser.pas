@@ -55,6 +55,10 @@ type
     procedure edtEmailAddressExit(Sender: TObject);
     procedure edtNameExit(Sender: TObject);
     procedure edtSurnameExit(Sender: TObject);
+    procedure edtUsernameKeyPress(Sender: TObject; var Key: Char);
+    procedure edtEmailAddressKeyPress(Sender: TObject; var Key: Char);
+    procedure edtNameKeyPress(Sender: TObject; var Key: Char);
+    procedure edtSurnameKeyPress(Sender: TObject; var Key: Char);
 
   public
     procedure EnableModal(); override;
@@ -127,6 +131,31 @@ begin
   m_ValidSurname := ValidateName(edtSurname.Text);
 
   TryEnableBtnSave();
+end;
+
+procedure TPhfModifyUser.edtUsernameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtUsernameExit(Sender);
+end;
+
+procedure TPhfModifyUser.edtEmailAddressKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtEmailAddressExit(Sender);
+end;
+
+procedure TPhfModifyUser.edtNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtNameExit(Sender);
+end;
+
+procedure TPhfModifyUser.edtSurnameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtSurnameExit(Sender);
 end;
 
 procedure TPhfModifyUser.EnableModal();

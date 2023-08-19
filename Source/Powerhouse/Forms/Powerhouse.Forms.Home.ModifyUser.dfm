@@ -123,6 +123,7 @@ object PhfModifyUser: TPhfModifyUser
       ParentFont = False
       TabOrder = 0
       OnExit = edtUsernameExit
+      OnKeyPress = edtUsernameKeyPress
     end
     object edtEmailAddress: TEdit
       Left = 17
@@ -141,6 +142,7 @@ object PhfModifyUser: TPhfModifyUser
       ParentFont = False
       TabOrder = 1
       OnExit = edtEmailAddressExit
+      OnKeyPress = edtEmailAddressKeyPress
     end
     object edtName: TEdit
       Left = 17
@@ -159,6 +161,7 @@ object PhfModifyUser: TPhfModifyUser
       ParentFont = False
       TabOrder = 2
       OnExit = edtNameExit
+      OnKeyPress = edtNameKeyPress
     end
     object edtSurname: TEdit
       Left = 202
@@ -177,6 +180,7 @@ object PhfModifyUser: TPhfModifyUser
       ParentFont = False
       TabOrder = 3
       OnExit = edtSurnameExit
+      OnKeyPress = edtSurnameKeyPress
     end
     object btnCancel: TButton
       Left = 288

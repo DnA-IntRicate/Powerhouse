@@ -97,6 +97,11 @@ const
   /// </summary>
   PH_MIN_LENGTH_PASSWORD = 8;
 
+  /// <summary>
+  /// ASCII key code for Enter.
+  /// </summary>
+  PH_KEYS_ENTER = Chr(13);
+
 implementation
 
 end.

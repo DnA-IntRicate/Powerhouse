@@ -84,6 +84,18 @@ type
     procedure edtFrequencyExit(Sender: TObject);
     procedure edtBatterySizeExit(Sender: TObject);
     procedure edtBatteryKindExit(Sender: TObject);
+    procedure edtNameKeyPress(Sender: TObject; var Key: Char);
+    procedure edtManufacturerKeyPress(Sender: TObject; var Key: Char);
+    procedure edtVoltageKeyPress(Sender: TObject; var Key: Char);
+    procedure edtAmperageKeyPress(Sender: TObject; var Key: Char);
+    procedure edtActivePowerKeyPress(Sender: TObject; var Key: Char);
+    procedure edtStandbyPowerKeyPress(Sender: TObject; var Key: Char);
+    procedure edtInputPowerKeyPress(Sender: TObject; var Key: Char);
+    procedure edtOutputPowerKeyPress(Sender: TObject; var Key: Char);
+    procedure edtPowerFactorKeyPress(Sender: TObject; var Key: Char);
+    procedure edtBatteryKindKeyPress(Sender: TObject; var Key: Char);
+    procedure edtBatterySizeKeyPress(Sender: TObject; var Key: Char);
+    procedure edtFrequencyKeyPress(Sender: TObject; var Key: Char);
 
   public
     procedure EnableModal(); override;
@@ -254,6 +266,89 @@ begin
   m_ValidBatteryKind := ValidateBatteryKind(edtBatteryKind.Text);
 
   TryEnableBtnSave();
+end;
+
+procedure TPhfModifyAppliance.edtNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtNameExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtManufacturerKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtManufacturerExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtVoltageKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtVoltageExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtAmperageKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtAmperageExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtActivePowerKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtActivePowerExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtStandbyPowerKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtStandbyPowerExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtInputPowerKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtInputPowerExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtOutputPowerKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtOutputPowerExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtPowerFactorKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtPowerFactorExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtBatteryKindKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtBatteryKindExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtBatterySizeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtBatterySizeExit(Sender);
+end;
+
+procedure TPhfModifyAppliance.edtFrequencyKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtFrequencyExit(Sender);
 end;
 
 procedure TPhfModifyAppliance.EnableModal();

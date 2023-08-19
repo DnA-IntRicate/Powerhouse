@@ -28,11 +28,12 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.StrUtils, System.Variants, System.Classes,
+  System.SysUtils, System.StrUtils, System.UITypes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
   Vcl.StdCtrls,
   Powerhouse.Types, Powerhouse.Defines, Powerhouse.Form, Powerhouse.Validator,
-  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
+  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
+  System.Classes;
 
 type
   TPhfRegistration = class(PhForm)
@@ -58,6 +59,12 @@ type
     procedure edtEmailAddressExit(Sender: TObject);
     procedure edtNameExit(Sender: TObject);
     procedure edtSurnameExit(Sender: TObject);
+    procedure edtUsernameKeyPress(Sender: TObject; var Key: Char);
+    procedure edtPasswordKeyPress(Sender: TObject; var Key: Char);
+    procedure edtConfirmPasswordKeyPress(Sender: TObject; var Key: Char);
+    procedure edtEmailAddressKeyPress(Sender: TObject; var Key: Char);
+    procedure edtNameKeyPress(Sender: TObject; var Key: Char);
+    procedure edtSurnameKeyPress(Sender: TObject; var Key: Char);
 
   public
     procedure EnableModal(); override;
@@ -149,6 +156,44 @@ begin
   m_ValidSurname := ValidateName(edtSurname.Text);
 
   TryEnableBtnRegister();
+end;
+
+procedure TPhfRegistration.edtUsernameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtUsernameExit(Sender);
+end;
+
+procedure TPhfRegistration.edtPasswordKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtPasswordExit(Sender);
+end;
+
+procedure TPhfRegistration.edtConfirmPasswordKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtConfirmPasswordExit(Sender);
+end;
+
+procedure TPhfRegistration.edtEmailAddressKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtEmailAddressExit(Sender);
+end;
+
+procedure TPhfRegistration.edtNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtNameExit(Sender);
+end;
+
+procedure TPhfRegistration.edtSurnameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtSurnameExit(Sender);
 end;
 
 procedure TPhfRegistration.EnableModal();

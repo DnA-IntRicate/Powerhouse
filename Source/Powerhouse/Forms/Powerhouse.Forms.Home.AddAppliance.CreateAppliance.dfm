@@ -289,6 +289,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 1
       OnExit = edtNameExit
+      OnKeyPress = edtNameKeyPress
     end
     object edtManufacturer: TEdit
       Left = 17
@@ -307,6 +308,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 2
       OnExit = edtManufacturerExit
+      OnKeyPress = edtManufacturerKeyPress
     end
     object edtVoltage: TEdit
       Left = 17
@@ -325,6 +327,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 3
       OnExit = edtVoltageExit
+      OnKeyPress = edtVoltageKeyPress
     end
     object edtActivePower: TEdit
       Left = 17
@@ -343,6 +346,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 4
       OnExit = edtActivePowerExit
+      OnKeyPress = edtActivePowerKeyPress
     end
     object edtAmperage: TEdit
       Left = 224
@@ -361,6 +365,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 5
       OnExit = edtAmperageExit
+      OnKeyPress = edtAmperageKeyPress
     end
     object edtStandbyPower: TEdit
       Left = 224
@@ -379,6 +384,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 6
       OnExit = edtStandbyPowerExit
+      OnKeyPress = edtStandbyPowerKeyPress
     end
     object edtInputPower: TEdit
       Left = 17
@@ -397,6 +403,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 7
       OnExit = edtInputPowerExit
+      OnKeyPress = edtInputPowerKeyPress
     end
     object edtOutputPower: TEdit
       Left = 175
@@ -415,6 +422,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 8
       OnExit = edtOutputPowerExit
+      OnKeyPress = edtOutputPowerKeyPress
     end
     object edtFrequency: TEdit
       Left = 17
@@ -433,6 +441,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 9
       OnExit = edtFrequencyExit
+      OnKeyPress = edtFrequencyKeyPress
     end
     object sedEfficiencyRating: TSpinEdit
       Left = 156
@@ -461,6 +470,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 11
       OnExit = edtPowerFactorExit
+      OnKeyPress = edtPowerFactorKeyPress
     end
     object edtBatteryKind: TEdit
       Left = 17
@@ -479,6 +489,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 12
       OnExit = edtBatteryKindExit
+      OnKeyPress = edtBatteryKindKeyPress
     end
     object edtBatterySize: TEdit
       Left = 224
@@ -497,6 +508,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
       ParentFont = False
       TabOrder = 13
       OnExit = edtBatterySizeExit
+      OnKeyPress = edtBatterySizeKeyPress
     end
     object cbxSurgeProtection: TCheckBox
       Left = 297

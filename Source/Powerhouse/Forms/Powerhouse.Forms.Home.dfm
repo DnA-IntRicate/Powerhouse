@@ -49,7 +49,7 @@ object PhfHome: TPhfHome
       Margins.Top = 2
       Margins.Right = 2
       Margins.Bottom = 2
-      ActivePage = tabAppliances
+      ActivePage = tabCalculator
       TabOrder = 0
       OnChange = pgcHomeChange
       object tabAppliances: TTabSheet
@@ -767,6 +767,7 @@ object PhfHome: TPhfHome
             ParentFont = False
             TabOrder = 0
             OnExit = edtTariffExit
+            OnKeyPress = edtTariffKeyPress
           end
           object lstAppliances2: TListBox
             Left = 6

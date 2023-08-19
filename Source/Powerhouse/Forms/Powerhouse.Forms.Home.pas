@@ -124,6 +124,7 @@ type
     procedure lstAppliances2Click(Sender: TObject);
     procedure sedUsageExit(Sender: TObject);
     procedure edtTariffExit(Sender: TObject);
+    procedure edtTariffKeyPress(Sender: TObject; var Key: Char);
 
   public
     procedure Enable(); override;
@@ -235,18 +236,21 @@ procedure TPhfHome.lstAppliances2Click(Sender: TObject);
 var
   currentApplianceName: string;
 begin
-  currentApplianceName := lstAppliances2.Items[lstAppliances2.ItemIndex];
-  g_CalculatorTabAppliance := g_CurrentUser.GetApplianceByName
-    (currentApplianceName);
-
-  if g_CalculatorTabAppliance <> nil then
+  if lstAppliances2.ItemIndex <> -1 then
   begin
-    sedUsage.Value := Round(g_CalculatorTabAppliance.GetDailyUsage() *
-      PH_HOUR_TO_MINUTE);
+    currentApplianceName := lstAppliances2.Items[lstAppliances2.ItemIndex];
+    g_CalculatorTabAppliance := g_CurrentUser.GetApplianceByName
+      (currentApplianceName);
 
-    sedUsage.Enabled := true;
-    lblCalculator3.Enabled := true;
-    lblCalculator4.Enabled := true;
+    if g_CalculatorTabAppliance <> nil then
+    begin
+      sedUsage.Value := Round(g_CalculatorTabAppliance.GetDailyUsage() *
+        PH_HOUR_TO_MINUTE);
+
+      sedUsage.Enabled := true;
+      lblCalculator3.Enabled := true;
+      lblCalculator4.Enabled := true;
+    end;
   end;
 end;
 
@@ -264,6 +268,12 @@ begin
     g_CurrentUser.SetElectricityTariff(StrToFloat(edtTariff.Text));
     g_SaveData.AddOrUpdateUser(g_CurrentUser);
   end;
+end;
+
+procedure TPhfHome.edtTariffKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = PH_KEYS_ENTER then
+    edtTariffExit(Sender);
 end;
 
 procedure TPhfHome.Enable();

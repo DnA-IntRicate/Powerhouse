@@ -159,6 +159,7 @@ object PhfRegistration: TPhfRegistration
       ParentFont = False
       TabOrder = 0
       OnExit = edtUsernameExit
+      OnKeyPress = edtUsernameKeyPress
     end
     object edtPassword: TEdit
       Left = 17
@@ -177,6 +178,7 @@ object PhfRegistration: TPhfRegistration
       ParentFont = False
       TabOrder = 1
       OnExit = edtPasswordExit
+      OnKeyPress = edtPasswordKeyPress
     end
     object edtConfirmPassword: TEdit
       Left = 202
@@ -195,6 +197,7 @@ object PhfRegistration: TPhfRegistration
       ParentFont = False
       TabOrder = 2
       OnExit = edtConfirmPasswordExit
+      OnKeyPress = edtConfirmPasswordKeyPress
     end
     object edtEmailAddress: TEdit
       Left = 17
@@ -213,6 +216,7 @@ object PhfRegistration: TPhfRegistration
       ParentFont = False
       TabOrder = 3
       OnExit = edtEmailAddressExit
+      OnKeyPress = edtEmailAddressKeyPress
     end
     object edtName: TEdit
       Left = 17
@@ -231,6 +235,7 @@ object PhfRegistration: TPhfRegistration
       ParentFont = False
       TabOrder = 4
       OnExit = edtNameExit
+      OnKeyPress = edtNameKeyPress
     end
     object edtSurname: TEdit
       Left = 202
@@ -249,6 +254,7 @@ object PhfRegistration: TPhfRegistration
       ParentFont = False
       TabOrder = 5
       OnExit = edtSurnameExit
+      OnKeyPress = edtSurnameKeyPress
     end
     object btnRegister: TButton
       Left = 17
