@@ -84,6 +84,7 @@ type
     procedure edtFrequencyExit(Sender: TObject);
     procedure edtBatterySizeExit(Sender: TObject);
     procedure edtBatteryKindExit(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   public
     procedure EnableModal(); override;
@@ -269,6 +270,13 @@ begin
   m_ValidBatteryKind := ValidateBatteryKind(edtBatteryKind.Text);
 
   TryEnableBtnCreate();
+end;
+
+procedure TPhfCreateAppliance.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  m_NewAppliance := nil;
+  m_Cancelled := true;
 end;
 
 procedure TPhfCreateAppliance.EnableModal();

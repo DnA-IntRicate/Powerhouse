@@ -133,8 +133,8 @@ begin
     edtUsername.Text := newUser.GetUsername();
     edtPassword.Text := '••••••••';
 
+    // Momentary pause created here to simulate loading.
     Sleep(750);
-
     LoginUser(newUser);
   end;
 
@@ -149,9 +149,6 @@ begin
     (refUser.GetGUID()));
 
   appliances := g_SaveData.GetUserAppliances(refUser.GetGUID());
-  if appliances.Empty() then
-    Exit();
-
   refUser.SetAppliances(appliances);
 end;
 

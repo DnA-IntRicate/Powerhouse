@@ -220,10 +220,12 @@ end;
 
 procedure TPhfHome.pgcHomeChange(Sender: TObject);
 begin
-  if pgcHome.Pages[pgcHome.ActivePageIndex] = tabCalculator then
+  if pgcHome.Pages[pgcHome.ActivePageIndex] = tabInsights then
+    DisplayInsights()
+  else if pgcHome.Pages[pgcHome.ActivePageIndex] = tabCalculator then
     DisplayCalculator()
-  else if pgcHome.Pages[pgcHome.ActivePageIndex] = tabInsights then
-    DisplayInsights();
+  else if pgcHome.Pages[pgcHome.ActivePageIndex] = tabAccount then
+    DisplayUserInformation();
 end;
 
 procedure TPhfHome.lstAppliances2Click(Sender: TObject);
@@ -274,7 +276,7 @@ begin
 
   g_AppliancesTabAppliance := nil;
   g_CalculatorTabAppliance := nil;
-  g_ApplianceInsights := PhVector < PhPair < string, InsightData >>.Create();
+  g_ApplianceInsights := PhVector<PhPair<string, InsightData>>.Create();
 
   redInsights.ReadOnly := true;
   redInsights.Paragraph.TabCount := 4;
@@ -309,7 +311,7 @@ end;
 
 procedure TPhfHome.DisplayInsights();
 var
-  i, j: int;
+  i, j: uint64;
   appliances: PhAppliances;
   appliance: PhAppliance;
   it: PhPair<string, InsightData>;
@@ -324,64 +326,68 @@ begin
   redInsights.SelLength := Length(redInsights.Lines[0]);
   redInsights.SelAttributes.Style := [TFontStyle.fsBold];
 
-  appliances := g_CurrentUser.GetAppliances();
-  g_ApplianceInsights.Clear();
-
-  for appliance in appliances do
-  begin
-    it.First := appliance.GetName();
-    it.Second.DailyUsage := appliance.GetDailyUsage();
-    it.Second.ActiveRunningCost := appliance.CalculateActiveRunningCost
-      (g_CurrentUser.GetElectricityTariff(), appliance.GetDailyUsage()) *
-      PH_CENT_TO_RAND;
-
-    it.Second.StandbyRunningCost := appliance.CalculateStandbyRunningCost
-      (g_CurrentUser.GetElectricityTariff(), 24 - appliance.GetDailyUsage()) *
-      PH_CENT_TO_RAND;
-
-    g_ApplianceInsights.PushBack(it);
-  end;
-
-  // Sort in descending order of Active Running Cost
-  for i := g_ApplianceInsights.First() to g_ApplianceInsights.Last() - 1 do
-  begin
-    for j := g_ApplianceInsights.First() to g_ApplianceInsights.Last() - 1 do
-    begin
-      if g_ApplianceInsights[j].Second.ActiveRunningCost < g_ApplianceInsights
-        [j + 1].Second.ActiveRunningCost then
-      begin
-        it := g_ApplianceInsights[j];
-        g_ApplianceInsights[j] := g_ApplianceInsights[j + 1];
-        g_ApplianceInsights[j + 1] := it;
-      end;
-    end;
-  end;
-
-  g_ApplianceInsights.ShrinkToFit();
-
   overallDailyCost := 0.0;
   overallActiveDailyCost := 0.0;
   overallStandbyDailyCost := 0.0;
 
-  for it in g_ApplianceInsights do
+  appliances := g_CurrentUser.GetAppliances();
+  g_ApplianceInsights.Clear();
+
+  if not appliances.Empty() then
   begin
-    overallDailyCost := overallDailyCost + it.Second.ActiveRunningCost +
-      it.Second.StandbyRunningCost;
+    for appliance in appliances do
+    begin
+      it.First := appliance.GetName();
+      it.Second.DailyUsage := appliance.GetDailyUsage();
+      it.Second.ActiveRunningCost := appliance.CalculateActiveRunningCost
+        (g_CurrentUser.GetElectricityTariff(), appliance.GetDailyUsage()) *
+        PH_CENT_TO_RAND;
 
-    overallActiveDailyCost := overallActiveDailyCost +
-      it.Second.ActiveRunningCost;
+      it.Second.StandbyRunningCost := appliance.CalculateStandbyRunningCost
+        (g_CurrentUser.GetElectricityTariff(), 24 - appliance.GetDailyUsage()) *
+        PH_CENT_TO_RAND;
 
-    overallStandbyDailyCost := overallStandbyDailyCost +
-      it.Second.StandbyRunningCost;
+      g_ApplianceInsights.PushBack(it);
+    end;
 
-    activeCost := FloatToStrF(it.Second.ActiveRunningCost, ffCurrency, 8, 2);
-    standbyCost := FloatToStrF(it.Second.StandbyRunningCost, ffCurrency, 8, 2);
-    dailyUsage := FloatToStrF(it.Second.DailyUsage, ffFixed, 2, 2);
+    // Sort in descending order of Active Running Cost
+    for i := g_ApplianceInsights.First() to g_ApplianceInsights.Last() - 1 do
+    begin
+      for j := g_ApplianceInsights.First() to g_ApplianceInsights.Last() - 1 do
+      begin
+        if g_ApplianceInsights[j].Second.ActiveRunningCost < g_ApplianceInsights
+          [j + 1].Second.ActiveRunningCost then
+        begin
+          it := g_ApplianceInsights[j];
+          g_ApplianceInsights[j] := g_ApplianceInsights[j + 1];
+          g_ApplianceInsights[j + 1] := it;
+        end;
+      end;
+    end;
 
-    lineBuf := it.First + PH_TAB + Format('%s Hour(s)', [dailyUsage]) + PH_TAB +
-      activeCost + PH_TAB + standbyCost;
+    g_ApplianceInsights.ShrinkToFit();
 
-    redInsights.Lines.Add(lineBuf);
+    for it in g_ApplianceInsights do
+    begin
+      overallDailyCost := overallDailyCost + it.Second.ActiveRunningCost +
+        it.Second.StandbyRunningCost;
+
+      overallActiveDailyCost := overallActiveDailyCost +
+        it.Second.ActiveRunningCost;
+
+      overallStandbyDailyCost := overallStandbyDailyCost +
+        it.Second.StandbyRunningCost;
+
+      activeCost := FloatToStrF(it.Second.ActiveRunningCost, ffCurrency, 8, 2);
+      standbyCost := FloatToStrF(it.Second.StandbyRunningCost,
+        ffCurrency, 8, 2);
+      dailyUsage := FloatToStrF(it.Second.DailyUsage, ffFixed, 2, 2);
+
+      lineBuf := it.First + PH_TAB + Format('%s Hour(s)', [dailyUsage]) + PH_TAB
+        + activeCost + PH_TAB + standbyCost;
+
+      redInsights.Lines.Add(lineBuf);
+    end;
   end;
 
   redInsights.SelStart := Length(redInsights.Lines[0]);

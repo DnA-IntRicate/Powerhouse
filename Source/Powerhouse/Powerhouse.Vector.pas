@@ -39,7 +39,7 @@ type
   /// <typeparam name="_Ty">
   /// The type of elements stored in the vector.
   /// </typeparam>
-  PhVector<_Ty> = class(PhBase, IEquatable < PhVector < _Ty >> )
+  PhVector<_Ty> = class(PhBase, IEquatable<PhVector< _Ty>>)
   public
     /// <summary>
     /// Creates a new <c>PhVector</c> instance with the specified

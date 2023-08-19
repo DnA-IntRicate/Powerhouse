@@ -11,6 +11,7 @@ object PhfCreateAppliance: TPhfCreateAppliance
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OnClose = FormClose
   TextHeight = 15
   object pnlModifyAppliance: TPanel
     Left = 0
