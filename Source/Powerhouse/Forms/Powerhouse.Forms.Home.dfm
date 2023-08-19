@@ -49,7 +49,7 @@ object PhfHome: TPhfHome
       Margins.Top = 2
       Margins.Right = 2
       Margins.Bottom = 2
-      ActivePage = tabCalculator
+      ActivePage = tabAppliances
       TabOrder = 0
       OnChange = pgcHomeChange
       object tabAppliances: TTabSheet
