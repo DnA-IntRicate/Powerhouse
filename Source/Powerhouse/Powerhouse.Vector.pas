@@ -34,11 +34,17 @@ uses
 type
   /// <summary>
   /// Dynamic array-like container class that provides various methods for
-  /// managing and manipulating elements.
+  /// managing and manipulating elements. This implementation was created to
+  /// mimic that of std::vector in the C++ standard template library.
   /// </summary>
   /// <typeparam name="_Ty">
   /// The type of elements stored in the vector.
   /// </typeparam>
+  /// <remarks>
+  /// This implementation is inspired by std::vector in the C++ standard
+  /// template library.
+  /// See: <see cref="https://cplusplus.com/reference/vector/vector"/>
+  /// </remarks>
   PhVector<_Ty> = class(PhBase, IEquatable<PhVector< _Ty>>)
   public
     /// <summary>

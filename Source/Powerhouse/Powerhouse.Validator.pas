@@ -137,6 +137,17 @@ type
 implementation
 
 const
+  // Since quite a few systems in the application sees user-input being
+  // sent to the database in SQL queries, this makes the application vulnerable
+  // to SQL injection attacks which can be used to bypass login-screens and
+  // inflict harm onto the database. To prevent this, a character whitelist has
+  // been created. This means that if the user inputs any character into any
+  // input field that is not in the whitelist, PhValidator will validate that
+  // input as a fail and these invalid strings will therefore not be passed to
+  // the database. For example: characters such as quotes (' ") have been
+  // excluded from the whitelist because these characters can be used to
+  // interfere with SQL queries and to inject other SQL queries inside of the
+  // queries that the application creates.
   PH_REGEX_WHITELIST = '^[a-zA-Z0-9_+\-=.,@ ]+$';
   PH_REGEX_EMAIL_ADDRESS = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 

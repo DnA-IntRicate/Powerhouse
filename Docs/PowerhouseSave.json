@@ -1,22 +1,129 @@
-﻿{
-    "type": "PhUsers_u.PhUsers",
+{
+    "type": "Powerhouse.SaveData.PhSaveData.StagingStruct",
     "id": 1,
     "fields": {
-        "Users": [
-            {
-                "type": "PhUsers_u.PhUser",
-                "id": 2,
-                "fields": {
-                    "m_GUID": "0FF54C0B80D24CB6B443C1C9BE95EC29",
-                    "m_Appliances": [
-                        1,
-                        5,
-                        21,
-                        23,
-                        30
-                    ]
+        "Data": [
+            [
+                "0FF54C0B80D24CB6B443C1C9BE95EC29",
+                211.850006103516,
+                {
+                    "type": "Powerhouse.Vector.PhVector<Powerhouse.SaveData.PhSaveData.ApplianceData>",
+                    "id": 2,
+                    "fields": {
+                        "m_Data": [
+                            [
+                                "8FC656412CA04989B50BDF343ED93064",
+                                24.0167140960693
+                            ],
+                            [
+                                "FDF4979C690E424B8F496F2E37A025B6",
+                                0.500001013278961
+                            ],
+                            [
+                                "BD0F8909ECDC44CBA101E35C4E163BCA",
+                                0
+                            ],
+                            [
+                                "141297AE401642DAADD8CA6DB2BCE43F",
+                                0
+                            ],
+                            [
+                                "114C2D5CD81A4C23BF97B73297FA353B",
+                                0
+                            ],
+                            [
+                                "A181E6C18C9A4770AB552496463EFF3B",
+                                0
+                            ],
+                            [
+                                "DECFEC12E6F341CE848056739D49326F",
+                                2.00000405311584
+                            ],
+                            [
+                                "E1A1324336214C7890E0FEAE5E9CEBAF",
+                                2.00000405311584
+                            ],
+                            [
+                                "025A45AFFCC2429E95924A9034D79AAC",
+                                6.00001192092896
+                            ],
+                            [
+                                "5765CC850A9D4A67BE97C12ED8CA5AFD",
+                                1.00000202655792
+                            ],
+                            [
+                                "B7CBA28E63224D3D80D71929C87BCF7D",
+                                1.00000202655792
+                            ],
+                            [
+                                "81CD32254E5A4A76BAF4B2CCE173CF5F",
+                                0.750001490116119
+                            ],
+                            [
+                                "3E84EB5D5E8A4CB0B454D99E63C2C0C4",
+                                0.333333998918533
+                            ],
+                            [
+                                "A7EECF95EB9B407094CE3351D0B21906",
+                                2.00000405311584
+                            ],
+                            [
+                                "16A89C41CA1D49929E5A775C5CE1FF46",
+                                0
+                            ],
+                            [
+                                "C37A504B766D4C3394C9B1AD2A743F5A",
+                                0
+                            ],
+                            [
+                                "76FE2626C8E24560BC125675C6F86ACE",
+                                0
+                            ]
+                        ],
+                        "m_Size": 17,
+                        "FRefCount": 0
+                    }
                 }
-            }
+            ],
+            [
+                "85C7A53DBDEA41DCB14D4E4C4441B341",
+                0,
+                {
+                    "type": "Powerhouse.Vector.PhVector<Powerhouse.SaveData.PhSaveData.ApplianceData>",
+                    "id": 3,
+                    "fields": {
+                        "m_Data": [],
+                        "m_Size": 0,
+                        "FRefCount": 0
+                    }
+                }
+            ],
+            [
+                "DB61DAB11FC54E6D8C45A4AF50B884EC",
+                186.850006103516,
+                {
+                    "type": "Powerhouse.Vector.PhVector<Powerhouse.SaveData.PhSaveData.ApplianceData>",
+                    "id": 4,
+                    "fields": {
+                        "m_Data": [
+                            [
+                                "114C2D5CD81A4C23BF97B73297FA353B",
+                                0.333333998918533
+                            ],
+                            [
+                                "8FC656412CA04989B50BDF343ED93064",
+                                7.00001382827759
+                            ],
+                            [
+                                "183D6FA5FED64DDB88CA7AA5E27F2C04",
+                                15.0000295639038
+                            ]
+                        ],
+                        "m_Size": 3,
+                        "FRefCount": 0
+                    }
+                }
+            ]
         ]
     }
 }

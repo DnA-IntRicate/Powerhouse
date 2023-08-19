@@ -17,12 +17,36 @@ During the development of Powerhouse, I interviewed several individuals to deter
 -	"I would like to learn more about how my electrical appliances work and the dos and don'ts of 
 -	operating these appliances during load shedding.”
 
-For security reasons, user passwords will not be stored as plain text in the backend database. Passwords will therefore be salted with a dynamic salt, and then hashed when being stored in the database (signup), and when being compared to the database (logins).
+## Gallery
+![alt text](Screenshots/Login.png)
+![alt text](Screenshots/MyAppliances.png)
+![alt text](Screenshots/AddAppliance.png)
+![alt text](Screenshots/Calculator.png)
+![alt text](Screenshots/Insights.png)
 
-Example: 
+## License
+Powerhouse is licensed under the MIT License. See [LICENSE](LICENSE)
 
-Password: 12345678
+```
+MIT License
 
-Salted Hash: a2240212f6e8d7db337b46aab21433ad==
+Copyright (c) 2023 Adam Foflonker
 
-This makes it impossible for passwords to be leaked in the event that the database is compromised.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
