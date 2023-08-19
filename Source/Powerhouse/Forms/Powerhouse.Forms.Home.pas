@@ -31,6 +31,7 @@ uses
   System.SysUtils, System.StrUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.StdCtrls, Vcl.ExtCtrls,
+  Vcl.Samples.Spin,
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
   Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.SaveData,
@@ -94,6 +95,23 @@ type
     lblApplianceCount: TLabel;
     lblAccount5: TLabel;
     btnModifyUser: TButton;
+    pnlCalculator: TPanel;
+    edtTariff: TEdit;
+    lblCalculator1: TLabel;
+    lblCalculator2: TLabel;
+    lstAppliances2: TListBox;
+    lblCalculator3: TLabel;
+    lblCalculator4: TLabel;
+    sedUsage: TSpinEdit;
+    redInsights: TRichEdit;
+    lblInsights1: TLabel;
+    lblOverallDailyCost: TLabel;
+    lblInsights2: TLabel;
+    lblOverallActiveDailyCost: TLabel;
+    lblInsights3: TLabel;
+    lblOverallStandbyDailyCost: TLabel;
+    lblHelp1: TLabel;
+    pnlCostInsights: TPanel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnAddApplianceClick(Sender: TObject);
     procedure lstAppliancesClick(Sender: TObject);
@@ -102,12 +120,18 @@ type
     procedure btnModifyApplianceClick(Sender: TObject);
     procedure btnRemoveApplianceClick(Sender: TObject);
     procedure btnModifyUserClick(Sender: TObject);
+    procedure pgcHomeChange(Sender: TObject);
+    procedure lstAppliances2Click(Sender: TObject);
+    procedure sedUsageExit(Sender: TObject);
+    procedure edtTariffExit(Sender: TObject);
 
   public
     procedure Enable(); override;
 
   private
     procedure DisplayAppliances();
+    procedure DisplayInsights();
+    procedure DisplayCalculator();
     procedure DisplayUserInformation();
 
     procedure ShowApplianceInformationLabels(const show: bool);
@@ -119,9 +143,21 @@ type
 
 var
   g_HomeForm: TPhfHome;
-  g_Appliance: PhAppliance;
 
 implementation
+
+type
+  InsightData = record
+  public
+    ActiveRunningCost: float;
+    StandbyRunningCost: float;
+    DailyUsage: float;
+  end;
+
+var
+  g_AppliancesTabAppliance: PhAppliance;
+  g_CalculatorTabAppliance: PhAppliance;
+  g_ApplianceInsights: PhVector<PhPair<string, InsightData>>;
 
 {$R *.dfm}
 
@@ -155,7 +191,7 @@ var
   modifyApplianceForm: TPhfModifyAppliance;
 begin
   modifyApplianceForm := TPhfModifyAppliance.Create(Self);
-  modifyApplianceForm.SetContext(@g_Appliance);
+  modifyApplianceForm.SetContext(@g_AppliancesTabAppliance);
   modifyApplianceForm.EnableModal();
   modifyApplianceForm.Free();
 
@@ -180,15 +216,77 @@ begin
   DisplayUserInformation();
 end;
 
+procedure TPhfHome.pgcHomeChange(Sender: TObject);
+begin
+  if pgcHome.Pages[pgcHome.ActivePageIndex] = tabCalculator then
+    DisplayCalculator()
+  else if pgcHome.Pages[pgcHome.ActivePageIndex] = tabInsights then
+    DisplayInsights();
+end;
+
+procedure TPhfHome.lstAppliances2Click(Sender: TObject);
+var
+  currentApplianceName: string;
+begin
+  currentApplianceName := lstAppliances2.Items[lstAppliances2.ItemIndex];
+  g_CalculatorTabAppliance := g_CurrentUser.GetApplianceByName
+    (currentApplianceName);
+
+  if g_CalculatorTabAppliance <> nil then
+  begin
+    sedUsage.Value := Round(g_CalculatorTabAppliance.GetDailyUsage() * 60.0);
+
+    sedUsage.Enabled := true;
+    lblCalculator3.Enabled := true;
+    lblCalculator4.Enabled := true;
+  end;
+end;
+
+procedure TPhfHome.sedUsageExit(Sender: TObject);
+const
+  MINUTE_TO_HOUR = 0.0166667;
+begin
+  g_CalculatorTabAppliance.SetDailyUsage(sedUsage.Value * MINUTE_TO_HOUR);
+  g_SaveData.AddOrUpdateUser(g_CurrentUser);
+end;
+
+procedure TPhfHome.edtTariffExit(Sender: TObject);
+begin
+  // TODO: Validation
+
+  // IF IT IS NOT EMPTY, VALIDATE!!!
+  g_CurrentUser.SetElectricityTariff(StrToFloat(edtTariff.Text));
+  g_SaveData.AddOrUpdateUser(g_CurrentUser);
+end;
+
 procedure TPhfHome.Enable();
+const
+  TAB_SIZE_INITIAL = 100;
+  TAB_SIZE = 50;
+var
+  i: int;
 begin
   inherited Enable();
 
   Self.Caption := Format('Powerhouse - %s', [g_CurrentUser.GetUsername()]);
 
+  g_AppliancesTabAppliance := nil;
+  g_CalculatorTabAppliance := nil;
+  g_ApplianceInsights := PhVector < PhPair < string, InsightData >>.Create();
+
+  redInsights.ReadOnly := true;
+  redInsights.Paragraph.TabCount := 4;
+  redInsights.Paragraph.Tab[0] := TAB_SIZE_INITIAL;
+
+  for i := 1 to redInsights.Paragraph.TabCount do
+    redInsights.Paragraph.Tab[i] := TAB_SIZE_INITIAL + (i * TAB_SIZE);
+
   DisplayAppliances();
-  DisplayUserInformation();
   ShowApplianceInformation(false);
+
+  DisplayInsights();
+  DisplayCalculator();
+  DisplayUserInformation();
 end;
 
 procedure TPhfHome.DisplayAppliances();
@@ -205,6 +303,117 @@ begin
     lstAppliances.Items.Add(appliance.GetName());
 
   lstAppliances.ItemIndex := backupIdx;
+end;
+
+procedure TPhfHome.DisplayInsights();
+const
+  TAB = #9;
+  CRLF = #13#10;
+  CENT_TO_RAND = 0.01;
+var
+  i, j: int;
+  appliances: PhAppliances;
+  appliance: PhAppliance;
+  it: PhPair<string, InsightData>;
+  overallDailyCost, overallActiveDailyCost, overallStandbyDailyCost: float;
+  activeCost, standbyCost, dailyUsage, lineBuf: string;
+begin
+  redInsights.Clear();
+  redInsights.Lines.Add('Appliance Name' + TAB + 'Daily Usage' + TAB +
+    'Daily Cost' + TAB + 'Standby Cost' + CRLF);
+
+  redInsights.SelStart := 0;
+  redInsights.SelLength := Length(redInsights.Lines[0]);
+  redInsights.SelAttributes.Style := [TFontStyle.fsBold];
+
+  appliances := g_CurrentUser.GetAppliances();
+  g_ApplianceInsights.Clear();
+
+  for appliance in appliances do
+  begin
+    it.First := appliance.GetName();
+    it.Second.DailyUsage := appliance.GetDailyUsage();
+    it.Second.ActiveRunningCost := appliance.CalculateActiveRunningCost
+      (g_CurrentUser.GetElectricityTariff(), appliance.GetDailyUsage()) *
+      CENT_TO_RAND;
+
+    it.Second.StandbyRunningCost := appliance.CalculateStandbyRunningCost
+      (g_CurrentUser.GetElectricityTariff(), 24 - appliance.GetDailyUsage()) *
+      CENT_TO_RAND;
+
+    g_ApplianceInsights.PushBack(it);
+  end;
+
+  // Sort in descending order of Active Running Cost
+  for i := g_ApplianceInsights.First() to g_ApplianceInsights.Last() - 1 do
+  begin
+    for j := g_ApplianceInsights.First() to g_ApplianceInsights.Last() - 1 do
+    begin
+      if g_ApplianceInsights[j].Second.ActiveRunningCost < g_ApplianceInsights
+        [j + 1].Second.ActiveRunningCost then
+      begin
+        it := g_ApplianceInsights[j];
+        g_ApplianceInsights[j] := g_ApplianceInsights[j + 1];
+        g_ApplianceInsights[j + 1] := it;
+      end;
+    end;
+  end;
+
+  g_ApplianceInsights.ShrinkToFit();
+
+  overallDailyCost := 0.0;
+  overallActiveDailyCost := 0.0;
+  overallStandbyDailyCost := 0.0;
+
+  for it in g_ApplianceInsights do
+  begin
+    overallDailyCost := overallDailyCost + it.Second.ActiveRunningCost +
+      it.Second.StandbyRunningCost;
+
+    overallActiveDailyCost := overallActiveDailyCost +
+      it.Second.ActiveRunningCost;
+
+    overallStandbyDailyCost := overallStandbyDailyCost +
+      it.Second.StandbyRunningCost;
+
+    activeCost := FloatToStrF(it.Second.ActiveRunningCost, ffCurrency, 8, 2);
+    standbyCost := FloatToStrF(it.Second.StandbyRunningCost, ffCurrency, 8, 2);
+    dailyUsage := FloatToStrF(it.Second.DailyUsage, ffFixed, 2, 2);
+
+    lineBuf := it.First + TAB + Format('%s Hour(s)', [dailyUsage]) + TAB +
+      activeCost + TAB + standbyCost;
+
+    redInsights.Lines.Add(lineBuf);
+  end;
+
+  redInsights.SelStart := Length(redInsights.Lines[0]);
+  redInsights.SelLength := MaxInt;
+  redInsights.SelAttributes.Style := [];
+  redInsights.ScrollPosition := TPoint.Create(0, 0);
+
+  lblOverallDailyCost.Caption := FloatToStrF(overallDailyCost,
+    ffCurrency, 8, 2);
+
+  lblOverallActiveDailyCost.Caption := FloatToStrF(overallActiveDailyCost,
+    ffCurrency, 8, 2);
+
+  lblOverallStandbyDailyCost.Caption := FloatToStrF(overallStandbyDailyCost,
+    ffCurrency, 8, 2);
+end;
+
+procedure TPhfHome.DisplayCalculator();
+begin
+  g_CalculatorTabAppliance := nil;
+
+  lstAppliances2.Items := lstAppliances.Items;
+  lstAppliances2.ItemIndex := -1;
+
+  sedUsage.Enabled := false;
+  lblCalculator3.Enabled := false;
+  lblCalculator4.Enabled := false;
+
+  edtTariff.Text := FloatToStrF(g_CurrentUser.GetElectricityTariff(),
+    ffGeneral, 6, 2);
 end;
 
 procedure TPhfHome.DisplayUserInformation();
@@ -259,35 +468,42 @@ var
     powerFactor, frequency, energyRating, surgeProtection, batterySize,
     batteryKind: string;
 begin
-  g_Appliance := nil;
+  g_AppliancesTabAppliance := nil;
 
   if show then
   begin
     currentApplianceName := lstAppliances.Items[lstAppliances.ItemIndex];
-    g_Appliance := g_CurrentUser.GetApplianceByName(currentApplianceName);
+    g_AppliancesTabAppliance := g_CurrentUser.GetApplianceByName
+      (currentApplianceName);
 
-    if g_Appliance <> nil then
+    if g_AppliancesTabAppliance <> nil then
     begin
-      voltage := Format('%fV', [g_Appliance.GetVoltage()]);
-      amperage := Format('%fA', [g_Appliance.GetAmperage()]);
-      activePower := Format('%fW', [g_Appliance.GetActivePower()]);
-      inputPower := Format('%fW', [g_Appliance.GetInputPower()]);
-      outputPower := IfThen(g_Appliance.GetOutputPower() <> -1.0,
-        Format('%fW', [g_Appliance.GetOutputPower()]), 'N/A');
+      voltage := Format('%fV', [g_AppliancesTabAppliance.GetVoltage()]);
+      amperage := Format('%fA', [g_AppliancesTabAppliance.GetAmperage()]);
+      activePower := Format('%fW', [g_AppliancesTabAppliance.GetActivePower()]);
+      inputPower := Format('%fW', [g_AppliancesTabAppliance.GetInputPower()]);
+      outputPower := IfThen(g_AppliancesTabAppliance.GetOutputPower() <> -1.0,
+        Format('%fW', [g_AppliancesTabAppliance.GetOutputPower()]), 'N/A');
 
-      standbyPower := Format('%fW', [g_Appliance.GetStandbyPower()]);
-      powerFactor := Format('%f', [g_Appliance.GetPowerFactor()]);
-      frequency := Format('%fHz', [g_Appliance.GetFrequency()]);
-      energyRating := Format('%d', [g_Appliance.GetEnergyRating()]);
-      surgeProtection := IfThen(g_Appliance.GetSurgeProtection(), 'Yes', 'No');
-      batterySize := IfThen(g_Appliance.GetBatterySize() <> -1.0,
-        Format('%fmAH', [g_Appliance.GetBatterySize()]), 'N/A');
+      standbyPower := Format('%fW',
+        [g_AppliancesTabAppliance.GetStandbyPower()]);
 
-      batteryKind := IfThen(g_Appliance.GetBatteryKind() <> '',
-        g_Appliance.GetBatteryKind(), 'N/A');
+      powerFactor := Format('%f', [g_AppliancesTabAppliance.GetPowerFactor()]);
+      frequency := Format('%fHz', [g_AppliancesTabAppliance.GetFrequency()]);
+      energyRating := Format('%d',
+        [g_AppliancesTabAppliance.GetEnergyRating()]);
 
-      lblApplianceName.Caption := g_Appliance.GetName();
-      lblManufacturer.Caption := g_Appliance.GetManufacturer();
+      surgeProtection := IfThen(g_AppliancesTabAppliance.GetSurgeProtection(),
+        'Yes', 'No');
+
+      batterySize := IfThen(g_AppliancesTabAppliance.GetBatterySize() <> -1.0,
+        Format('%fmAH', [g_AppliancesTabAppliance.GetBatterySize()]), 'N/A');
+
+      batteryKind := IfThen(g_AppliancesTabAppliance.GetBatteryKind() <> '',
+        g_AppliancesTabAppliance.GetBatteryKind(), 'N/A');
+
+      lblApplianceName.Caption := g_AppliancesTabAppliance.GetName();
+      lblManufacturer.Caption := g_AppliancesTabAppliance.GetManufacturer();
       lblVoltage.Caption := voltage;
       lblAmperage.Caption := amperage;
       lblActivePowerConsumption.Caption := activePower;
@@ -323,7 +539,7 @@ begin
 
     g_SaveData.AddOrUpdateUser(g_CurrentUser);
 
-    g_Appliance := newAppliance;
+    g_AppliancesTabAppliance := newAppliance;
     lstAppliances.ItemIndex := lstAppliances.Count - 1;
     lstAppliancesClick(nil);
   end;

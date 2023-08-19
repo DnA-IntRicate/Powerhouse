@@ -3,8 +3,8 @@ object PhfHome: TPhfHome
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Powerhouse'
-  ClientHeight = 419
-  ClientWidth = 427
+  ClientHeight = 410
+  ClientWidth = 421
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -51,6 +51,7 @@ object PhfHome: TPhfHome
       Margins.Bottom = 2
       ActivePage = tabAppliances
       TabOrder = 0
+      OnChange = pgcHomeChange
       object tabAppliances: TTabSheet
         Margins.Left = 2
         Margins.Top = 2
@@ -543,6 +544,130 @@ object PhfHome: TPhfHome
         Margins.Bottom = 2
         Caption = 'Insights'
         ImageIndex = 1
+        object redInsights: TRichEdit
+          Left = 3
+          Top = 3
+          Width = 389
+          Height = 174
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -10
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          HideScrollBars = False
+          ParentFont = False
+          ScrollBars = ssVertical
+          TabOrder = 0
+        end
+        object pnlCostInsights: TPanel
+          Left = 3
+          Top = 183
+          Width = 389
+          Height = 145
+          TabOrder = 1
+          object lblInsights1: TLabel
+            Left = 4
+            Top = 9
+            Width = 96
+            Height = 14
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Overall Daily Cost:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblOverallDailyCost: TLabel
+            Left = 163
+            Top = 9
+            Width = 88
+            Height = 14
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'OVERALLCOST'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblInsights2: TLabel
+            Left = 4
+            Top = 30
+            Width = 134
+            Height = 14
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Overall Active Daily Cost:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblOverallActiveDailyCost: TLabel
+            Left = 163
+            Top = 30
+            Width = 132
+            Height = 14
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'OVERALLACTIVECOST'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblInsights3: TLabel
+            Left = 4
+            Top = 51
+            Width = 155
+            Height = 14
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Overall Active Standby Cost:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblOverallStandbyDailyCost: TLabel
+            Left = 163
+            Top = 51
+            Width = 144
+            Height = 14
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'OVERALLSTANDBYCOST'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
       end
       object tabCalculator: TTabSheet
         Margins.Left = 2
@@ -551,6 +676,130 @@ object PhfHome: TPhfHome
         Margins.Bottom = 2
         Caption = 'Calculator'
         ImageIndex = 2
+        object pnlCalculator: TPanel
+          Left = 3
+          Top = 3
+          Width = 389
+          Height = 325
+          TabOrder = 0
+          object lblCalculator1: TLabel
+            Left = 219
+            Top = 216
+            Width = 89
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Electricity Tariff'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblCalculator2: TLabel
+            Left = 351
+            Top = 237
+            Width = 34
+            Height = 12
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'c/kWh'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -10
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblCalculator3: TLabel
+            Left = 8
+            Top = 216
+            Width = 82
+            Height = 13
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Usage per Day'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblCalculator4: TLabel
+            Left = 139
+            Top = 239
+            Width = 39
+            Height = 12
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Caption = 'Minutes'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -10
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object edtTariff: TEdit
+            Left = 219
+            Top = 230
+            Width = 128
+            Height = 25
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -14
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            OnExit = edtTariffExit
+          end
+          object lstAppliances2: TListBox
+            Left = 8
+            Top = 8
+            Width = 377
+            Height = 193
+            Margins.Left = 2
+            Margins.Top = 2
+            Margins.Right = 2
+            Margins.Bottom = 2
+            ItemHeight = 12
+            TabOrder = 1
+            OnClick = lstAppliances2Click
+            OnMouseDown = lstAppliancesMouseDown
+          end
+          object sedUsage: TSpinEdit
+            Left = 8
+            Top = 232
+            Width = 128
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxValue = 1440
+            MinValue = 0
+            ParentFont = False
+            TabOrder = 2
+            Value = 0
+            OnExit = sedUsageExit
+          end
+        end
       end
       object tabAccount: TTabSheet
         Margins.Left = 2
@@ -785,6 +1034,23 @@ object PhfHome: TPhfHome
         Margins.Bottom = 2
         Caption = 'Help'
         ImageIndex = 4
+        object lblHelp1: TLabel
+          Left = 37
+          Top = 122
+          Width = 317
+          Height = 51
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
+          Caption = 'Coming Soon...'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -42
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
       end
     end
   end
