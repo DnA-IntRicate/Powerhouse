@@ -101,17 +101,17 @@ type
     m_AvailableAppliances: PhVector<PhAppliance>;
   end;
 
+implementation
+
 var
   g_SelectedAppliance: PhAppliance;
-
-implementation
 
 {$R *.dfm}
 
 procedure TPhfAddAppliance.EnableModal();
 var
   userAppliances: PhAppliances;
-  numAvailable: uint64;
+  numAvailable, i, j: uint64;
   guid: PhGUID;
   guids: PhVector<PhGUID>;
   appliance: PhAppliance;
@@ -142,6 +142,22 @@ begin
 
     if not userAppliances.Contains(appliance) then
       m_AvailableAppliances.PushBack(appliance);
+  end;
+
+  // Sort available appliances in alphabetical order.
+  for i := m_AvailableAppliances.First() to m_AvailableAppliances.Last() - 1 do
+  begin
+    for j := m_AvailableAppliances.First()
+      to m_AvailableAppliances.Last() - 1 do
+    begin
+      if m_AvailableAppliances[j].GetName() > m_AvailableAppliances[j + 1]
+        .GetName() then
+      begin
+        appliance := m_AvailableAppliances[j];
+        m_AvailableAppliances[j] := m_AvailableAppliances[j + 1];
+        m_AvailableAppliances[j + 1] := appliance;
+      end;
+    end;
   end;
 
   for appliance in m_AvailableAppliances do

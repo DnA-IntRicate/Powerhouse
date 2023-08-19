@@ -396,7 +396,9 @@ begin
   redInsights.SelStart := Length(redInsights.Lines[0]);
   redInsights.SelLength := MaxInt;
   redInsights.SelAttributes.Style := [];
+
   redInsights.ScrollPosition := TPoint.Create(0, 0);
+  redInsights.SelLength := 0;
 
   lblOverallDailyCost.Caption := FloatToStrF(overallDailyCost,
     ffCurrency, 8, 2);
