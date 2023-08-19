@@ -344,7 +344,6 @@ end;
 
 procedure PhUser.AddAppliance(const appliance: PhAppliance);
 begin
-  Assert(m_Appliances <> nil, 'PhUser.AddAppliance() : m_Appliances was null!');
   m_Appliances.PushBack(appliance);
 end;
 
