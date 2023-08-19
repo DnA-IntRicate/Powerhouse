@@ -2,8 +2,8 @@ object PhfMain: TPhfMain
   Left = 0
   Top = 0
   Caption = 'Main'
-  ClientHeight = 153
-  ClientWidth = 281
+  ClientHeight = 114
+  ClientWidth = 227
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

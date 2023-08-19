@@ -58,6 +58,9 @@ type
   end;
 
 var
+  /// <summary>
+  /// The global instance of <c>TPhfLogin</c>.
+  /// </summary>
   g_LoginForm: TPhfLogin;
 
 implementation

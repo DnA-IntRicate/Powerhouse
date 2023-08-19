@@ -52,6 +52,9 @@ type
   end;
 
 var
+  /// <summary>
+  /// The global instance of <c>TPhfMain</c>.
+  /// </summary>
   g_MainForm: TPhfMain;
 
 implementation

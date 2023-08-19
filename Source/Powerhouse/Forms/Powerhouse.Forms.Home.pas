@@ -144,6 +144,9 @@ type
   end;
 
 var
+  /// <summary>
+  /// The global instance of <c>TPhfHome</c>.
+  /// </summary>
   g_HomeForm: TPhfHome;
 
 implementation
