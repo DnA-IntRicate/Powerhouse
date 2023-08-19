@@ -122,6 +122,43 @@ type
 
 type
   /// <summary>
+  /// Represents a pair of two values.
+  /// </summary>
+  /// <typeparam name="_Ty1">
+  /// The type of the first value in the pair.
+  /// </typeparam>
+  /// <typeparam name="_Ty2">
+  /// The type of the second value in the pair.
+  /// </typeparam>
+  PhPair<_Ty1, _Ty2> = record
+  public
+    /// <summary>
+    /// Creates a new instance of <c>PhPair<_Ty1, _Ty2></c>
+    /// with the specified values.
+    /// </summary>
+    /// <param name="first">
+    /// The value of the first element in the pair.
+    /// </param>
+    /// <param name="second">
+    /// The value of the second element in the pair.
+    /// </param>
+    class function Create(const first: _Ty1; const second: _Ty2)
+      : PhPair<_Ty1, _Ty2>; static;
+
+  public
+    /// <summary>
+    /// The value of the first element in the pair.
+    /// </summary>
+    First: _Ty1;
+
+    /// <summary>
+    /// The value of the second element in the pair.
+    /// </summary>
+    Second: _Ty2;
+  end;
+
+type
+  /// <summary>
   /// Represents a globally unique identifier. This is the logical
   /// representation of all primary keys in the Powerhouse database.
   /// </summary>
@@ -203,6 +240,13 @@ type
   end;
 
 implementation
+
+class function PhPair<_Ty1, _Ty2>.Create(const first: _Ty1; const second: _Ty2)
+  : PhPair<_Ty1, _Ty2>;
+begin
+  Result.First := first;
+  Result.Second := second;
+end;
 
 class function PhGUID.Create(const hexGuidStr: string = ''): PhGUID;
 var
