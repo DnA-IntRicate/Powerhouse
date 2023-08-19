@@ -33,8 +33,8 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.Samples.Spin,
   Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
-  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
-  Powerhouse.SaveData,
+  Powerhouse.Validator, Powerhouse.Database, Powerhouse.Appliance,
+  Powerhouse.User, Powerhouse.SaveData,
   Powerhouse.Forms.Home.ModifyAppliance, Powerhouse.Forms.Home.AddAppliance,
   Powerhouse.Forms.Home.ModifyUser;
 
@@ -139,6 +139,8 @@ type
 
     procedure AddAppliance();
     procedure RemoveAppliance();
+
+    function ValidateTariff(const tariffStr: string): bool;
   end;
 
 var
@@ -252,11 +254,11 @@ end;
 
 procedure TPhfHome.edtTariffExit(Sender: TObject);
 begin
-  // TODO: Validation
-
-  // IF IT IS NOT EMPTY, VALIDATE!!!
-  g_CurrentUser.SetElectricityTariff(StrToFloat(edtTariff.Text));
-  g_SaveData.AddOrUpdateUser(g_CurrentUser);
+  if ValidateTariff(edtTariff.Text) then
+  begin
+    g_CurrentUser.SetElectricityTariff(StrToFloat(edtTariff.Text));
+    g_SaveData.AddOrUpdateUser(g_CurrentUser);
+  end;
 end;
 
 procedure TPhfHome.Enable();
@@ -570,6 +572,35 @@ begin
 
   DisplayAppliances();
   ShowApplianceInformation(false);
+end;
+
+function TPhfHome.ValidateTariff(const tariffStr: string): bool;
+var
+  validation: PhValidation;
+  f: float;
+  convertible: bool;
+begin
+  Result := false;
+
+  validation := PhValidator.ValidateString(tariffStr, [Numbers]);
+
+  if validation.Valid then
+    Result := true
+  else
+  begin
+    if PhValidationFlag.Empty in validation.Flags then
+    begin
+      PhLogger.Warn('Electricity Tariff cannot be left empty!');
+      Exit();
+    end;
+
+    convertible := TryStrToFloat(tariffStr, f);
+    if (PhValidationFlag.InvalidFormat in validation.Flags) or convertible then
+      PhLogger.Warn('Electricity Tariff is in an incorrect format!');
+
+    if PhValidationFlag.ForbiddenCharacter in validation.Flags then
+      PhLogger.Warn('Electricity Tariff contains forbidden characters!');
+  end;
 end;
 
 end.

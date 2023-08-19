@@ -683,7 +683,7 @@ object PhfHome: TPhfHome
           Height = 325
           TabOrder = 0
           object lblCalculator1: TLabel
-            Left = 219
+            Left = 218
             Top = 216
             Width = 89
             Height = 13
@@ -700,7 +700,7 @@ object PhfHome: TPhfHome
             ParentFont = False
           end
           object lblCalculator2: TLabel
-            Left = 351
+            Left = 350
             Top = 237
             Width = 34
             Height = 12
@@ -717,7 +717,7 @@ object PhfHome: TPhfHome
             ParentFont = False
           end
           object lblCalculator3: TLabel
-            Left = 8
+            Left = 6
             Top = 216
             Width = 82
             Height = 13
@@ -734,7 +734,7 @@ object PhfHome: TPhfHome
             ParentFont = False
           end
           object lblCalculator4: TLabel
-            Left = 139
+            Left = 137
             Top = 239
             Width = 39
             Height = 12
@@ -751,7 +751,7 @@ object PhfHome: TPhfHome
             ParentFont = False
           end
           object edtTariff: TEdit
-            Left = 219
+            Left = 218
             Top = 230
             Width = 128
             Height = 25
@@ -769,7 +769,7 @@ object PhfHome: TPhfHome
             OnExit = edtTariffExit
           end
           object lstAppliances2: TListBox
-            Left = 8
+            Left = 6
             Top = 8
             Width = 377
             Height = 193
@@ -783,7 +783,7 @@ object PhfHome: TPhfHome
             OnMouseDown = lstAppliancesMouseDown
           end
           object sedUsage: TSpinEdit
-            Left = 8
+            Left = 6
             Top = 232
             Width = 128
             Height = 23
