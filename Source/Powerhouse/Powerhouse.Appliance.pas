@@ -115,23 +115,27 @@ type
     /// Calculates the energy consumption of the appliance.
     /// </summary>
     /// <param name="hours">
-    /// The amount of hours to calculate the energy consumption on.
+    /// The amount of hours to calculate the energy consumption on. If this is
+    /// left at a default value of 0.0, this instance's daily usage is
+    /// automatically used.
     /// </param>
     /// <returns>
     /// The energy consumption of the appliance in Joules.
     /// </returns>
-    function CalculateActiveEnergyConsumption(const hours: int): float;
+    function CalculateActiveEnergyConsumption(const hours: float = 0.0): float;
 
     /// <summary>
     /// Calculates the standby energy consumption of the appliance.
     /// </summary>
     /// <param name="hours">
-    /// The amount of hours to calculate the standby energy consumption on.
+    /// The amount of hours to calculate the standby energy consumption on. If
+    /// this is left at a default value of 0.0, this instance's daily usage is
+    /// automatically used.
     /// </param>
     /// <returns>
     /// The standby energy consumption of the appliance in Joules.
     /// </returns>
-    function CalculateStandbyEnergyConsumption(const hours: int): float;
+    function CalculateStandbyEnergyConsumption(const hours: float = 0.0): float;
 
     /// <summary>
     /// Calculates the running cost of the appliance.
@@ -140,13 +144,15 @@ type
     /// The cost per kilowatt hour of electricity measured in c/kWh.
     /// </param>
     /// <param name="hours>
-    /// The amount of hours to calculate the running cost on.
+    /// The amount of hours to calculate the running cost on. If this is left at
+    /// a default value of 0.0, this instance's daily usage is
+    /// automatically used.
     /// </param>
     /// <returns>
-    /// The running cost of the appliance in Rands.
+    /// The running cost of the appliance in Cents.
     /// </returns>
     function CalculateActiveRunningCost(const tariff: float;
-      const hours: int): float;
+      const hours: float = 0.0): float;
 
     /// <summary>
     /// Calculates the standby running cost of the appliance.
@@ -155,13 +161,15 @@ type
     /// The cost per kilowatt hour of electricity measured in c/kWh.
     /// </param>
     /// <param name="hours>
-    /// The amount of hours to calculate the standby running cost on.
+    /// The amount of hours to calculate the standby running cost on. If this is
+    /// left at a default value of 0.0, this instance's daily usage is
+    /// automatically used.
     /// </param>
     /// <returns>
-    /// The standby running cost of the appliance in Rands.
+    /// The standby running cost of the appliance in Cents.
     /// </returns>
     function CalculateStandbyRunningCost(const tariff: float;
-      const hours: int): float;
+      const hours: float = 0.0): float;
 
     /// <summary>
     /// Compares the GUIDs of this appliance and 'other' to check for equality.
@@ -317,12 +325,12 @@ type
     /// <summary>
     /// Returns the user-specific daily usage of the appliance in hours.
     /// </summary>
-    function GetDailyUsage(): int;
+    function GetDailyUsage(): float;
 
     /// <summary>
     /// Sets the user-specific daily usage of the appliance in hours.
     /// </summary>
-    procedure SetDailyUsage(const dailyUsage: int);
+    procedure SetDailyUsage(const dailyUsage: float);
 
   private
     m_Name: string;
@@ -340,7 +348,7 @@ type
     m_BatteryKind: string;
     m_SurgeProtection: bool;
 
-    m_DailyUsage: int;
+    m_DailyUsage: float;
   end;
 
 type
@@ -446,6 +454,9 @@ const
   PH_TBL_FIELD_NAME_APPLIANCES_BATTERY_KIND = 'BatteryKind';
 
 implementation
+
+const
+  WATT_TO_KILOWATT = 0.001;
 
 constructor PhAppliance.Create(const guid: PhGUID);
 begin
@@ -626,26 +637,40 @@ begin
   end;
 end;
 
-function PhAppliance.CalculateActiveEnergyConsumption(const hours: int): float;
+function PhAppliance.CalculateActiveEnergyConsumption
+  (const hours: float): float;
+var
+  myHours: float;
 begin
-  Result := float(hours) * m_ActivePower;
+  myHours := IfThen(hours <> 0.0, hours, m_DailyUsage);
+  Result := myHours * m_ActivePower * WATT_TO_KILOWATT;
 end;
 
-function PhAppliance.CalculateStandbyEnergyConsumption(const hours: int): float;
+function PhAppliance.CalculateStandbyEnergyConsumption
+  (const hours: float): float;
+var
+  myHours: float;
 begin
-  Result := float(hours) * m_StandbyPower;
+  myHours := IfThen(hours <> 0.0, hours, m_DailyUsage);
+  Result := myHours * m_StandbyPower * WATT_TO_KILOWATT;
 end;
 
 function PhAppliance.CalculateActiveRunningCost(const tariff: float;
-  const hours: int): float;
+  const hours: float): float;
+var
+  myHours: float;
 begin
-  Result := CalculateActiveEnergyConsumption(hours) * tariff;
+  myHours := IfThen(hours <> 0.0, hours, m_DailyUsage);
+  Result := CalculateActiveEnergyConsumption(myHours) * tariff;
 end;
 
 function PhAppliance.CalculateStandbyRunningCost(const tariff: float;
-  const hours: int): float;
+  const hours: float): float;
+var
+  myHours: float;
 begin
-  Result := CalculateStandbyEnergyConsumption(hours) * tariff;
+  myHours := IfThen(hours <> 0.0, hours, m_DailyUsage);
+  Result := CalculateStandbyEnergyConsumption(myHours) * tariff;
 end;
 
 function PhAppliance.Equals(other: PhAppliance): bool;
@@ -796,12 +821,12 @@ begin
   m_SurgeProtection := surgeProtection;
 end;
 
-function PhAppliance.GetDailyUsage(): int;
+function PhAppliance.GetDailyUsage(): float;
 begin
   Result := m_DailyUsage;
 end;
 
-procedure PhAppliance.SetDailyUsage(const dailyUsage: int);
+procedure PhAppliance.SetDailyUsage(const dailyUsage: float);
 begin
   m_DailyUsage := dailyUsage;
 end;

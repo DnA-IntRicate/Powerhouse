@@ -88,7 +88,7 @@ type
   private type
     ApplianceData = record
       GUID: string;
-      DailyUsage: int;
+      DailyUsage: float;
     end;
 
     UserData = record
