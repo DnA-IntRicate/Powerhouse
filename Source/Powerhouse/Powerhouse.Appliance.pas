@@ -28,8 +28,8 @@ interface
 
 uses
   System.SysUtils, System.StrUtils, System.Math, System.Variants,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Base, Powerhouse.Logger,
-  Powerhouse.Database;
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Vector, Powerhouse.Base,
+  Powerhouse.Logger, Powerhouse.Database;
 
 type
   /// <summary>
@@ -455,9 +455,6 @@ const
 
 implementation
 
-const
-  WATT_TO_KILOWATT = 0.001;
-
 constructor PhAppliance.Create(const guid: PhGUID);
 begin
   m_DailyUsage := 0;
@@ -643,7 +640,7 @@ var
   myHours: float;
 begin
   myHours := IfThen(hours <> 0.0, hours, m_DailyUsage);
-  Result := myHours * m_ActivePower * WATT_TO_KILOWATT;
+  Result := myHours * m_ActivePower * PH_WATT_TO_KILOWATT;
 end;
 
 function PhAppliance.CalculateStandbyEnergyConsumption
@@ -652,7 +649,7 @@ var
   myHours: float;
 begin
   myHours := IfThen(hours <> 0.0, hours, m_DailyUsage);
-  Result := myHours * m_StandbyPower * WATT_TO_KILOWATT;
+  Result := myHours * m_StandbyPower * PH_WATT_TO_KILOWATT;
 end;
 
 function PhAppliance.CalculateActiveRunningCost(const tariff: float;

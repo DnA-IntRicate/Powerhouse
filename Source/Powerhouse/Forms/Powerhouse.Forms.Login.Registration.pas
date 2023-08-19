@@ -31,8 +31,8 @@ uses
   System.SysUtils, System.StrUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
   Vcl.StdCtrls,
-  Powerhouse.Types, Powerhouse.Form, Powerhouse.Validator, Powerhouse.Logger,
-  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Form, Powerhouse.Validator,
+  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
 
 type
   TPhfRegistration = class(PhForm)
@@ -88,13 +88,6 @@ type
     m_ValidName: bool;
     m_ValidSurname: bool;
   end;
-
-const
-  PH_MIN_LENGTH_USERNAME = 6;
-  PH_MIN_LENGTH_PASSWORD = 8;
-
-  PH_MAX_LENGTH_USERNAME = 18;
-  PH_MAX_LENGTH_PASSWORD = 26;
 
 implementation
 

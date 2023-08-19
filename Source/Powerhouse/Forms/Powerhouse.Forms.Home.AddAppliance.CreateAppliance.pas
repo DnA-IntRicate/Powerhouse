@@ -33,8 +33,9 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.Samples.Spin,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Validator,
-  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User;
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Vector, Powerhouse.Form,
+  Powerhouse.Validator, Powerhouse.Logger, Powerhouse.Database,
+  Powerhouse.Appliance, Powerhouse.User;
 
 type
   TPhfCreateAppliance = class(PhForm)
@@ -124,10 +125,6 @@ type
     m_ValidBatterySize: bool;
     m_ValidBatteryKind: bool;
   end;
-
-const
-  PH_MAX_LENGTH_APPLIANCE_STR = 26;
-  PH_MAX_LENGTH_APPLIANCE_STR_BATTERY_KIND = 8;
 
 implementation
 

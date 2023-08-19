@@ -31,9 +31,10 @@ uses
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
   Vcl.StdCtrls,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
-  Powerhouse.Database, Powerhouse.JsonSerializer, Powerhouse.FileStream,
-  Powerhouse.Appliance, Powerhouse.User, Powerhouse.SaveData,
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Vector, Powerhouse.Form,
+  Powerhouse.Logger, Powerhouse.Database, Powerhouse.JsonSerializer,
+  Powerhouse.FileStream, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.SaveData,
   Powerhouse.Forms.Home,
   Powerhouse.Forms.Login.Registration;
 

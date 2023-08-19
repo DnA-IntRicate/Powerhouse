@@ -32,8 +32,8 @@ uses
   System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.StdCtrls, Vcl.ExtCtrls,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
-  Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Vector, Powerhouse.Form,
+  Powerhouse.Logger, Powerhouse.Database, Powerhouse.Appliance, Powerhouse.User,
   Powerhouse.Forms.Home.AddAppliance.CreateAppliance;
 
 type

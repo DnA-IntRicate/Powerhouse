@@ -32,9 +32,9 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.Samples.Spin,
-  Powerhouse.Types, Powerhouse.Vector, Powerhouse.Form, Powerhouse.Logger,
-  Powerhouse.Validator, Powerhouse.Database, Powerhouse.Appliance,
-  Powerhouse.User, Powerhouse.SaveData,
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Vector, Powerhouse.Form,
+  Powerhouse.Logger, Powerhouse.Validator, Powerhouse.Database,
+  Powerhouse.Appliance, Powerhouse.User, Powerhouse.SaveData,
   Powerhouse.Forms.Home.ModifyAppliance, Powerhouse.Forms.Home.AddAppliance,
   Powerhouse.Forms.Home.ModifyUser;
 
@@ -236,7 +236,8 @@ begin
 
   if g_CalculatorTabAppliance <> nil then
   begin
-    sedUsage.Value := Round(g_CalculatorTabAppliance.GetDailyUsage() * 60.0);
+    sedUsage.Value := Round(g_CalculatorTabAppliance.GetDailyUsage() *
+      PH_HOUR_TO_MINUTE);
 
     sedUsage.Enabled := true;
     lblCalculator3.Enabled := true;
@@ -245,10 +246,9 @@ begin
 end;
 
 procedure TPhfHome.sedUsageExit(Sender: TObject);
-const
-  MINUTE_TO_HOUR = 0.0166667;
+
 begin
-  g_CalculatorTabAppliance.SetDailyUsage(sedUsage.Value * MINUTE_TO_HOUR);
+  g_CalculatorTabAppliance.SetDailyUsage(sedUsage.Value * PH_MINUTE_TO_HOUR);
   g_SaveData.AddOrUpdateUser(g_CurrentUser);
 end;
 
@@ -308,10 +308,6 @@ begin
 end;
 
 procedure TPhfHome.DisplayInsights();
-const
-  TAB = #9;
-  CRLF = #13#10;
-  CENT_TO_RAND = 0.01;
 var
   i, j: int;
   appliances: PhAppliances;
@@ -321,8 +317,8 @@ var
   activeCost, standbyCost, dailyUsage, lineBuf: string;
 begin
   redInsights.Clear();
-  redInsights.Lines.Add('Appliance Name' + TAB + 'Daily Usage' + TAB +
-    'Daily Cost' + TAB + 'Standby Cost' + CRLF);
+  redInsights.Lines.Add('Appliance Name' + PH_TAB + 'Daily Usage' + PH_TAB +
+    'Daily Cost' + PH_TAB + 'Standby Cost' + PH_CRLF);
 
   redInsights.SelStart := 0;
   redInsights.SelLength := Length(redInsights.Lines[0]);
@@ -337,11 +333,11 @@ begin
     it.Second.DailyUsage := appliance.GetDailyUsage();
     it.Second.ActiveRunningCost := appliance.CalculateActiveRunningCost
       (g_CurrentUser.GetElectricityTariff(), appliance.GetDailyUsage()) *
-      CENT_TO_RAND;
+      PH_CENT_TO_RAND;
 
     it.Second.StandbyRunningCost := appliance.CalculateStandbyRunningCost
       (g_CurrentUser.GetElectricityTariff(), 24 - appliance.GetDailyUsage()) *
-      CENT_TO_RAND;
+      PH_CENT_TO_RAND;
 
     g_ApplianceInsights.PushBack(it);
   end;
@@ -382,8 +378,8 @@ begin
     standbyCost := FloatToStrF(it.Second.StandbyRunningCost, ffCurrency, 8, 2);
     dailyUsage := FloatToStrF(it.Second.DailyUsage, ffFixed, 2, 2);
 
-    lineBuf := it.First + TAB + Format('%s Hour(s)', [dailyUsage]) + TAB +
-      activeCost + TAB + standbyCost;
+    lineBuf := it.First + PH_TAB + Format('%s Hour(s)', [dailyUsage]) + PH_TAB +
+      activeCost + PH_TAB + standbyCost;
 
     redInsights.Lines.Add(lineBuf);
   end;

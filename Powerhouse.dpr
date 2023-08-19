@@ -54,7 +54,8 @@ uses
   Powerhouse.Validator in 'Source\Powerhouse\Powerhouse.Validator.pas',
   Powerhouse.Types in 'Source\Powerhouse\Powerhouse.Types.pas',
   Powerhouse.Vector in 'Source\Powerhouse\Powerhouse.Vector.pas',
-  Powerhouse.Base in 'Source\Powerhouse\Powerhouse.Base.pas';
+  Powerhouse.Base in 'Source\Powerhouse\Powerhouse.Base.pas',
+  Powerhouse.Defines in 'Source\Powerhouse\Powerhouse.Defines.pas';
 
 {$R *.res}
 

@@ -31,7 +31,8 @@ uses
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
   Vcl.ComCtrls,
-  Powerhouse.Types, Powerhouse.Database, Powerhouse.SaveData, Powerhouse.Form,
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Database,
+  Powerhouse.SaveData, Powerhouse.Form,
   Powerhouse.Forms.Home, Powerhouse.Forms.Login;
 
 type
@@ -49,10 +50,6 @@ type
   private
     procedure SetFormStyle(const formPtr: PhFormPtr);
   end;
-
-const
-  PH_PATH_DATABASE = 'Assets/PowerhouseDb.mdb';
-  PH_PATH_SAVEFILE = 'PowerhouseSave.json';
 
 var
   g_MainForm: TPhfMain;

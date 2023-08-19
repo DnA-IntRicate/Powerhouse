@@ -29,7 +29,7 @@ interface
 uses
   Winapi.Windows,
   System.SysUtils,
-  Powerhouse.Types, Powerhouse.Logger;
+  Powerhouse.Types, Powerhouse.Defines, Powerhouse.Logger;
 
 type
   /// <summary>
@@ -113,7 +113,7 @@ begin
   while not Eof(s_File) do
   begin
     Readln(s_File, buf);
-    text := text + buf + #13#10;
+    text := text + buf + PH_CRLF;
   end;
 
   CloseFile();
