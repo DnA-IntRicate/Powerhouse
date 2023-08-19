@@ -780,7 +780,6 @@ object PhfHome: TPhfHome
             ItemHeight = 12
             TabOrder = 1
             OnClick = lstAppliances2Click
-            OnMouseDown = lstAppliancesMouseDown
           end
           object sedUsage: TSpinEdit
             Left = 6
