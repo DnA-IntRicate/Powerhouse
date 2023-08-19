@@ -25,7 +25,7 @@ During the development of Powerhouse, I interviewed several individuals to deter
 ![alt text](Screenshots/Insights.png)
 
 ## License
-Powerhouse is licensed under the MIT License. See [LICENSE](LICENSE)
+Powerhouse is licensed under the MIT License. See [LICENSE](LICENSE).
 
 ```
 MIT License
