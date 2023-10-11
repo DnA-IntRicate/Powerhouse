@@ -152,11 +152,11 @@ const
   PH_REGEX_EMAIL_ADDRESS = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 
   PH_REGEX_LETTERS = '^[A-Za-z ]+$';
-  PH_REGEX_LETTERS_NUMBERS = '^[a-zA-Z0-9, ]+$';
+  PH_REGEX_LETTERS_NUMBERS = '^[a-zA-Z0-9,. ]+$';
   PH_REGEX_LETTERS_SYMBOLS = '^[a-zA-Z\p{P} ]+$';
   PH_REGEX_LETTERS_NUMBERS_SYMBOLS = '^[a-zA-Z0-9,\p{P} ]+$';
 
-  PH_REGEX_NUMBERS = '^[0-9]+(\,[0-9]+)?$';
+  PH_REGEX_NUMBERS = '^[0-9]+[.,]+([0-9]+)?$';
   PH_REGEX_NUMBERS_SYMBOLS = '^[0-9\p{P}]+$';
 
   PH_REGEX_SYMBOLS = '^[p{P}]+$';
