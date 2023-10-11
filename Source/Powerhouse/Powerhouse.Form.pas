@@ -27,7 +27,7 @@ unit Powerhouse.Form;
 interface
 
 uses
-  Winapi.Windows,
+  Winapi.Windows, Winapi.ShellAPI, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.SyncObjs,
   Vcl.Forms,
   Powerhouse.Types;
@@ -96,6 +96,11 @@ type
     procedure Quit();
 
     /// <summary>
+    /// Restarts the application.
+    /// </summary>
+    procedure Restart();
+
+    /// <summary>
     /// Retrieves the parent form using a lambda-callback procedure.
     /// </summary>
     /// <param name="onGetParentProc">
@@ -142,7 +147,6 @@ end;
 procedure PhForm.TransitionForms(const oldForm, newForm: PhFormPtr);
 begin
   oldForm.Disable();
-
   newForm.SetParentForm(oldForm);
   newForm.Enable();
 end;
@@ -179,6 +183,15 @@ begin
 
   TerminateProcess(myHandle, 0);
   CloseHandle(myHandle);
+end;
+
+procedure PhForm.Restart();
+var
+  oldHandle: HWND;
+begin
+  oldHandle := Application.MainFormHandle;
+  ShellExecute(0, 'open', PChar(ParamStr(0)), nil, nil, SW_SHOWNORMAL);
+  SendMessage(oldHandle, WM_CLOSE, 0, 0);
 end;
 
 end.

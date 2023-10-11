@@ -72,9 +72,9 @@ object PhfAddAppliance: TPhfAddAppliance
       OnClick = lblCreateNewApplianceClick
     end
     object btnAdd: TButton
-      Left = 10
+      Left = 11
       Top = 316
-      Width = 287
+      Width = 136
       Height = 39
       Margins.Left = 2
       Margins.Top = 2
@@ -513,9 +513,9 @@ object PhfAddAppliance: TPhfAddAppliance
       end
     end
     object btnCancel: TButton
-      Left = 301
+      Left = 291
       Top = 316
-      Width = 97
+      Width = 107
       Height = 39
       Margins.Left = 2
       Margins.Top = 2
@@ -530,6 +530,25 @@ object PhfAddAppliance: TPhfAddAppliance
       ParentFont = False
       TabOrder = 3
       OnClick = btnCancelClick
+    end
+    object btnRemove: TButton
+      Left = 151
+      Top = 316
+      Width = 136
+      Height = 39
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
+      Caption = 'Remove'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -20
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      OnClick = btnRemoveClick
     end
   end
 end

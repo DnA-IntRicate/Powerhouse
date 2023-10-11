@@ -112,6 +112,7 @@ type
     lblOverallStandbyDailyCost: TLabel;
     lblHelp1: TLabel;
     pnlCostInsights: TPanel;
+    btnDeleteUser: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnAddApplianceClick(Sender: TObject);
     procedure lstAppliancesClick(Sender: TObject);
@@ -125,6 +126,7 @@ type
     procedure sedUsageExit(Sender: TObject);
     procedure edtTariffExit(Sender: TObject);
     procedure edtTariffKeyPress(Sender: TObject; var Key: Char);
+    procedure btnDeleteUserClick(Sender: TObject);
 
   public
     procedure Enable(); override;
@@ -274,6 +276,26 @@ procedure TPhfHome.edtTariffKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = PH_KEYS_ENTER then
     edtTariffExit(Sender);
+end;
+
+procedure TPhfHome.btnDeleteUserClick(Sender: TObject);
+var
+  dlgResult: int;
+begin
+  PhLogger.Warn
+    ('Are you sure you want to delete your account? This action cannot be undone.',
+    dlgResult);
+
+  if dlgResult <> mrOk then
+    Exit();
+
+  g_CurrentUser.Delete();
+  g_CurrentUser.Free();
+  g_CurrentUser := nil;
+
+  // TODO: Userdata must still be deleted in PhSaveData and the JSON file.
+  PhLogger.Info('Your account has been deleted.');
+  Restart();
 end;
 
 procedure TPhfHome.Enable();

@@ -80,6 +80,13 @@ type
     procedure Pull(); override;
 
     /// <summary>
+    /// Removes the entry in the Powerhouse database corresponding to an
+    /// object's GUID.
+    /// Note: This does not free the memory held by the object.
+    /// </summary>
+    procedure Delete(); override;
+
+    /// <summary>
     /// Hashes the provided password and checks if it matches the user
     /// account's password hash.
     /// </summary>
@@ -334,6 +341,23 @@ begin
     end;
 
     TblUsers.First();
+  end;
+end;
+
+procedure PhUser.Delete();
+var
+  query: string;
+  e: Exception;
+begin
+  query := Format('DELETE FROM %s WHERE %s = ''%s'';',
+    [PH_TBL_NAME_USERS, PH_TBL_FIELD_NAME_USERS_PK, m_GUID.ToString()]);
+
+  e := g_Database.RunQuery(query);
+
+  if e <> nil then
+  begin
+    PhLogger.Error('Error removing user (%s) from database: %s',
+      [m_Username, e.Message]);
   end;
 end;
 

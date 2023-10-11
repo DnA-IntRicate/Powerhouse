@@ -69,6 +69,13 @@ type
     procedure Sync(); virtual;
 
     /// <summary>
+    /// Removes the entry in the Powerhouse database corresponding to an
+    /// object's GUID.
+    /// Note: This does not free the memory held by the object.
+    /// </summary>
+    procedure Delete(); virtual; abstract;
+
+    /// <summary>
     /// Returns the GUID of the database-object.
     /// </summary>
     function GetGUID(): PhGUID;

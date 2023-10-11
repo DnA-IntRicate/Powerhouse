@@ -112,6 +112,13 @@ type
     procedure Pull(); override;
 
     /// <summary>
+    /// Removes the entry in the Powerhouse database corresponding to an
+    /// object's GUID.
+    /// Note: This does not free the memory held by the object.
+    /// </summary>
+    procedure Delete(); override;
+
+    /// <summary>
     /// Calculates the energy consumption of the appliance.
     /// </summary>
     /// <param name="hours">
@@ -631,6 +638,24 @@ begin
     end;
 
     TblAppliances.First();
+  end;
+end;
+
+procedure PhAppliance.Delete();
+var
+  query: string;
+  e: Exception;
+begin
+  query := Format('DELETE FROM %s WHERE %s = ''%s'';',
+    [PH_TBL_NAME_APPLIANCES, PH_TBL_FIELD_NAME_APPLIANCES_PK,
+    m_GUID.ToString()]);
+
+  e := g_Database.RunQuery(query);
+
+  if e <> nil then
+  begin
+    PhLogger.Error('Error removing appliance (%s) from database: %s',
+      [m_Name, e.Message]);
   end;
 end;
 

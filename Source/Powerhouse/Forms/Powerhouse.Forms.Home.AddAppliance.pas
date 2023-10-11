@@ -75,6 +75,7 @@ type
     lblBatteryKind: TLabel;
     lblCreateNewAppliance: TLabel;
     btnCancel: TButton;
+    btnRemove: TButton;
     procedure btnAddClick(Sender: TObject);
     procedure lstAvailableAppliancesClick(Sender: TObject);
     procedure lstAvailableAppliancesMouseDown(Sender: TObject;
@@ -82,6 +83,7 @@ type
     procedure lstAvailableAppliancesDblClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure lblCreateNewApplianceClick(Sender: TObject);
+    procedure btnRemoveClick(Sender: TObject);
 
   public
     procedure EnableModal(); override;
@@ -89,6 +91,7 @@ type
     function GetNewAppliance(): PhAppliance;
 
   private
+    procedure ShowAvailableAppliances();
     procedure ShowApplianceInformationLabels(const show: bool);
     procedure ShowApplianceInformation(const show: bool);
 
@@ -109,61 +112,12 @@ var
 {$R *.dfm}
 
 procedure TPhfAddAppliance.EnableModal();
-var
-  userAppliances: PhAppliances;
-  numAvailable, i, j: uint64;
-  guid: PhGUID;
-  guids: PhVector<PhGUID>;
-  appliance: PhAppliance;
 begin
   Self.Caption := Format('Add Appliance - %s', [g_CurrentUser.GetUsername()]);
 
-  with g_Database do
-  begin
-    userAppliances := g_CurrentUser.GetAppliances();
-    numAvailable := uint64(TblAppliances.RecordCount) - userAppliances.Size();
-
-    m_AvailableAppliances := PhVector<PhAppliance>.Create(numAvailable);
-    guids := PhVector<PhGUID>.Create(numAvailable);
-
-    TblAppliances.First();
-    while not TblAppliances.Eof do
-    begin
-      guids.PushBack(TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK]);
-      TblAppliances.Next();
-    end;
-
-    TblAppliances.First();
-  end;
-
-  for guid in guids do
-  begin
-    appliance := PhAppliance.Create(guid);
-
-    if not userAppliances.Contains(appliance) then
-      m_AvailableAppliances.PushBack(appliance);
-  end;
-
-  // Sort available appliances in alphabetical order.
-  for i := m_AvailableAppliances.First() to m_AvailableAppliances.Last() - 1 do
-  begin
-    for j := m_AvailableAppliances.First()
-      to m_AvailableAppliances.Last() - 1 do
-    begin
-      if m_AvailableAppliances[j].GetName() > m_AvailableAppliances[j + 1]
-        .GetName() then
-      begin
-        appliance := m_AvailableAppliances[j];
-        m_AvailableAppliances[j] := m_AvailableAppliances[j + 1];
-        m_AvailableAppliances[j + 1] := appliance;
-      end;
-    end;
-  end;
-
-  for appliance in m_AvailableAppliances do
-    lstAvailableAppliances.Items.Add(appliance.GetName());
-
+  ShowAvailableAppliances();
   ShowApplianceInformation(false);
+
   inherited EnableModal();
 end;
 
@@ -207,9 +161,93 @@ begin
     DisableModal();
 end;
 
+procedure TPhfAddAppliance.btnRemoveClick(Sender: TObject);
+var
+  applianceName: string;
+  dlgResult: int;
+begin
+  if g_SelectedAppliance <> nil then
+  begin
+    applianceName := g_SelectedAppliance.GetName();
+
+    PhLogger.Warn
+      ('Are you sure you want to remove ''%s'' from the local database?',
+      dlgResult, [applianceName]);
+
+    if dlgResult <> mrOk then
+      exit();
+
+    g_SelectedAppliance.Delete();
+    g_SelectedAppliance.Free();
+    g_SelectedAppliance := nil;
+
+    lstAvailableAppliances.ItemIndex := -1;
+
+    PhLogger.Info('''%s'' has been removed from the database.',
+      [applianceName]);
+
+    ShowAvailableAppliances();
+  end;
+end;
+
 function TPhfAddAppliance.GetNewAppliance(): PhAppliance;
 begin
   Result := m_NewAppliance;
+end;
+
+procedure TPhfAddAppliance.ShowAvailableAppliances();
+var
+  userAppliances: PhAppliances;
+  numAvailable, i, j: uint64;
+  guid: PhGUID;
+  guids: PhVector<PhGUID>;
+  appliance: PhAppliance;
+begin
+  with g_Database do
+  begin
+    userAppliances := g_CurrentUser.GetAppliances();
+    numAvailable := uint64(TblAppliances.RecordCount) - userAppliances.Size();
+
+    m_AvailableAppliances := PhVector<PhAppliance>.Create(numAvailable);
+    guids := PhVector<PhGUID>.Create(numAvailable);
+
+    TblAppliances.First();
+    while not TblAppliances.Eof do
+    begin
+      guids.PushBack(TblAppliances[PH_TBL_FIELD_NAME_APPLIANCES_PK]);
+      TblAppliances.Next();
+    end;
+
+    TblAppliances.First();
+  end;
+
+  for guid in guids do
+  begin
+    appliance := PhAppliance.Create(guid);
+
+    if not userAppliances.Contains(appliance) then
+      m_AvailableAppliances.PushBack(appliance);
+  end;
+
+  // Sort available appliances in alphabetical order.
+  for i := m_AvailableAppliances.First() to m_AvailableAppliances.Last() - 1 do
+  begin
+    for j := m_AvailableAppliances.First()
+      to m_AvailableAppliances.Last() - 1 do
+    begin
+      if m_AvailableAppliances[j].GetName() > m_AvailableAppliances[j + 1]
+        .GetName() then
+      begin
+        appliance := m_AvailableAppliances[j];
+        m_AvailableAppliances[j] := m_AvailableAppliances[j + 1];
+        m_AvailableAppliances[j + 1] := appliance;
+      end;
+    end;
+  end;
+
+  lstAvailableAppliances.Clear();
+  for appliance in m_AvailableAppliances do
+    lstAvailableAppliances.Items.Add(appliance.GetName());
 end;
 
 procedure TPhfAddAppliance.ShowApplianceInformationLabels(const show: bool);

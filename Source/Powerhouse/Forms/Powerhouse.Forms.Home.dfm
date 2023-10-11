@@ -1008,7 +1008,7 @@ object PhfHome: TPhfHome
           end
         end
         object btnModifyUser: TButton
-          Left = 206
+          Left = 2
           Top = 264
           Width = 187
           Height = 65
@@ -1025,6 +1025,25 @@ object PhfHome: TPhfHome
           ParentFont = False
           TabOrder = 1
           OnClick = btnModifyUserClick
+        end
+        object btnDeleteUser: TButton
+          Left = 232
+          Top = 304
+          Width = 161
+          Height = 25
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
+          Caption = 'Delete'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          OnClick = btnDeleteUserClick
         end
       end
       object tabHelp: TTabSheet
